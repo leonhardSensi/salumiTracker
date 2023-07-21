@@ -1,6 +1,7 @@
 # salumiTracker
 
-Salumi-Tracker is a web applicaiton that allows users to adapt their salumi recipes and have an overview of their current salumis.
+<<<<<<< HEAD
+Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently being cured.
 
 ## Frontend
 
@@ -28,3 +29,5 @@ Start the development server:
 npm run dev
 
 After running the command, visit http://localhost:3000 in your web browser to access the application
+
+## Backend
