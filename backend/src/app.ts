@@ -88,10 +88,15 @@ AppDataSource.initialize()
     app.use(cookieParser());
 
     // 4. Cors
+    // app.use(
+    //   cors({
+    //     origin: config.get<string>("origin"),
+    //     credentials: true,
+    //   })
+    // );
     app.use(
       cors({
-        origin: config.get<string>("origin"),
-        credentials: true,
+        origin: "http://localhost:3000",
       })
     );
 
