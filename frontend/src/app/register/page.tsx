@@ -33,13 +33,13 @@ export default function Registration() {
     if (name && email && password && passwordConfirm) {
       const response = await fetch("http://localhost:8000/api/auth/register", {
         method: "POST",
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           name,
           email,
           password,
           passwordConfirm,
         }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const data = await response.json();
       console.log("response data:", data);
@@ -88,7 +88,7 @@ export default function Registration() {
               <h1 className="font-bold leading-tight tracking-tight text-gray-900 text-2xl text-center">
                 Create new account
               </h1>
-              <form className="space-y-6" action="#">
+              <form className="space-y-6" method="post" action="/register">
                 <div>
                   <label
                     htmlFor="email"

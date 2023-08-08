@@ -22,17 +22,20 @@ export default function Login() {
   };
 
   const handleSubmit = async () => {
+    console.log(email, password);
     if (email && password) {
       const response = await fetch("http://localhost:8000/api/auth/login", {
         method: "POST",
+        headers: { "Content-type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
         }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const data = await response.json();
       console.log("response data:", data);
+      document.cookie = "logged_in=true";
     }
   };
 
@@ -50,7 +53,7 @@ export default function Login() {
         <div className="flex flex-col items-center justify-start px-6 py-8 mx-auto h-full w-screen">
           <div className="w-screen h- bg-white rounded-lg shadow border max-w-md border-gray-700">
             <div className="p-8 space-y-4">
-              <form className="space-y-6" action="#">
+              <form className="space-y-6" method="post" action="/login">
                 <div>
                   <label
                     htmlFor="email"
