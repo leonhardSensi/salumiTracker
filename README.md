@@ -102,3 +102,19 @@ npm run start
 ```
 
 The backend will be available at http://localhost:8000
+
+### Schema migrations
+
+Make sure the database is running.
+
+#### Create Migrations
+
+```bash
+npm run migrate
+```
+
+#### Run Migrations
+
+```bash
+npm run db:push
+```
