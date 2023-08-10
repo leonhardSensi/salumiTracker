@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.id) {
       case "email":
-        setEmail(e.target.value);
+        setEmail(e.currentTarget.value);
         break;
       case "password":
-        setPassword(e.target.value);
+        setPassword(e.currentTarget.value);
         break;
       default:
         break;
@@ -34,8 +34,9 @@ export default function Login() {
         }),
       });
       const data = await response.json();
-      console.log("response data:", data);
-      document.cookie = "logged_in=true";
+      if (data.status === "success") {
+        location.href = "/dashboard";
+      }
     }
   };
 
@@ -51,9 +52,9 @@ export default function Login() {
       </section>
       <section className="bg-white">
         <div className="flex flex-col items-center justify-start px-6 py-8 mx-auto h-full w-screen">
-          <div className="w-screen h- bg-white rounded-lg shadow border max-w-md border-gray-700">
+          <div className="w-screen bg-white rounded-lg shadow border max-w-md border-gray-700">
             <div className="p-8 space-y-4">
-              <form className="space-y-6" method="post" action="/login">
+              <form className="space-y-6" method="post" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
@@ -98,7 +99,6 @@ export default function Login() {
                 </div>
 
                 <button
-                  onClick={handleSubmit}
                   type="submit"
                   className="w-full text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
                 >
