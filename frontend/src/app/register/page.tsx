@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Registration() {
   const [name, setName] = useState("");
@@ -10,7 +10,7 @@ export default function Registration() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.id) {
       case "name":
         setName(e.target.value);
@@ -33,23 +33,24 @@ export default function Registration() {
     if (name && email && password && passwordConfirm) {
       const response = await fetch("http://localhost:8000/api/auth/register", {
         method: "POST",
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           name,
           email,
           password,
           passwordConfirm,
         }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const data = await response.json();
       console.log("response data:", data);
+      location.href = "/";
     }
   };
 
   return (
-    <div className="bg-white flex flex-row mx-auto">
-      <section className="bg-white m-auto ">
-        <div className="absolute left-48 bottom-96">
+    <div className="bg-white flex flex-row justify-center pt-24">
+      <section className="bg-white flex flex-col items-center justify-center w-1/2">
+        <div className="">
           <Image
             src="/salami.svg"
             width={200}
@@ -70,9 +71,9 @@ export default function Registration() {
           </h3>
         </div>
       </section>
-      <section className="bg-white">
-        <div className="flex flex-col items-center justify-around px-6 py-8 mx-auto h-screen lg:py-0 absolute bottom-1 right-36 w-1/3">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 border-gray-700">
+      <section className="bg-white flex flex-col items-center justify-center w-1/2">
+        <div className="">
+          <div className="w-full bg-white rounded-lg shadow dark:border border-gray-700">
             <div className="p-6 space-y-6 sm:p-8">
               <div className="text-center">
                 <p className="text-black">
@@ -88,7 +89,7 @@ export default function Registration() {
               <h1 className="font-bold leading-tight tracking-tight text-gray-900 text-2xl text-center">
                 Create new account
               </h1>
-              <form className="space-y-6" action="#">
+              <form className="space-y-6" method="post" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
@@ -195,7 +196,6 @@ export default function Registration() {
                   </div>
                 </div>
                 <button
-                  onClick={handleSubmit}
                   type="submit"
                   className="w-full text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
                 >
@@ -206,7 +206,7 @@ export default function Registration() {
           </div>
         </div>
       </section>
-      <section className="bg-gray-100 w-1/4"></section>
+      {/* <section className="bg-gray-100 w-1/4"></section> */}
     </div>
   );
 }

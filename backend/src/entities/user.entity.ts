@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Entity, Column, Index, BeforeInsert, OneToMany } from "typeorm";
 import bcrypt from "bcryptjs";
 import Model from "./model.entity";
-import { Post } from "./post.entity";
+import { Recipe } from "./recipe.entity";
 
 export enum RoleEnumType {
   USER = "user",
@@ -48,8 +48,8 @@ export class User extends Model {
   })
   verificationCode!: string | null;
 
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  @OneToMany(() => Recipe, (recipe) => recipe.user)
+  recipes: Recipe[];
 
   @BeforeInsert()
   async hashPassword() {

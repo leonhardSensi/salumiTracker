@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  CreatePostInput,
-  DeletePostInput,
-  GetPostInput,
-  UpdatePostInput,
-} from "../schemas/post.schema";
-import { createPost, findPosts, getPost } from "../services/post.service";
+  CreateRecipeInput,
+  DeleteRecipeInput,
+  GetRecipeInput,
+  UpdateRecipeInput,
+} from "../schemas/recipe.schema";
+import {
+  createRecipe,
+  findRecipes,
+  getRecipe,
+} from "../services/recipe.service";
 import { findUserById } from "../services/user.service";
 import AppError from "../utils/appError";
 import multer from "multer";
@@ -31,9 +35,9 @@ const upload = multer({
   limits: { fileSize: 5000000, files: 1 },
 });
 
-export const uploadPostImage = upload.single("image");
+export const uploadRecipeImage = upload.single("image");
 
-export const resizePostImage = async (
+export const resizeRecipeImage = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -49,7 +53,7 @@ export const resizePostImage = async (
       .resize(800, 450)
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
-      .toFile(`${__dirname}/../../public/posts/${fileName}`);
+      .toFile(`${__dirname}/../../public/recipes/${fileName}`);
 
     req.body.image = fileName;
 
@@ -59,49 +63,49 @@ export const resizePostImage = async (
   }
 };
 
-export const createPostHandler = async (
-  req: Request<{}, {}, CreatePostInput>,
+export const createRecipeHandler = async (
+  req: Request<{}, {}, CreateRecipeInput>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const user = await findUserById(res.locals.user.id as string);
 
-    const post = await createPost(req.body, user!);
+    const recipe = await createRecipe(req.body, user!);
 
     res.status(201).json({
       status: "success",
       data: {
-        post,
+        recipe,
       },
     });
   } catch (err: any) {
     if (err.code === "23505") {
       return res.status(409).json({
         status: "fail",
-        message: "Post with that title already exist",
+        message: "Recipe with that title already exist",
       });
     }
     next(err);
   }
 };
 
-export const getPostHandler = async (
-  req: Request<GetPostInput>,
+export const getRecipeHandler = async (
+  req: Request<GetRecipeInput>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const post = await getPost(req.params.postId);
+    const recipe = await getRecipe(req.params.recipeId);
 
-    if (!post) {
-      return next(new AppError(404, "Post with that ID not found"));
+    if (!recipe) {
+      return next(new AppError(404, "Recipe with that ID not found"));
     }
 
     res.status(200).json({
       status: "success",
       data: {
-        post,
+        recipe,
       },
     });
   } catch (err: any) {
@@ -109,19 +113,19 @@ export const getPostHandler = async (
   }
 };
 
-export const getPostsHandler = async (
+export const getRecipesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const posts = await findPosts({}, {}, {});
+    const recipes = await findRecipes({}, {}, {});
 
     res.status(200).json({
       status: "success",
-      results: posts.length,
+      results: recipes.length,
       data: {
-        posts,
+        recipes,
       },
     });
   } catch (err: any) {
@@ -129,26 +133,26 @@ export const getPostsHandler = async (
   }
 };
 
-export const updatePostHandler = async (
-  req: Request<UpdatePostInput["params"], {}, UpdatePostInput["body"]>,
+export const updateRecipeHandler = async (
+  req: Request<UpdateRecipeInput["params"], {}, UpdateRecipeInput["body"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const post = await getPost(req.params.postId);
+    const recipe = await getRecipe(req.params.recipeId);
 
-    if (!post) {
-      return next(new AppError(404, "Post with that ID not found"));
+    if (!recipe) {
+      return next(new AppError(404, "Recipe with that ID not found"));
     }
 
-    Object.assign(post, req.body);
+    Object.assign(recipe, req.body);
 
-    const updatedPost = await post.save();
+    const updatedRecipe = await recipe.save();
 
     res.status(200).json({
       status: "success",
       data: {
-        post: updatedPost,
+        recipe: updatedRecipe,
       },
     });
   } catch (err: any) {
@@ -156,19 +160,19 @@ export const updatePostHandler = async (
   }
 };
 
-export const deletePostHandler = async (
-  req: Request<DeletePostInput>,
+export const deleteRecipeHandler = async (
+  req: Request<DeleteRecipeInput>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const post = await getPost(req.params.postId);
+    const recipe = await getRecipe(req.params.recipeId);
 
-    if (!post) {
-      return next(new AppError(404, "Post with that ID not found"));
+    if (!recipe) {
+      return next(new AppError(404, "Recipe with that ID not found"));
     }
 
-    await post.remove();
+    await recipe.remove();
 
     res.status(204).json({
       status: "success",
