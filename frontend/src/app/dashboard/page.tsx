@@ -1,64 +1,16 @@
-"use client";
+import Curing from "@/components/dashboard/curing";
+import Drying from "@/components/dashboard/drying";
+import Salting from "@/components/dashboard/salting";
 
-import { useEffect, useState } from "react";
-
-export default function Profile() {
-  interface IresponseData {
-    status: string;
-    data: IprofileData;
-  }
-
-  interface IprofileData {
-    user: Iuser;
-  }
-
-  interface Iuser {
-    created_at: string;
-    email: string;
-    id: string;
-    name: string;
-    role: string;
-    updated_at: string;
-  }
-
-  const [profileData, setProfileData] = useState<IprofileData>();
-
-  useEffect(() => {
-    const getProfile = async () => {
-      const response = await fetch("http://localhost:8000/api/users/me", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: IresponseData = await response.json();
-      switch (data.status) {
-        case "success":
-          setProfileData(data.data);
-          break;
-        case "fail":
-          location.href = "/login";
-          break;
-        default:
-          break;
-      }
-      console.log(data);
-    };
-    if (document.cookie === "logged_in=true") {
-      getProfile();
-    } else {
-      location.href = "/login";
-    }
-  }, []);
-
+export default function Dashboard() {
   return (
-    <div>
-      {profileData ? (
-        <div>
-          <p className="text-black">{profileData.user.name}</p>
-          <p className="text-black">{profileData.user.email}</p>
-        </div>
-      ) : (
-        <p></p>
-      )}
+    <div className="flex flex-col items-center">
+      <h1 className="text-black text-4xl m-16">Dashboard</h1>
+      <div className="grid grid-cols-2 gap-24 w-full justify-items-center">
+        <Curing />
+        <Salting />
+        <Drying />
+      </div>
     </div>
   );
 }

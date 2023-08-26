@@ -4,7 +4,7 @@ import uuid from "../utils/uuid";
 
 const multerStorage = multer.diskStorage({
   destination: function (req: Request, file: Express.Multer.File, cb) {
-    cb(null, `${__dirname}/../../public/recipes/single`);
+    cb(null, `${__dirname}/../../public/recipes`);
   },
   filename: function (req: Request, file: Express.Multer.File, cb) {
     const ext = file.mimetype.split("/")[1];

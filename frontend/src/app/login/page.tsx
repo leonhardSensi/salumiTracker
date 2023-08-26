@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import React, { useState } from "react";
 
 export default function Login() {
@@ -22,7 +21,6 @@ export default function Login() {
   };
 
   const handleSubmit = async () => {
-    console.log(email, password);
     if (email && password) {
       const response = await fetch("http://localhost:8000/api/auth/login", {
         method: "POST",
@@ -35,7 +33,9 @@ export default function Login() {
       });
       const data = await response.json();
       if (data.status === "success") {
-        location.href = "/dashboard";
+        location.href = "/";
+      } else {
+        location.href = "/login";
       }
     }
   };

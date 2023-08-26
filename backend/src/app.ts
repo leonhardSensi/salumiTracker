@@ -57,6 +57,7 @@ import recipeRouter from "./routes/recipe.routes";
 import validateEnv from "./utils/validateEnv";
 import cluster from "cluster";
 import os from "os";
+import path from "path";
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -105,6 +106,10 @@ AppDataSource.initialize()
     app.use("/api/auth", authRouter);
     app.use("/api/users", userRouter);
     app.use("/api/recipes", recipeRouter);
+    app.use(
+      "/recipes",
+      express.static(path.join(__dirname, "../public/recipes"))
+    );
 
     // HEALTH CHECKER
     app.get("/api/healthChecker", async (_, res: Response) => {
