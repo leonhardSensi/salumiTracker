@@ -1,9 +1,12 @@
+import PrivateLayout from "@/components/PrivateLayout/privateLayout";
 import RecipeDetails from "@/components/recipes/recipeDetails";
 
 export default function Recipe() {
   return (
-    <div>
-      <RecipeDetails />
-    </div>
+    <PrivateLayout>
+      <div>
+        <RecipeDetails />
+      </div>
+    </PrivateLayout>
   );
 }

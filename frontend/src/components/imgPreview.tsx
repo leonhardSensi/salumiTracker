@@ -3,16 +3,6 @@ import Image from "next/image";
 
 export default function ImgPreview(props: IimageFileProp) {
   return props.image ? (
-    // <div className="ml-16 mb-16">
-    //   <img
-    //     id="imgPreview"
-    //     src={URL.createObjectURL(props.image)}
-    //     alt="uploaded image preview"
-    //     className="mb-2 h-32"
-    //   />
-    //   <p className="text-black">{props.image.name}</p>
-    // </div>
-
     <div className="rounded-md bg-[#F5F7FB] py-4 px-8">
       <div className="flex items-center justify-around">
         <Image

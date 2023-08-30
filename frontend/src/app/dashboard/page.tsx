@@ -7,7 +7,7 @@ export default function Dashboard() {
   return (
     <PrivateLayout>
       <div className="flex flex-col items-center">
-        <h1 className="text-black text-4xl m-16">Dashboard edds</h1>
+        <h1 className="text-black text-4xl m-16">Dashboard</h1>
         <div className="grid grid-cols-2 gap-24 w-full justify-items-center">
           <Curing />
           <Salting />

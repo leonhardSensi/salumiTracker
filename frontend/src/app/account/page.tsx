@@ -1,5 +1,6 @@
 "use client";
 
+import PrivateLayout from "@/components/PrivateLayout/privateLayout";
 import { useEffect, useState } from "react";
 
 export default function Account() {
@@ -17,11 +18,13 @@ export default function Account() {
   }, []);
 
   return (
-    <div className="h-screen">
-      <h1 className="text-black text-4xl m-16 h-fit">Account</h1>
+    <PrivateLayout>
+      <div className="h-screen">
+        <h1 className="text-black text-4xl m-16 h-fit">Account</h1>
 
-      <p className="text-black text-xl ml-16">Name: {name}</p>
-      <p className="text-black text-xl ml-16">Email: {email}</p>
-    </div>
+        <p className="text-black text-xl ml-16">Name: {name}</p>
+        <p className="text-black text-xl ml-16">Email: {email}</p>
+      </div>
+    </PrivateLayout>
   );
 }

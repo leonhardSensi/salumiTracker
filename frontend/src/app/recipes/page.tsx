@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Irecipe, IrecipeResponse } from "../../interfaces/interfaces";
-import RecipeCard from "@/components/recipes/recipeCard";
 import RecipeList from "@/components/recipes/recipeList";
+import PrivateLayout from "@/components/PrivateLayout/privateLayout";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState<Irecipe[]>();
@@ -21,13 +21,12 @@ export default function Recipes() {
         console.log("no recipes found");
       }
     };
-
-    if (document.cookie === "logged_in=true") {
-      getRecipes();
-    }
+    getRecipes();
   }, []);
 
-  if (recipes) {
-    return <RecipeList recipes={recipes} />;
-  }
+  return (
+    <PrivateLayout>
+      <RecipeList recipes={recipes} />
+    </PrivateLayout>
+  );
 }
