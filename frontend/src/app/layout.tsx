@@ -1,13 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import "./globals.css";
 // import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/navigation/navbar";
-import { useEffect } from "react";
-import { useState } from "react";
-import Sidebar from "@/components/navigation/sidebar";
-import { IresponseData, IprofileData } from "../interfaces/interfaces";
+import { useRouter } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,56 +20,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [profileData, setProfileData] = useState<IprofileData>();
+  const router = useRouter();
 
-  useEffect(() => {
-    const getProfile = async () => {
-      const response = await fetch("http://localhost:8000/api/users/me", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: IresponseData = await response.json();
-      if (data.status) {
-        setProfileData(data.data);
-        sessionStorage.setItem("email", data.data.user.email);
-        sessionStorage.setItem("name", data.data.user.name);
-      } else {
-        console.log("request failed");
-        location.href = "/login";
-      }
-    };
+  if (
+    !document.cookie.includes("logged_in=true") &&
+    window.location.href !== "http://localhost:3000/login" &&
+    window.location.href !== "http://localhost:3000/registers"
+  ) {
+    console.log("REDEDEDEDE");
 
-    if (document.cookie === "logged_in=true") {
-      getProfile();
-    } else if (location.href !== "http://localhost:3000/login") {
-      location.href = "/login";
-    }
-
-    if (
-      (document.cookie === "logged_in=true" &&
-        window.location.href === "http://localhost:3000/register") ||
-      (document.cookie === "logged_in=true" &&
-        window.location.href === "http://localhost:3000/login")
-    ) {
-      location.href = "/";
-    }
-  }, []);
+    router.push("/login");
+  }
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {profileData ? (
-          <div className="flex flex-row">
-            <Sidebar />
-            <div className="flex-col w-full flex">
-              <Navbar person={profileData} />
-              {children}
-            </div>
-          </div>
-        ) : (
-          children
-        )}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

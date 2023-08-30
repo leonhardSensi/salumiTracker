@@ -4,30 +4,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const [selectedTabId, setSelectedTabId] = useState("");
 
-  const checkActive = (tabId: string) => {
-    let activeTab;
-    if (selectedTabId) {
-      activeTab = selectedTabId;
-    } else {
-      activeTab = sessionStorage.getItem("activeTab");
-    }
-    return tabId === activeTab;
-  };
+  const pathname = usePathname();
+  console.log("-------", pathname);
 
-  const handleClick = (tabId: string) => {
-    sessionStorage.setItem("activeTab", tabId);
-    setSelectedTabId(tabId);
+  const checkActive = (tabId: string) => {
+    return pathname === `/${tabId}`;
   };
 
   useEffect(() => {});
 
   return (
     <aside className="w-64 bg-gray-900 flex flex-col items-center pt-2 pb-2 space-y-7 min-h-screen">
-      <Link href="/" onClick={() => handleClick("home")}>
+      <Link href="/">
         <Image
           width={100}
           height={100}
@@ -39,7 +32,6 @@ export default function Sidebar() {
       <div className="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm">
         <Link href="/" className="font-QuicksandMedium">
           <div
-            onClick={() => handleClick("home")}
             id="home"
             className="w-full flex items-center gap-x-1.5 group select-none cursor-pointer"
           >
@@ -52,9 +44,9 @@ export default function Sidebar() {
                 } transition-all duration-300`}
               ></div>
             </div>
-            <div className=" group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <div className=" group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-white hover:text-white text-sm">
               <svg
-                className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200"
+                className="h-5 w-5 group-hover:fill-red-600 fill-gray-600  transition-colors duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -67,7 +59,6 @@ export default function Sidebar() {
 
         <Link href="/dashboard" className="font-QuicksandMedium">
           <div
-            onClick={() => handleClick("dashboard")}
             id="dashboard"
             className="w-full flex items-center gap-x-1.5 group select-none cursor-pointer"
           >
@@ -80,9 +71,9 @@ export default function Sidebar() {
                 } transition-all duration-300`}
               ></div>
             </div>
-            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-white hover:text-white text-sm">
               <svg
-                className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200"
+                className="h-5 w-5 group-hover:fill-red-600 fill-gray-600  transition-colors duration-200"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -98,7 +89,6 @@ export default function Sidebar() {
         </Link>
         <Link href="/recipes" className="font-QuicksandMedium">
           <div
-            onClick={() => handleClick("recipies")}
             id="recipies"
             className="w-full flex items-center gap-x-1.5 group select-none cursor-pointer"
           >
@@ -109,9 +99,9 @@ export default function Sidebar() {
                 } transition-all duration-300`}
               ></div>
             </div>
-            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-white hover:text-white text-sm">
               <svg
-                className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600 transition-colors duration-200"
+                className="h-5 w-5 group-hover:fill-red-600 fill-gray-600 transition-colors duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -127,7 +117,6 @@ export default function Sidebar() {
 
         <Link href="/add_recipe" className="font-QuicksandMedium">
           <div
-            onClick={() => handleClick("add_recipe")}
             id="add_recipe"
             className="w-full flex items-center gap-x-1.5 group select-none cursor-pointer"
           >
@@ -140,9 +129,9 @@ export default function Sidebar() {
                 } transition-all duration-300`}
               ></div>
             </div>
-            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-white hover:text-white text-sm">
               <svg
-                className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200"
+                className="h-5 w-5 group-hover:fill-red-600 fill-gray-600  transition-colors duration-200"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -159,7 +148,6 @@ export default function Sidebar() {
 
         <Link href="/add_salume" className="font-QuicksandMedium">
           <div
-            onClick={() => handleClick("add_salume")}
             id="add_salume"
             className="w-full flex items-center gap-x-1.5 group select-none cursor-pointer"
           >
@@ -172,9 +160,9 @@ export default function Sidebar() {
                 } transition-all duration-300`}
               ></div>
             </div>
-            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <div className="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-white hover:text-white text-sm">
               <svg
-                className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200"
+                className="h-5 w-5 group-hover:fill-red-600 fill-gray-600  transition-colors duration-200"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
