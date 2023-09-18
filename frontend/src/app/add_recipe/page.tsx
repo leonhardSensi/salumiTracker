@@ -1,7 +1,8 @@
 "use client";
+import UserInput from "@/components/generic/input/userInput";
 import ImgPreview from "@/components/imgPreview";
-import PrivateLayout from "@/components/PrivateLayout/privateLayout";
-import StatusButton from "@/components/statusButton";
+import PrivateLayout from "@/components/privateLayout/privateLayout";
+import StatusButton from "@/components/generic/button/statusButton";
 import React, { useState } from "react";
 
 export default function RecipeImageUpload() {
@@ -75,7 +76,17 @@ export default function RecipeImageUpload() {
                   <label htmlFor="title" className="text-white">
                     Title
                   </label>
-                  <input
+                  <UserInput
+                    width={"w-fit"}
+                    addStyle={"mt-1 mb-4"}
+                    name="title"
+                    handleChange={handleChange}
+                    type="text"
+                    id="title"
+                    placeholder="New Recipe"
+                    required={true}
+                  />
+                  {/* <input
                     name="title"
                     onChange={handleChange}
                     type="text"
@@ -83,13 +94,23 @@ export default function RecipeImageUpload() {
                     placeholder="New Recipe"
                     className="mt-1 mb-4 w-fit border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                     required={true}
-                  />
+                  /> */}
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="category" className="text-white">
                     Category
                   </label>
-                  <input
+                  <UserInput
+                    width={"w-fit"}
+                    addStyle={"mt-1 mb-4"}
+                    name="category"
+                    handleChange={handleChange}
+                    type="text"
+                    id="category"
+                    placeholder="Cured Meats"
+                    required={true}
+                  />
+                  {/* <input
                     name="category"
                     onChange={handleChange}
                     type="text"
@@ -97,7 +118,7 @@ export default function RecipeImageUpload() {
                     placeholder="Cured Meats"
                     className="mt-1 mb-4 w-fit border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                     required={true}
-                  />
+                  /> */}
                 </div>
               </div>
 

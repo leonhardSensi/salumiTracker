@@ -1,6 +1,6 @@
 "use client";
 
-import PrivateLayout from "@/components/PrivateLayout/privateLayout";
+import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { useEffect, useState } from "react";
 
 export default function Account() {
@@ -19,7 +19,7 @@ export default function Account() {
 
   return (
     <PrivateLayout>
-      <div className="h-screen">
+      <div className="">
         <h1 className="text-black text-4xl m-16 h-fit">Account</h1>
 
         <p className="text-black text-xl ml-16">Name: {name}</p>

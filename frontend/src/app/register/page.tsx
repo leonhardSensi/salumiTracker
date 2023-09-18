@@ -1,10 +1,12 @@
 "use client";
 
-import PublicLayout from "@/components/PublicLayout/publicLayout";
+import PublicLayout from "@/components/publicLayout/publicLayout";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import UserInput from "@/components/generic/input/userInput";
+import SubmitButton from "@/components/generic/button/submitButton";
 
 export default function Registration() {
   const [name, setName] = useState("");
@@ -105,13 +107,13 @@ export default function Registration() {
                     >
                       Your name
                     </label>
-                    <input
-                      onChange={handleChange}
-                      type="name"
-                      name="name"
-                      id="name"
-                      className="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="John Doe"
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
+                      type={"name"}
+                      name={"name"}
+                      id={"name"}
+                      placeholder={"Your name"}
                       required={true}
                     />
                   </div>
@@ -123,13 +125,13 @@ export default function Registration() {
                     >
                       Your email address
                     </label>
-                    <input
-                      onChange={handleChange}
-                      type="email"
-                      name="email"
-                      id="email"
-                      className="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="name@company.com"
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
+                      type={"email"}
+                      name={"email"}
+                      id={"email"}
+                      placeholder={"name@company.com"}
                       required={true}
                     />
                   </div>
@@ -140,13 +142,13 @@ export default function Registration() {
                     >
                       Password
                     </label>
-                    <input
-                      onChange={handleChange}
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
+                      type={"password"}
+                      name={"password"}
+                      id={"password"}
+                      placeholder={"••••••••"}
                       required={true}
                     />
                   </div>
@@ -157,13 +159,13 @@ export default function Registration() {
                     >
                       Repeat password
                     </label>
-                    <input
-                      onChange={handleChange}
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
                       type="password"
                       name="confirm-password"
                       id="confirm-password"
                       placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required={true}
                     />
                   </div>
@@ -206,12 +208,7 @@ export default function Registration() {
                       </label>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-                  >
-                    Get started
-                  </button>
+                  <SubmitButton text={"Get started"} />
                 </form>
               </div>
             </div>

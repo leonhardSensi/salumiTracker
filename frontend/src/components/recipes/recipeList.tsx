@@ -1,6 +1,7 @@
 import { Irecipe } from "@/interfaces/interfaces";
+import Card from "../generic/card/card";
 import NoRecipes from "./noRecipes";
-import RecipeCard from "./recipeCard";
+import RecipeCardDetails from "./recipeCardDetails";
 
 export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
   return (
@@ -11,7 +12,15 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
         (props.recipes.length > 0 ? (
           <div className="mb-16 w-full mx-16 grid grid-cols-2 gap-24 justify-items-center">
             {props.recipes.map((recipe) => (
-              <RecipeCard recipe={recipe} key={recipe.id} />
+              <Card
+                details={recipe}
+                image={`http://localhost:8000/recipes/${recipe.image}`}
+                key={recipe.id}
+                imageSize={{ width: 200, height: 200 }}
+                link={`/recipes/${recipe.id}`}
+              >
+                <RecipeCardDetails recipe={recipe} key={recipe.id} />
+              </Card>
             ))}
           </div>
         ) : (

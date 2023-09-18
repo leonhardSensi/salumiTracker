@@ -1,32 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Irecipe, IrecipeResponse } from "../../interfaces/interfaces";
 import RecipeList from "@/components/recipes/recipeList";
-import PrivateLayout from "@/components/PrivateLayout/privateLayout";
+import PrivateLayout from "@/components/privateLayout/privateLayout";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipes } from "@/hooks/recipeHooks";
+import { useRouter } from "next/navigation";
 
 export default function Recipes() {
-  const [recipes, setRecipes] = useState<Irecipe[]>();
+  const router = useRouter();
 
-  useEffect(() => {
-    const getRecipes = async () => {
-      const response = await fetch("http://localhost:8000/api/recipes", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: IrecipeResponse = await response.json();
-      if (data.status) {
-        setRecipes(data.data.recipes);
-      } else {
-        console.log("no recipes found");
-      }
-    };
-    getRecipes();
-  }, []);
+  const {
+    status,
+    error,
+    data: recipes,
+  } = useQuery({
+    queryKey: ["recipes"],
+    queryFn: getRecipes,
+  });
+
+  if (status === "loading") {
+    return <p className="text-black">Loading</p>;
+  }
+  if (error === "error") {
+    return <p className="text-black">{JSON.stringify(error)}</p>;
+  }
+  if (recipes?.status === "fail") {
+    router.push("/login");
+    return;
+  }
 
   return (
     <PrivateLayout>
-      <RecipeList recipes={recipes} />
+      <RecipeList recipes={recipes?.data.recipes} />
     </PrivateLayout>
   );
 }

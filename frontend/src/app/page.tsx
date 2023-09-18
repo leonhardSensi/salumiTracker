@@ -1,4 +1,4 @@
-import PrivateLayout from "@/components/PrivateLayout/privateLayout";
+import PrivateLayout from "@/components/privateLayout/privateLayout";
 
 export default function Home() {
   return (

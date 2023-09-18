@@ -1,25 +1,31 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Irecipe } from "@/interfaces/interfaces";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipe } from "@/hooks/recipeHooks";
+import { useRouter, useParams } from "next/navigation";
 
 export default function RecipeDetails() {
-  const [currentRecipe, setCurrentRecipe] = useState<Irecipe>();
-  useEffect(() => {
-    const id = sessionStorage.getItem("recipeId");
-    const image = sessionStorage.getItem("image");
-    const title = sessionStorage.getItem("title");
-    const content = sessionStorage.getItem("content");
-    const created_at = sessionStorage.getItem("created_at");
-    const updated_at = sessionStorage.getItem("updated_at");
-    if (id && image && title && content && created_at && updated_at) {
-      setCurrentRecipe({ id, image, title, content, created_at, updated_at });
-    }
-  }, []);
+  const router = useRouter();
+  const params = useParams();
 
-  return currentRecipe ? (
+  const {
+    status: statusRecipe,
+    error: errorRecipe,
+    data: recipe,
+  } = useQuery({
+    queryKey: ["recipe", params.recipeId],
+    queryFn: () => getRecipe(params.recipeId),
+  });
+
+  if (statusRecipe === "loading") return <p className="text-black">Loading</p>;
+  if (errorRecipe === "error")
+    return <p className="text-black">{JSON.stringify(errorRecipe)}</p>;
+  if (recipe.status === "fail") {
+    router.push("/login");
+    return;
+  }
+  return recipe.data.recipe ? (
     <div>
       <svg
         className="h-12"
@@ -28,29 +34,31 @@ export default function RecipeDetails() {
       >
         <Link className="w-12" href="/recipes">
           <g>
-            <path fill="none" d="M0 0h24v24H0z" /> <path d="M8 12l6-6v12z" />
+            <path d="M8 12l6-6v12z" fill="#111827" fillOpacity={0.9} />
           </g>
         </Link>
       </svg>
+
       <div className="mx-16 flex flex-col items-center">
-        <h1 className="text-black text-4xl mb-2 h-fit">
-          {currentRecipe.title}
-        </h1>
-        <p className="text-black text-xl ">
-          Created at: {currentRecipe.created_at}
-        </p>
         <Image
           width={200}
           height={200}
-          src={`http://localhost:8000/recipes/${currentRecipe.image}`}
+          src={`http://localhost:8000/recipes/${recipe.data.recipe.image}`}
           alt={"recipe image"}
-          className=" mt-8"
+          className="w-100 h-100 mb-8"
         />
 
-        <p className="text-black text-xl mt-16">{currentRecipe.content}</p>
+        <h1 className="text-black text-4xl mb-2 h-fit">
+          {recipe.data.recipe.title}
+        </h1>
+        <p className="text-black text-xl">
+          Created on: {recipe.data.recipe.created_at}
+        </p>
+
+        <p className="text-black text-xl mt-16">{recipe.data.recipe.content}</p>
       </div>
     </div>
   ) : (
-    <p>Loading...</p>
+    <p className="text-black">No access</p>
   );
 }
