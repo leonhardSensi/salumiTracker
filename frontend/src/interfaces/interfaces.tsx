@@ -16,8 +16,9 @@ export interface IrecipeData {
 
 export interface IrecipeResponse {
   status: string;
-  data: IrecipeData;
-  results: number;
+  data?: IrecipeData;
+  results?: number;
+  message?: string;
 }
 
 // USERS

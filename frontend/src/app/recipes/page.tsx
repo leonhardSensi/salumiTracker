@@ -3,35 +3,42 @@
 import RecipeList from "@/components/recipes/recipeList";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipes } from "@/hooks/recipeHooks";
+import { SalumiError, getRecipes } from "@/api/recipeApi";
 import { useRouter } from "next/navigation";
+import { Irecipe } from "@/interfaces/interfaces";
 
 export default function Recipes() {
   const router = useRouter();
 
   const {
     status,
-    error,
+    error: errorMessage,
     data: recipes,
-  } = useQuery({
+  } = useQuery<Irecipe[], SalumiError>({
     queryKey: ["recipes"],
     queryFn: getRecipes,
   });
 
+  console.log("RECIPE DETAILS", status, errorMessage, recipes);
+
   if (status === "loading") {
-    return <p className="text-black">Loading</p>;
+    return (
+      <PrivateLayout>
+        <p className="text-black">Loading</p>
+      </PrivateLayout>
+    );
   }
-  if (error === "error") {
-    return <p className="text-black">{JSON.stringify(error)}</p>;
-  }
-  if (recipes?.status === "fail") {
-    router.push("/login");
-    return;
+  if (status === "error") {
+    return (
+      <PrivateLayout>
+        <p className="text-black">{errorMessage.message}</p>
+      </PrivateLayout>
+    );
   }
 
   return (
     <PrivateLayout>
-      <RecipeList recipes={recipes?.data.recipes} />
+      <RecipeList recipes={recipes} />
     </PrivateLayout>
   );
 }

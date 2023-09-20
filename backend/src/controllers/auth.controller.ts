@@ -28,10 +28,12 @@ if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
-  expires: new Date(
+  expires: new Date(Date.now() + 86400000), //24
+  /*new Date(
     Date.now() + config.get<number>("accessTokenExpiresIn") * 60 * 1000
-  ),
-  maxAge: config.get<number>("accessTokenExpiresIn") * 60 * 1000,
+  )*/
+  // maxAge: Date.now() + 86400000,
+  /*config.get<number>("accessTokenExpiresIn") * 60 * 1000,*/
 };
 
 const refreshTokenCookieOptions: CookieOptions = {

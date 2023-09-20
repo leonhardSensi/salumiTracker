@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipe } from "@/hooks/recipeHooks";
+import { getRecipe } from "@/api/recipeApi";
 import { useRouter, useParams } from "next/navigation";
 
 export default function RecipeDetails() {
@@ -15,17 +15,14 @@ export default function RecipeDetails() {
     data: recipe,
   } = useQuery({
     queryKey: ["recipe", params.recipeId],
-    queryFn: () => getRecipe(params.recipeId),
+    queryFn: () => getRecipe(params.recipeId as string),
   });
 
   if (statusRecipe === "loading") return <p className="text-black">Loading</p>;
   if (errorRecipe === "error")
     return <p className="text-black">{JSON.stringify(errorRecipe)}</p>;
-  if (recipe.status === "fail") {
-    router.push("/login");
-    return;
-  }
-  return recipe.data.recipe ? (
+
+  return recipe ? (
     <div>
       <svg
         className="h-12"
@@ -43,19 +40,15 @@ export default function RecipeDetails() {
         <Image
           width={200}
           height={200}
-          src={`http://localhost:8000/recipes/${recipe.data.recipe.image}`}
+          src={`http://localhost:8000/recipes/${recipe.image}`}
           alt={"recipe image"}
           className="w-100 h-100 mb-8"
         />
 
-        <h1 className="text-black text-4xl mb-2 h-fit">
-          {recipe.data.recipe.title}
-        </h1>
-        <p className="text-black text-xl">
-          Created on: {recipe.data.recipe.created_at}
-        </p>
+        <h1 className="text-black text-4xl mb-2 h-fit">{recipe.title}</h1>
+        <p className="text-black text-xl">Created on: {recipe.created_at}</p>
 
-        <p className="text-black text-xl mt-16">{recipe.data.recipe.content}</p>
+        <p className="text-black text-xl mt-16">{recipe.content}</p>
       </div>
     </div>
   ) : (

@@ -123,7 +123,7 @@ export const getRecipesHandler = async (
 
     res.status(200).json({
       status: "success",
-      results: recipes.length,
+      nbrResults: recipes.length,
       data: {
         recipes,
       },
