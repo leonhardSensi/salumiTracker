@@ -53,10 +53,11 @@ import { AppDataSource } from "./utils/data-source";
 import AppError from "./utils/appError";
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
-import postRouter from "./routes/post.routes";
+import recipeRouter from "./routes/recipe.routes";
 import validateEnv from "./utils/validateEnv";
 import cluster from "cluster";
 import os from "os";
+import path from "path";
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -97,13 +98,18 @@ AppDataSource.initialize()
     app.use(
       cors({
         origin: "http://localhost:3000",
+        credentials: true,
       })
     );
 
     // ROUTES
     app.use("/api/auth", authRouter);
     app.use("/api/users", userRouter);
-    app.use("/api/posts", postRouter);
+    app.use("/api/recipes", recipeRouter);
+    app.use(
+      "/recipes",
+      express.static(path.join(__dirname, "../public/recipes"))
+    );
 
     // HEALTH CHECKER
     app.get("/api/healthChecker", async (_, res: Response) => {
