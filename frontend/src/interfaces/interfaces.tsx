@@ -1,4 +1,5 @@
 import { ChangeEventHandler } from "react";
+import { StringMappingType } from "typescript";
 
 // RECIPES
 export interface Irecipe {
@@ -8,6 +9,34 @@ export interface Irecipe {
   image: string;
   title: string;
   updated_at: string;
+  cuts: ICut[];
+  spices: ISpice[];
+  steps: IStep[];
+}
+
+export interface ICut {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+  name: string;
+  quantity: number;
+}
+
+export interface ISpice {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+  name: string;
+  quantity: number;
+}
+
+export interface IStep {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+  name: string;
+  description: string;
+  duration: number;
 }
 
 export interface IrecipeData {
@@ -26,6 +55,10 @@ export interface IrecipeResponse {
 export interface IresponseData {
   status: string;
   data: IprofileData;
+}
+
+export interface IuserData {
+  data: Iuser;
 }
 
 export interface IprofileData {
@@ -88,15 +121,68 @@ interface IImageSize {
 export interface IUserInput {
   width?: string;
   height?: string;
+  step?: string;
+  min?: number;
   addStyle?: string;
-  handleChange: ChangeEventHandler;
+  // handleChange: ChangeEventHandler;
+  handleChange: ChangeEventHandler<
+    HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement
+  >;
   type: string;
   name: string;
   id: string;
   placeholder: string;
   required: boolean;
+  defaultValue?: string;
 }
 
-export interface ISubmitButton {
+export interface ISubmitButtonProps {
   text: string;
+}
+
+export interface ILinkButtonProps {
+  text: string;
+  href: string;
+  width?: string;
+  height?: string;
+}
+
+export interface IGenericButtonProps {
+  text: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  addStyles?: string;
+}
+
+export interface IItem {
+  id: number;
+  name: string;
+  quantity?: number;
+  description?: string;
+  duration?: number;
+}
+
+// export interface ICutProps {
+//   name: string;
+//   quantity: number;
+// }
+
+// export interface ISpiceProps {
+//   name: string;
+//   quantity: number;
+// }
+
+// export interface IStepProps {
+//   name: string;
+//   description: string;
+//   duration: number;
+// }
+
+export interface IItemProps {
+  handleChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >;
+  stepNum?: number;
+  items: IItem[];
+  remove: React.MouseEventHandler<HTMLImageElement>;
+  currentItem?: ICut | ISpice | IStep;
 }

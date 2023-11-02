@@ -1,140 +1,130 @@
 "use client";
-import UserInput from "@/components/generic/input/userInput";
-import ImgPreview from "@/components/imgPreview";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
-import StatusButton from "@/components/generic/button/statusButton";
 import React, { useState } from "react";
+import RecipeInput from "@/components/generic/input/recipeInput";
 
 export default function RecipeImageUpload() {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [image, setImage] = useState<File>();
-  const [category, setCategory] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [cuts, setCuts] = useState([{ cut: "", cutQuantity: 0 }]);
+  const [spices, setSpices] = useState([{ spice: "", spiceQuantity: 0 }]);
+  const [steps, setSteps] = useState([
+    { name: "", description: "", duration: 0 },
+  ]);
   const [reqSuccess, setReqSuccess] = useState<string>("false");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { id, value } = e.target;
+  // const [image, setImage] = useState<File>();
+  // const [category, setCategory] = useState<string>("");
 
-    switch (id) {
-      case "title":
-        setTitle(value);
-        break;
-      case "content":
-        setContent(value);
-        break;
-      case "image":
-        if (e.target instanceof HTMLInputElement && e.target.files) {
-          setImage(e.target.files[0]);
-        }
-        break;
-      case "category":
-        setCategory(value);
-        break;
-      default:
-        break;
-    }
-  };
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { id, value } = e.target;
 
-  const handleSubmit = async () => {
-    if (title && content && image && category) {
-      setReqSuccess("pending");
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("image", image);
-      formData.append("category", category);
+  //   switch (id) {
+  //     case "name":
+  //       setName(value);
+  //       break;
+  //     case "cut":
+  //       // console.log(value);
+  //       const newCut = [...meats];
+  //       newCut[0][id] = value;
+  //       setMeats(newCut);
 
-      const response = await fetch("http://localhost:8000/api/recipes", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-      const data = await response.json();
-      if (data.status === "success") {
-        setReqSuccess("true");
-      }
-    }
-  };
+  //       console.log(meats);
+  //       break;
+
+  //     case "cutQuantity":
+  //       // console.log(value);
+  //       const newCutQuantity = [...meats];
+  //       newCutQuantity[0][id] = +value;
+  //       setMeats(newCutQuantity);
+
+  //       break;
+  //     case "spice":
+  //       const newSpice = [...spices];
+  //       newSpice[0][id] = value;
+  //       setSpices(newSpice);
+
+  //       break;
+
+  //     case "spiceQuantity":
+  //       const newSpiceQuantity = [...spices];
+  //       newSpiceQuantity[0][id] = +value;
+  //       setSpices(newSpiceQuantity);
+
+  //     case "step":
+  //       const newStep = [...steps];
+  //       newStep[0][id] = value;
+  //       console.log(newStep);
+  //       setSteps(newStep);
+
+  //       break;
+
+  //     case "stepDescription":
+  //       const newStepDescription = [...steps];
+  //       newStepDescription[0][id] = +value;
+  //       setSteps(newStepDescription);
+
+  //     case "stepDuration":
+  //       const newStepDuration = [...steps];
+  //       newStepDuration[0][id] = +value;
+  //       setSteps(newStepDuration);
+
+  //     // case "image":
+  //     //   if (e.target instanceof HTMLInputElement && e.target.files) {
+  //     //     setImage(e.target.files[0]);
+  //     //   }
+  //     //   break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  // const handleSubmit = async () => {
+  //   if (name && cuts && spices && steps) {
+  //     setReqSuccess("pending");
+  //     // const formData = new FormData();
+  //     // formData.append("name", name);
+  //     // formData.append("meats", meats);
+  //     // formData.append("spices", spices);
+  //     // formData.append("steps", steps);
+  //     // formData.append("image", image);
+  //     // const response = await fetch("http://localhost:8000/api/recipes", {
+  //     //   method: "POST",
+  //     //   credentials: "include",
+  //     //   body: formData,
+  //     // });
+  //     const response = await fetch("http://localhost:8000/api/recipes", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         name,
+  //         cuts,
+  //         spices,
+  //         steps,
+  //       }),
+  //     });
+  //     const data = await response.json();
+  //     if (data.status === "success") {
+  //       setReqSuccess("true");
+  //     }
+  //   }
+  // };
 
   return (
     <PrivateLayout>
-      <div className="w-full flex flex-col items-center h-full justify-center">
-        <div className=" bg-gray-900 py-16 px-48 w-fit rounded-lg">
-          <h1 className="text-white text-4xl">Add Recipe</h1>
-          <form
+      <div className="w-full flex flex-col items-center h-full justify-center my-16">
+        <div className="py-16 w-2/3">
+          {/* <form
             name="uploadForm"
             id="uploadForm"
             method="post"
             onSubmit={handleSubmit}
             className="mt-8"
-          >
-            <div className="">
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col">
-                  <label htmlFor="title" className="text-white">
-                    Title
-                  </label>
-                  <UserInput
-                    width={"w-fit"}
-                    addStyle={"mt-1 mb-4"}
-                    name="title"
-                    handleChange={handleChange}
-                    type="text"
-                    id="title"
-                    placeholder="New Recipe"
-                    required={true}
-                  />
-                  {/* <input
-                    name="title"
-                    onChange={handleChange}
-                    type="text"
-                    id="title"
-                    placeholder="New Recipe"
-                    className="mt-1 mb-4 w-fit border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                    required={true}
-                  /> */}
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="category" className="text-white">
-                    Category
-                  </label>
-                  <UserInput
-                    width={"w-fit"}
-                    addStyle={"mt-1 mb-4"}
-                    name="category"
-                    handleChange={handleChange}
-                    type="text"
-                    id="category"
-                    placeholder="Cured Meats"
-                    required={true}
-                  />
-                  {/* <input
-                    name="category"
-                    onChange={handleChange}
-                    type="text"
-                    id="category"
-                    placeholder="Cured Meats"
-                    className="mt-1 mb-4 w-fit border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                    required={true}
-                  /> */}
-                </div>
-              </div>
+          > */}
+          <RecipeInput />
 
-              <label htmlFor="content" className="text-white">
-                Description
-              </label>
-              <textarea
-                name="content"
-                onChange={handleChange}
-                id="content"
-                placeholder="Step 1, Step 2, ..."
-                className="mt-1 mb-4 w-96 border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                required={true}
-              />
-            </div>
-            <div className="flex flex-col">
+          {/* <div className="flex flex-col">
               <label htmlFor="image" className="text-white">
                 Add Image
               </label>
@@ -164,9 +154,11 @@ export default function RecipeImageUpload() {
                   {image ? <ImgPreview image={image} /> : <div></div>}
                 </div>
               </div>
-            </div>
-            <StatusButton reqSuccess={reqSuccess} />
-          </form>
+            </div> */}
+          {/* <div className="flex justify-end mt-16">
+              <StatusButton reqSuccess={reqSuccess} />
+            </div> */}
+          {/* </form> */}
         </div>
       </div>
     </PrivateLayout>

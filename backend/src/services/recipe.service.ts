@@ -11,12 +11,22 @@ import { AppDataSource } from "../utils/data-source";
 
 const postRepository = AppDataSource.getRepository(Recipe);
 
-export const createRecipe = async (input: Partial<Recipe>, user: User) => {
+export const createRecipe = async (
+  input: Partial<Recipe>,
+  user: User,
+  recipe?: Recipe
+) => {
+  input.cuts?.map(async (cut) => {
+    recipe && recipe.addCut(cut);
+  });
   return await postRepository.save(postRepository.create({ ...input, user }));
 };
 
 export const getRecipe = async (recipeId: string) => {
-  return await postRepository.findOneBy({ id: recipeId });
+  return await postRepository.findOne({
+    where: { id: recipeId },
+    relations: ["cuts", "spices", "steps"],
+  });
 };
 
 export const findRecipes = async (

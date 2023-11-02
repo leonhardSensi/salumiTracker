@@ -14,6 +14,9 @@ import { findUserById } from "../services/user.service";
 import AppError from "../utils/appError";
 import multer from "multer";
 import sharp from "sharp";
+import { Recipe } from "../entities/recipe.entity";
+import { Cut } from "../entities/cuts.entity";
+import { getRepository } from "typeorm";
 
 const multerStorage = multer.memoryStorage();
 
@@ -64,7 +67,7 @@ export const resizeRecipeImage = async (
 };
 
 export const createRecipeHandler = async (
-  req: Request<{}, {}, CreateRecipeInput>,
+  req: any, //Request<{}, {}, CreateRecipeInput>,
   res: Response,
   next: NextFunction
 ) => {
@@ -72,6 +75,17 @@ export const createRecipeHandler = async (
     const user = await findUserById(res.locals.user.id as string);
 
     const recipe = await createRecipe(req.body, user!);
+    // const recipe = new Recipe();
+    // recipe.id = req.body.id;
+    // recipe.title = req.body.title;
+    // recipe.cuts = req.body.cuts.map((cut: Cut) => {
+    //   const newCut = new Cut();
+    //   newCut.name = cut.name;
+    //   newCut.quantity = cut.quantity;
+    //   return newCut;
+    // });
+
+    await createRecipe(recipe, user!, recipe);
 
     res.status(201).json({
       status: "success",

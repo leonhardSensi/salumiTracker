@@ -1,6 +1,6 @@
-import { ISubmitButton } from "@/interfaces/interfaces";
+import { ISubmitButtonProps } from "@/interfaces/interfaces";
 
-export default function SubmitButton({ text }: ISubmitButton) {
+export default function SubmitButton({ text }: ISubmitButtonProps) {
   return (
     <button
       type="submit"

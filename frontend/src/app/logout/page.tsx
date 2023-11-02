@@ -1,6 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import LogoutPage from "@/components/authentication/logoutPage";
+import PublicLayout from "@/components/publicLayout/publicLayout";
 
 export default function Logout() {
   const router = useRouter();
@@ -15,12 +17,15 @@ export default function Logout() {
 
       if (data.status) {
         sessionStorage.clear();
-        router.push("/login");
       } else {
         router.push("/dashboard");
       }
     };
-
     logout();
   }, []);
+  return (
+    <PublicLayout>
+      <LogoutPage />
+    </PublicLayout>
+  );
 }

@@ -54,8 +54,8 @@ export default function Registration() {
 
   return (
     <PublicLayout>
-      <div className="bg-white flex flex-row justify-center pt-24">
-        <section className="bg-white flex flex-col items-center justify-center w-1/2">
+      <div className="bg-register-bg bg-auto bg-no-repeat bg-right-top flex flex-row justify-center pt-24">
+        <section className=" flex flex-col items-center justify-center w-1/2">
           <div className="">
             <Image
               src="/salami.svg"
@@ -77,9 +77,9 @@ export default function Registration() {
             </h3>
           </div>
         </section>
-        <section className="bg-white flex flex-col items-center justify-center w-1/2">
+        <section className=" flex flex-col items-center justify-center w-1/2">
           <div className="">
-            <div className="w-full bg-white rounded-lg shadow dark:border border-gray-700">
+            <div className="w-full bg-white bg-opacity-90 rounded-lg shadow-xl">
               <div className="p-6 space-y-6 sm:p-8">
                 <div className="text-center">
                   <p className="text-black">

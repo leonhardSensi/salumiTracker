@@ -25,7 +25,8 @@ export default function Login() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (email && password) {
       const response = await fetch("http://localhost:8000/api/auth/login", {
         method: "POST",
@@ -38,17 +39,19 @@ export default function Login() {
       });
       const data = await response.json();
       if (data.status === "success") {
+        console.log(data);
         router.push("/");
       } else {
         router.push("/login");
       }
     }
+    return false;
   };
 
   return (
     <PublicLayout>
-      <div className="bg-white flex flex-col mx-auto">
-        <section className="bg-white m-auto text-center">
+      <div className="flex flex-col mx-auto bg-login-bg bg-contain h-screen bg-no-repeat bg-top-left">
+        <section className="text-center">
           <h1 className="text-black text-5xl pt-24 mx-auto font-bold">
             Welcome back!
           </h1>
@@ -56,15 +59,11 @@ export default function Login() {
             Your salumi are waiting
           </h3>
         </section>
-        <section className="bg-white">
+        <section>
           <div className="flex flex-col items-center justify-start px-6 py-8 mx-auto h-full w-screen">
-            <div className="w-screen bg-white rounded-lg shadow border max-w-md border-gray-700">
+            <div className="w-screen bg-white bg-opacity-90 rounded-lg shadow-xl max-w-md">
               <div className="p-8 space-y-4">
-                <form
-                  className="space-y-6"
-                  method="post"
-                  onSubmit={handleSubmit}
-                >
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
                     <label
                       htmlFor="email"
@@ -82,15 +81,6 @@ export default function Login() {
                       placeholder={"name@company.com"}
                       required={true}
                     />
-                    {/* <input
-                      onChange={handleChange}
-                      type="email"
-                      name="email"
-                      id="email"
-                      className=" border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="name@company.com"
-                      required={true}
-                    /> */}
                   </div>
                   <div>
                     <label
@@ -109,16 +99,6 @@ export default function Login() {
                       placeholder={"••••••••"}
                       required={true}
                     />
-
-                    {/* <input
-                      onChange={handleChange}
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                      required={true}
-                    /> */}
                   </div>
                   <div>
                     <Link
@@ -129,12 +109,6 @@ export default function Login() {
                     </Link>
                   </div>
 
-                  {/* <button
-                    type="submit"
-                    className="w-full text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-                  >
-                    Login
-                  </button> */}
                   <SubmitButton text={"Login"} />
                   <div className="text-black">
                     <label htmlFor="terms" className=" text-black">
