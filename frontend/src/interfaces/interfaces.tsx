@@ -15,7 +15,8 @@ export interface Irecipe {
 }
 
 export interface ICut {
-  id?: string;
+  position?: number;
+  id?: string | number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -23,7 +24,8 @@ export interface ICut {
 }
 
 export interface ISpice {
-  id?: string;
+  position?: number;
+  id?: string | number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -31,7 +33,8 @@ export interface ISpice {
 }
 
 export interface IStep {
-  id?: string;
+  position?: number;
+  id?: string | number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -182,7 +185,7 @@ export interface IItemProps {
     HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
   >;
   stepNum?: number;
-  items: IItem[];
+  items: IItem[] | ICut[] | ISpice[] | IStep[];
   remove: React.MouseEventHandler<HTMLImageElement>;
   currentItem?: ICut | ISpice | IStep;
 }

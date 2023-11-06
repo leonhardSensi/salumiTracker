@@ -1,20 +1,12 @@
 "use client";
 
 import { getRecipe } from "@/api/recipeApi";
-import StatusButton from "@/components/generic/button/statusButton";
-import RecipeInput from "@/components/generic/input/recipeInput";
+import EditRecipeInput from "@/components/generic/input/editRecipeInput";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
 export default function EditRecipeDetails() {
-  const [reqSuccess, setReqSuccess] = useState("false");
-  const handleSubmit = () => {
-    console.log("submit");
-    setReqSuccess("true");
-  };
-
   const params = useParams();
 
   const {
@@ -30,7 +22,7 @@ export default function EditRecipeDetails() {
     <PrivateLayout>
       <div className="w-full flex flex-col items-center h-full justify-center my-16">
         <div className="py-16 w-2/3 rounded-lg">
-          <RecipeInput recipe={recipe && recipe} />
+          {recipe && <EditRecipeInput recipe={recipe} />}
 
           {/* <div className="flex flex-col">
                       <label htmlFor="image" className="text-white">

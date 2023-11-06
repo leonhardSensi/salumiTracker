@@ -33,7 +33,6 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
   //   }
   // }, []);
 
-  console.log(cuts);
   const add = (items: IItem[], type: string) => {
     const nextId = items[items.length - 1].id + 1;
 
