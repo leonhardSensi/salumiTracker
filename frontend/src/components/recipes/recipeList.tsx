@@ -57,15 +57,15 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
                   >
                     <th
                       scope="row"
-                      className="text-xl cursor-pointer px-6 py-4 font-medium text-white whitespace-nowrap "
+                      className="text-xl cursor-pointer px-6 py-4 font-medium text-white whitespace-nowrap"
                       onClick={() => router.push(`/recipes/edit/${recipe.id}`)}
                     >
                       {/* <Image
-                  src={`http://localhost:8000/recipes/${recipe.image}`}
-                  width={100}
-                  height={100}
-                  alt="recipe image"
-                /> */}
+                        src={`http://localhost:8000/recipes/${recipe.image}`}
+                        width={100}
+                        height={100}
+                        alt="recipe image"
+                      /> */}
                       {recipe.title}
                     </th>
                     <td
@@ -73,20 +73,22 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
                       onClick={() => router.push(`/recipes/edit/${recipe.id}`)}
                     >
                       {new Date(recipe.created_at).getDate()}/
-                      {new Date(recipe.created_at).getMonth()}/
+                      {new Date(recipe.created_at).getMonth() + 1}/
                       {new Date(recipe.created_at).getFullYear()}
                     </td>
 
                     <td className="px-6 py-4">
                       <div className="relative group inline-block">
-                        <button className="flex flex-row group-hover:bg-gray-700 py-2 px-4 rounded-t-md text-white hover:text-gray-300 transition-colors w-fit">
-                          <Image
-                            className="w-4"
-                            src={"./edit.svg"}
-                            width={100}
-                            height={100}
-                            alt="edit"
-                          />
+                        <button className="flex flex-row py-2 px-4 rounded-t-md text-white w-fit">
+                          <div className="border-white rounded-full border-2 border-solid p-2 group group-hover:bg-white">
+                            <Image
+                              className="w-3 group-hover:invert"
+                              src={"./edit.svg"}
+                              width={100}
+                              height={100}
+                              alt="edit"
+                            />
+                          </div>
                         </button>
                         <div className="z-10 w-fit hidden group-hover:block absolute bg-white py-2 px-3 rounded-md shadow-lg">
                           <Link

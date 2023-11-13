@@ -42,6 +42,25 @@ export interface IStep {
   duration: number;
 }
 
+export interface IrecipeToCreate {
+  title: string;
+  cuts: IItem[];
+  spices: IItem[];
+  steps: IItem[];
+}
+
+export interface IloginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface IregisterCredentials {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 export interface IrecipeData {
   recipes: Irecipe[];
 }
@@ -137,6 +156,7 @@ export interface IUserInput {
   placeholder: string;
   required: boolean;
   defaultValue?: string;
+  autoComplete?: string;
 }
 
 export interface ISubmitButtonProps {

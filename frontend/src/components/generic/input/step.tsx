@@ -1,6 +1,7 @@
-import { IItemProps } from "@/interfaces/interfaces";
+import { IItemProps, IStep } from "@/interfaces/interfaces";
 import UserInput from "./userInput";
 import Image from "next/image";
+import { handleCurrentItem } from "@/utils/typeChecker";
 
 export default function Step({
   handleChange,
@@ -47,7 +48,7 @@ export default function Step({
         placeholder="Cut all the meats in small pieces and add all the spices"
         className="w-full h-32 text-white mt-1 mb-4 border text-l rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
         required={true}
-        defaultValue={currentItem && currentItem.description}
+        defaultValue={handleCurrentItem(currentItem, "description")}
       />
       <label htmlFor="stepDuration" className="text-gray-900 text-xl">
         Duration (minutes)
@@ -63,7 +64,7 @@ export default function Step({
         step="0.5"
         min={0}
         required={true}
-        defaultValue={currentItem && currentItem.duration}
+        defaultValue={handleCurrentItem(currentItem, "duration")}
       />
     </>
   );

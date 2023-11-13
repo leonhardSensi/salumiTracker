@@ -35,23 +35,27 @@ export default function RootLayout({
   }
 
   const checkAuth = () => {
-    console.log("entered");
     try {
-      if (!document.cookie.includes("logged_in=true")) {
-        router.push("/login");
+      if (
+        !document.cookie.includes("logged_in=true") &&
+        pathname !== "/register" &&
+        pathname !== "/login"
+      ) {
+        console.log(pathname !== "/register");
+        router.push("/logout");
       }
     } catch (e) {
       console.log("Error checking authentication status:", e);
     }
   };
 
-  useEffect(() => {
-    checkAuth();
-    const interval = setInterval(checkAuth, 6000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  // useEffect(() => {
+  //   checkAuth();
+  //   const interval = setInterval(checkAuth, 6000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   return (
     <html lang="en">

@@ -7,6 +7,10 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "@/api/userApi";
+import { IregisterCredentials } from "@/interfaces/interfaces";
+import { useRegisterMutation } from "@/mutations/userMutations";
 
 export default function Registration() {
   const [name, setName] = useState("");
@@ -34,23 +38,30 @@ export default function Registration() {
     }
   };
 
-  const handleSubmit = async () => {
-    if (name && email && password && passwordConfirm) {
-      const response = await fetch("http://localhost:8000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          passwordConfirm,
-        }),
-      });
-      const data = await response.json();
-      console.log("response data:", data);
-      router.push("/");
-    }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const registerCredentials = {
+      name,
+      email,
+      password,
+      passwordConfirm,
+    };
+    const createUser = useRegisterMutation();
+    // registerMutation.mutate(registerCredentials);
+    createUser.mutate(registerCredentials);
   };
+
+  // const registerMutation = useMutation({
+  //   mutationFn: (registerCredentials: IregisterCredentials) => {
+  //     return register(
+  //       registerCredentials.name,
+  //       registerCredentials.email,
+  //       registerCredentials.password,
+  //       registerCredentials.passwordConfirm
+  //     );
+  //   },
+  //   onSuccess: () => router.push("/"),
+  // });
 
   return (
     <PublicLayout>

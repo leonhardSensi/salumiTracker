@@ -2,22 +2,10 @@
 
 import { getUser } from "@/api/userApi";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
-import { QueryCache, useQuery } from "@tanstack/react-query";
-import { Days_One } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Account() {
   const { data } = useQuery(["user"], getUser);
-
-  // useEffect(() => {
-  //   const email = sessionStorage.getItem("email");
-  //   const name = sessionStorage.getItem("name");
-
-  //   if (email && name) {
-  //     setEmail(email);
-  //     setName(name);
-  //   }
-  // }, []);
 
   return (
     <PrivateLayout>

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
 import UserInput from "./userInput";
-import { ICut, IItem, Irecipe, ISpice, IStep } from "@/interfaces/interfaces";
+import { IItem, Irecipe, IrecipeToCreate } from "@/interfaces/interfaces";
 import GenericButton from "../button/genericButton";
 import StatusButton from "../button/statusButton";
+import { useMutation } from "@tanstack/react-query";
+import { submitRecipe } from "@/api/recipeApi";
+import { useRecipeMutation } from "@/mutations/recipeMutations";
 
 export default function RecipeInput(props: { recipe?: Irecipe }) {
   const [name, setName] = useState("");
@@ -19,7 +22,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
     { id: 1, name: "", description: "", duration: 0 },
   ]);
 
-  const [reqSuccess, setReqSuccess] = useState<string>("false");
+  const createRecipe = useRecipeMutation();
 
   // useEffect(() => {
   //   if (props.recipe) {
@@ -33,7 +36,6 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
   //   }
   // }, []);
 
-  console.log(cuts);
   const add = (items: IItem[], type: string) => {
     const nextId = items[items.length - 1].id + 1;
 
@@ -141,58 +143,15 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
     }
   };
 
-  const handleSubmit = async () => {
-    if (cuts && spices && steps) {
-      const submitCuts: ICut[] = [];
-      cuts.map(
-        (cut) =>
-          cut.quantity &&
-          submitCuts.push({ name: cut.name, quantity: cut.quantity })
-      );
-      let submitSpices: ISpice[] = [];
-      spices.map(
-        (spice) =>
-          spice.quantity &&
-          submitSpices.push({ name: spice.name, quantity: spice.quantity })
-      );
-
-      let submitSteps: IStep[] = [];
-      steps.map(
-        (step) =>
-          step.description &&
-          step.duration &&
-          submitSteps.push({
-            name: step.name,
-            description: step.description,
-            duration: step.duration,
-          })
-      );
-      const response = await fetch("http://localhost:8000/api/recipes", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          title: name,
-          cuts: submitCuts,
-          spices: submitSpices,
-          steps: submitSteps,
-        }),
-      });
-      const data = await response.json();
-      console.log(
-        "request data:",
-        JSON.stringify({
-          title: name,
-          cuts: submitCuts,
-          spices: submitSpices,
-          steps: submitSteps,
-        })
-      );
-      console.log("response data", data);
-      if (data.status === "success") {
-        setReqSuccess("true");
-      }
-    }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recipe = {
+      title: name,
+      cuts: cuts,
+      spices: spices,
+      steps: steps,
+    };
+    createRecipe.mutate(recipe);
   };
 
   const renderRecipe = (data: string) => {
@@ -349,7 +308,9 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
           addStyles="w-fit p-2"
         />
         <div className="flex justify-end mt-16">
-          <StatusButton reqSuccess={reqSuccess} />
+          <StatusButton
+            reqSuccess={createRecipe.isLoading ? "pending" : "false"}
+          />
         </div>
       </form>
     </div>

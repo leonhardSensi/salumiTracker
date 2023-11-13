@@ -6,11 +6,14 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
+import { useLoginMutation } from "@/mutations/userMutations";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
+
+  const loginUser = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.id) {
@@ -27,25 +30,14 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (email && password) {
-      const response = await fetch("http://localhost:8000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      const data = await response.json();
-      if (data.status === "success") {
-        console.log(data);
-        router.push("/");
-      } else {
-        router.push("/login");
-      }
-    }
-    return false;
+    const loginCredentials = {
+      email,
+      password,
+    };
+    loginUser.mutate(loginCredentials);
+
+    // login button needs to be clicked twice in order to be redirected.
+    loginUser.isSuccess && router.push("/");
   };
 
   return (
@@ -80,6 +72,7 @@ export default function Login() {
                       id={"email"}
                       placeholder={"name@company.com"}
                       required={true}
+                      autoComplete={"email"}
                     />
                   </div>
                   <div>
@@ -98,6 +91,7 @@ export default function Login() {
                       id={"password"}
                       placeholder={"••••••••"}
                       required={true}
+                      autoComplete={"password"}
                     />
                   </div>
                   <div>

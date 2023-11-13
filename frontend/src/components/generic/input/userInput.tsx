@@ -26,6 +26,7 @@ export default function UserInput({
       step={step}
       min={min}
       defaultValue={defaultValue}
+      autoComplete={"current password"}
     />
   );
 }

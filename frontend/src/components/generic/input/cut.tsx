@@ -2,6 +2,7 @@ import { IItemProps } from "@/interfaces/interfaces";
 import React from "react";
 import UserInput from "./userInput";
 import Image from "next/image";
+import { handleCurrentItem } from "@/utils/typeChecker";
 
 export default function Cut({
   handleChange,
@@ -9,31 +10,6 @@ export default function Cut({
   remove,
   currentItem,
 }: IItemProps) {
-  const handleCurrentItem = (data: string) => {
-    if (currentItem) {
-      switch (data) {
-        case "name":
-          return currentItem.name;
-        case "quantity":
-          if ("quantity" in currentItem) {
-            return JSON.stringify(currentItem.quantity);
-          }
-          break;
-        case "description":
-          if ("description" in currentItem) {
-            return currentItem.description;
-          }
-          break;
-        case "duration":
-          if ("duration" in currentItem) {
-            return JSON.stringify(currentItem.duration);
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  };
   return (
     <>
       <div className="flex flex-col w-full">
@@ -50,7 +26,7 @@ export default function Cut({
           id="cut"
           placeholder="Pork Belly"
           required={true}
-          defaultValue={handleCurrentItem("name")}
+          defaultValue={handleCurrentItem(currentItem, "name")}
         />
       </div>
       <div className="flex flex-col ml-4 w-fit">
@@ -68,7 +44,7 @@ export default function Cut({
           step="0.1"
           min={0}
           required={true}
-          defaultValue={handleCurrentItem("quantity")}
+          defaultValue={handleCurrentItem(currentItem, "quantity")}
         />
       </div>
       <div className="w-8">
