@@ -16,7 +16,7 @@ export interface Irecipe {
 
 export interface ICut {
   position?: number;
-  id?: string | number;
+  id: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -25,7 +25,7 @@ export interface ICut {
 
 export interface ISpice {
   position?: number;
-  id?: string | number;
+  id: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -34,7 +34,7 @@ export interface ISpice {
 
 export interface IStep {
   position?: number;
-  id?: string | number;
+  id: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -47,6 +47,19 @@ export interface IrecipeToCreate {
   cuts: IItem[];
   spices: IItem[];
   steps: IItem[];
+}
+
+export interface IrecipeToUpdate {
+  id: string;
+  title: string;
+  cuts: IItem[];
+  spices: IItem[];
+  steps: IItem[];
+}
+
+export interface IuserToUpdate {
+  name: string;
+  email: string;
 }
 
 export interface IloginCredentials {
@@ -134,6 +147,30 @@ export interface ICardDetailsProps {
   children?: React.ReactNode;
 }
 
+export interface IUserCardProps {
+  title: string;
+  details: string;
+  imgSrc: string;
+  isModalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+}
+
+export interface IModalProps {
+  isModalVisible: boolean;
+  closeModal: () => void;
+  // setModalVisibility: (visibility: boolean) => void;
+  // handleChange: (
+  //   event: React.ChangeEvent<
+  //     HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
+  //   >
+  // ) => void;
+  imgSrc: string;
+  title?: string;
+  details?: string;
+  addStyle: string;
+}
+
 interface IImageSize {
   width: number;
   height: number;
@@ -207,5 +244,5 @@ export interface IItemProps {
   stepNum?: number;
   items: IItem[] | ICut[] | ISpice[] | IStep[];
   remove: React.MouseEventHandler<HTMLImageElement>;
-  currentItem?: ICut | ISpice | IStep;
+  currentItem?: IItem;
 }

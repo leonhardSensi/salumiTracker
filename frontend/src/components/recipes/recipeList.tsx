@@ -37,7 +37,7 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
               <p>No recipes found. Create a new one instead!</p>
             </div>
           ) : (
-            <table className="border rounded-lg w-full text-m text-left text-gray-500 dark:text-gray-400">
+            <table className="border rounded-lg w-full text-m text-left text-gray-500 dark:text-gray-400 mb-16">
               <thead className="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr className="w-full">
                   <th scope="col" className="px-6 py-3">

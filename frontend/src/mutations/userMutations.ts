@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, register } from "@/api/userApi";
+import { login, register, updateUser } from "@/api/userApi";
 import {
   IloginCredentials,
   IregisterCredentials,
+  IuserToUpdate,
 } from "@/interfaces/interfaces";
 
 export const useRegisterMutation = () => {
@@ -27,5 +28,13 @@ export const useLoginMutation = () => {
       return login(loginCredentials.email, loginCredentials.password);
     },
     // onSuccess: () => router.push("/"),
+  });
+};
+
+export const useUpdateUserMutation = () => {
+  return useMutation({
+    mutationFn: (user: IuserToUpdate) => {
+      return updateUser(user.name, user.email);
+    },
   });
 };

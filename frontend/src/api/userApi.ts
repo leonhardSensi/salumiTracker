@@ -55,3 +55,18 @@ export async function register(
   });
   return response;
 }
+
+export async function updateUser(name: string, email: string) {
+  const response = await fetch("http://localhost:8000/api/users/update", {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      email,
+    }),
+  });
+  return response;
+}

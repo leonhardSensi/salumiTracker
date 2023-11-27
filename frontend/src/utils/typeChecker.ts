@@ -1,7 +1,7 @@
-import { ICut, ISpice, IStep } from "@/interfaces/interfaces";
+import { ICut, IItem, ISpice, IStep } from "@/interfaces/interfaces";
 
 export function handleCurrentItem(
-  currentItem: ICut | ISpice | IStep | undefined,
+  currentItem: IItem | undefined,
   data: string
 ) {
   if (currentItem) {
@@ -9,7 +9,7 @@ export function handleCurrentItem(
       case "name":
         return currentItem.name;
       case "quantity":
-        if ("quantity" in currentItem) {
+        if ("quantity" in currentItem && currentItem.quantity !== 0) {
           return JSON.stringify(currentItem.quantity);
         }
         break;
@@ -19,7 +19,7 @@ export function handleCurrentItem(
         }
         break;
       case "duration":
-        if ("duration" in currentItem) {
+        if ("duration" in currentItem && currentItem.duration !== 0) {
           return JSON.stringify(currentItem.duration);
         }
         break;

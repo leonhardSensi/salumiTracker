@@ -1,48 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
 import UserInput from "./userInput";
-import { ICut, IItem, Irecipe, ISpice, IStep } from "@/interfaces/interfaces";
+import { IItem, Irecipe } from "@/interfaces/interfaces";
 import GenericButton from "../button/genericButton";
 import StatusButton from "../button/statusButton";
+import { useUpdateRecipeMutation } from "@/mutations/recipeMutations";
 
-export default function RecipeInput(props: { recipe?: Irecipe }) {
-  const [name, setName] = useState("");
+export default function EditRecipeInput(props: { recipe: Irecipe }) {
+  const initCuts = props.recipe.cuts.map((cut) => {
+    cut.id = props.recipe.cuts.indexOf(cut) + 1;
+    delete cut.created_at;
+    delete cut.updated_at;
+    return cut;
+  });
 
-  const [cuts, setCuts] = useState<IItem[]>([{ id: 1, name: "", quantity: 0 }]);
+  const initSpices = props.recipe.spices.map((spice) => {
+    spice.id = props.recipe.spices.indexOf(spice) + 1;
+    delete spice.created_at;
+    delete spice.updated_at;
+    return spice;
+  });
 
-  const [spices, setSpices] = useState<IItem[]>([
-    { id: 1, name: "", quantity: 0 },
-  ]);
-  const [steps, setSteps] = useState<IItem[]>([
-    { id: 1, name: "", description: "", duration: 0 },
-  ]);
+  const initSteps = props.recipe.steps.map((step) => {
+    step.id = props.recipe.steps.indexOf(step) + 1;
+    delete step.created_at;
+    delete step.updated_at;
+    return step;
+  });
 
-  const [reqSuccess, setReqSuccess] = useState<string>("false");
+  const [name, setName] = useState(props.recipe.title);
 
-  // useEffect(() => {
-  //   if (props.recipe) {
-  //     props.recipe.cuts.map((cut, index) => {
-  //       const nextId = index;
-  //       setCuts([
-  //         ...cuts,
-  //         { id: nextId, name: cut.name, quantity: cut.quantity },
-  //       ]);
-  //     });
-  //   }
-  // }, []);
+  const [cuts, setCuts] = useState<IItem[]>([...initCuts]);
+
+  const [spices, setSpices] = useState<IItem[]>([...initSpices]);
+  const [steps, setSteps] = useState<IItem[]>([...initSteps]);
+
+  // const [reqSuccess, setReqSuccess] = useState<string>("false");
+
+  const updateRecipe = useUpdateRecipeMutation();
 
   const add = (items: IItem[], type: string) => {
     const nextId = items[items.length - 1].id + 1;
 
     switch (type) {
       case "cuts":
-        setCuts([
-          ...cuts,
-          { id: nextId, name: "", quantity: 0 },
-          // { id: nextId, name: cut.name, quantity: cut.quantity },
-        ]);
+        setCuts([...cuts, { id: nextId, name: "", quantity: 0 }]);
         break;
       case "spices":
         setSpices([...spices, { id: nextId, name: "", quantity: 0 }]);
@@ -92,7 +96,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
         const updatedCuts = cuts.map((cut) =>
           cut.id === id ? { ...cut, name: value } : cut
         );
-        console.log(updatedCuts);
+        console.log("updated", updatedCuts);
         setCuts(updatedCuts);
         break;
       case "cutQuantity":
@@ -140,117 +144,16 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
     }
   };
 
-  const handleSubmit = async () => {
-    if (cuts && spices && steps) {
-      const submitCuts: ICut[] = [];
-      cuts.map(
-        (cut) =>
-          cut.quantity &&
-          submitCuts.push({ name: cut.name, quantity: cut.quantity })
-      );
-      let submitSpices: ISpice[] = [];
-      spices.map(
-        (spice) =>
-          spice.quantity &&
-          submitSpices.push({ name: spice.name, quantity: spice.quantity })
-      );
-
-      let submitSteps: IStep[] = [];
-      steps.map(
-        (step) =>
-          step.description &&
-          step.duration &&
-          submitSteps.push({
-            name: step.name,
-            description: step.description,
-            duration: step.duration,
-          })
-      );
-      const response = await fetch("http://localhost:8000/api/recipes", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          title: name,
-          cuts: submitCuts,
-          spices: submitSpices,
-          steps: submitSteps,
-        }),
-      });
-      const data = await response.json();
-      console.log(
-        "request data:",
-        JSON.stringify({
-          title: name,
-          cuts: submitCuts,
-          spices: submitSpices,
-          steps: submitSteps,
-        })
-      );
-      console.log("response data", data);
-      if (data.status === "success") {
-        setReqSuccess("true");
-      }
-    }
-  };
-
-  const renderRecipe = (data: string) => {
-    if (props.recipe) {
-      switch (data) {
-        case "cut":
-          add(cuts, "cut");
-          return props.recipe.cuts.map((cut, index) => (
-            <div
-              key={`cut-${cut.id}`}
-              className="flex flex-row justify-between"
-            >
-              <>
-                <Cut
-                  handleChange={(e) => handleChange(e, index)}
-                  remove={() => remove(cuts, index, "cuts")}
-                  items={cuts}
-                  currentItem={cut}
-                />
-              </>
-            </div>
-          ));
-        case "spice":
-          return props.recipe.spices.map((spice, index) => (
-            <div
-              key={`step-${spice.id}`}
-              className="flex flex-row justify-between"
-            >
-              <>
-                <Spice
-                  handleChange={(e) => handleChange(e, index)}
-                  stepNum={index}
-                  remove={() => remove(steps, index, "spices")}
-                  items={steps}
-                  currentItem={spice}
-                />
-              </>
-            </div>
-          ));
-
-        case "step":
-          return props.recipe.steps.map((step, index) => (
-            <div key={`step-${step.id}`}>
-              <>
-                <Step
-                  handleChange={(e) => handleChange(e, index)}
-                  stepNum={index}
-                  remove={() => remove(steps, index, "steps")}
-                  items={steps}
-                  currentItem={step}
-                />
-              </>
-            </div>
-          ));
-
-        default:
-          break;
-      }
-    }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recipe = {
+      id: props.recipe && props.recipe.id,
+      title: name,
+      cuts: cuts,
+      spices: spices,
+      steps: steps,
+    };
+    updateRecipe.mutate(recipe);
   };
 
   return (
@@ -269,7 +172,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
         />
 
         <h1 className="text-gray-900 text-3xl my-4 font-bold">Meats</h1>
-        {renderRecipe("cut")}
+        {/* {renderRecipe("cut")} */}
         {cuts.map((cut) => (
           <div key={`cut-${cut.id}`} className="flex flex-row justify-between">
             {cut !== null && (
@@ -278,6 +181,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
                   handleChange={(e) => handleChange(e, cut.id)}
                   remove={() => remove(cuts, cut.id, "cuts")}
                   items={cuts}
+                  currentItem={cut}
                 />
               </>
             )}
@@ -291,7 +195,6 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
         />
 
         <h1 className="text-gray-900 text-3xl my-4 font-bold">Spices</h1>
-        {renderRecipe("spice")}
         {spices.map((spice) => (
           <div
             key={`spice-${spice.id}`}
@@ -303,6 +206,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
                   handleChange={(e) => handleChange(e, spice.id)}
                   remove={() => remove(spices, spice.id, "spices")}
                   items={spices}
+                  currentItem={spice}
                 />
               </>
             )}
@@ -315,7 +219,6 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
         />
 
         <h1 className="text-gray-900 text-3xl my-4 font-bold">Steps</h1>
-        {renderRecipe("step")}
         {steps.map((step) => (
           <div key={`step-${step.id}`}>
             {step !== null && (
@@ -325,6 +228,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
                   stepNum={steps.indexOf(step) + 1}
                   remove={() => remove(steps, step.id, "steps")}
                   items={steps}
+                  currentItem={step}
                 />
                 {/* <div className="w-4">
                 <Image
@@ -348,7 +252,9 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
           addStyles="w-fit p-2"
         />
         <div className="flex justify-end mt-16">
-          <StatusButton reqSuccess={reqSuccess} />
+          <StatusButton
+            reqSuccess={updateRecipe.isLoading ? "pending" : "false"}
+          />
         </div>
       </form>
     </div>

@@ -6,6 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect } from "react";
+import { ModalProvider } from "@/utils/modalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 

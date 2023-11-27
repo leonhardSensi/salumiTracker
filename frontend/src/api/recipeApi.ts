@@ -47,6 +47,54 @@ export async function submitRecipe(
 ) {
   if (cuts && spices && steps) {
     const submitCuts: ICut[] = [];
+    cuts.forEach(
+      (cut) =>
+        cut.quantity &&
+        submitCuts.push({ name: cut.name, quantity: cut.quantity })
+    );
+    let submitSpices: ISpice[] = [];
+    spices.forEach(
+      (spice) =>
+        spice.quantity &&
+        submitSpices.push({ name: spice.name, quantity: spice.quantity })
+    );
+
+    let submitSteps: IStep[] = [];
+    steps.forEach(
+      (step) =>
+        step.description &&
+        step.duration &&
+        submitSteps.push({
+          name: step.name,
+          description: step.description,
+          duration: step.duration,
+        })
+    );
+
+    const response = await fetch("http://localhost:8000/api/recipes", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        title: name,
+        cuts: submitCuts,
+        spices: submitSpices,
+        steps: submitSteps,
+      }),
+    });
+    return response;
+  }
+}
+
+export const updateRecipe = async (
+  id: string,
+  name: string,
+  cuts: IItem[],
+  spices: IItem[],
+  steps: IItem[]
+) => {
+  if (cuts && spices && steps) {
+    const submitCuts: ICut[] = [];
     cuts.map(
       (cut) =>
         cut.quantity &&
@@ -70,8 +118,8 @@ export async function submitRecipe(
           duration: step.duration,
         })
     );
-    const response = await fetch("http://localhost:8000/api/recipes", {
-      method: "POST",
+    const response = await fetch(`http://localhost:8000/api/recipes/${id}`, {
+      method: "PATCH",
       headers: { "Content-type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
@@ -83,4 +131,4 @@ export async function submitRecipe(
     });
     return response;
   }
-}
+};

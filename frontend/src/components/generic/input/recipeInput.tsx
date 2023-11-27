@@ -3,11 +3,9 @@ import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
 import UserInput from "./userInput";
-import { IItem, Irecipe, IrecipeToCreate } from "@/interfaces/interfaces";
+import { IItem, Irecipe } from "@/interfaces/interfaces";
 import GenericButton from "../button/genericButton";
 import StatusButton from "../button/statusButton";
-import { useMutation } from "@tanstack/react-query";
-import { submitRecipe } from "@/api/recipeApi";
 import { useRecipeMutation } from "@/mutations/recipeMutations";
 
 export default function RecipeInput(props: { recipe?: Irecipe }) {
@@ -24,28 +22,12 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
 
   const createRecipe = useRecipeMutation();
 
-  // useEffect(() => {
-  //   if (props.recipe) {
-  //     props.recipe.cuts.map((cut, index) => {
-  //       const nextId = index;
-  //       setCuts([
-  //         ...cuts,
-  //         { id: nextId, name: cut.name, quantity: cut.quantity },
-  //       ]);
-  //     });
-  //   }
-  // }, []);
-
   const add = (items: IItem[], type: string) => {
     const nextId = items[items.length - 1].id + 1;
 
     switch (type) {
       case "cuts":
-        setCuts([
-          ...cuts,
-          { id: nextId, name: "", quantity: 0 },
-          // { id: nextId, name: cut.name, quantity: cut.quantity },
-        ]);
+        setCuts([...cuts, { id: nextId, name: "", quantity: 0 }]);
         break;
       case "spices":
         setSpices([...spices, { id: nextId, name: "", quantity: 0 }]);
