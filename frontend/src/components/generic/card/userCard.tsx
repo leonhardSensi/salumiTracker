@@ -17,8 +17,6 @@ export default function UserCard({
 IUserCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  console.log(title);
-
   const handleModalData = (id: string) => {
     switch (id) {
       case "Name":

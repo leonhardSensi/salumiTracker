@@ -20,6 +20,12 @@ export class User extends Model {
   })
   email: string;
 
+  @Column({
+    unique: false,
+    default: "missing date of birth",
+  })
+  date_of_birth: string;
+
   @Column()
   password: string;
 

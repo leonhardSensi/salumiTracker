@@ -15,9 +15,12 @@ import { useRegisterMutation } from "@/mutations/userMutations";
 export default function Registration() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const router = useRouter();
+
+  const createUser = useRegisterMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.id) {
@@ -26,6 +29,10 @@ export default function Registration() {
         break;
       case "email":
         setEmail(e.target.value);
+        break;
+      case "dateOfBirth":
+        setDateOfBirth(e.target.value);
+        console.log(dateOfBirth);
         break;
       case "password":
         setPassword(e.target.value);
@@ -43,10 +50,11 @@ export default function Registration() {
     const registerCredentials = {
       name,
       email,
+      dateOfBirth,
       password,
       passwordConfirm,
     };
-    const createUser = useRegisterMutation();
+    console.log(registerCredentials);
     // registerMutation.mutate(registerCredentials);
     createUser.mutate(registerCredentials);
   };
@@ -143,6 +151,23 @@ export default function Registration() {
                       name={"email"}
                       id={"email"}
                       placeholder={"name@company.com"}
+                      required={true}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="dateOfBirth"
+                      className="block mb-2 text-sm font-medium text-gray-500"
+                    >
+                      Your date of birth
+                    </label>
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
+                      type={"date"}
+                      name={"dateOfBirth"}
+                      id={"dateOfBirth"}
+                      placeholder={""}
                       required={true}
                     />
                   </div>

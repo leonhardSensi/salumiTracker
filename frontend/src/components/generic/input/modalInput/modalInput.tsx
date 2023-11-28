@@ -10,6 +10,9 @@ export default function ModalInput({ text }: { text?: string }) {
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
+  const [dateOfBirth, setDateOfBirth] = useState(
+    data ? data.date_of_birth : ""
+  );
 
   const updateUser = useUpdateUserMutation();
 
@@ -25,6 +28,9 @@ export default function ModalInput({ text }: { text?: string }) {
         break;
       case "Email":
         setEmail(e.target.value);
+      case "Date of birth":
+        console.log(e.target.value);
+        setDateOfBirth(e.target.value);
       default:
         break;
     }
@@ -35,7 +41,9 @@ export default function ModalInput({ text }: { text?: string }) {
     const user = {
       name,
       email,
+      dateOfBirth,
     };
+    console.log("USER", user);
     updateUser.mutate(user);
     window.location.reload();
   };
@@ -45,16 +53,16 @@ export default function ModalInput({ text }: { text?: string }) {
       <div className="flex flex-col mb-2 justify-center items-center">
         <div className="w-full">
           <label
-            htmlFor="name"
+            htmlFor="update info"
             className="block mb-2 text-m font-medium text-black"
           >
             {text}
           </label>
           <UserInput
             handleChange={(e) => handleChange(e, text)}
-            type={"name"}
-            name={"name"}
-            id={"name"}
+            type={"text"}
+            name={"update info"}
+            id={"update info"}
             placeholder={`New ${text}`}
             required={true}
             addStyle={"mb-4 w-full"}

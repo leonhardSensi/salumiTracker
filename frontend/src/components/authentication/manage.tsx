@@ -4,10 +4,9 @@ import { getUser } from "@/api/userApi";
 import AccountMenu from "@/components/authentication/accountMenu";
 import UserCard from "@/components/generic/card/userCard";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
-import { ModalProvider, useModal } from "@/utils/modalProvider";
+import { useModal } from "@/utils/modalProvider";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import Modal from "../generic/modal/modal";
+import { useEffect } from "react";
 
 export default function ManageAccount() {
   //-----.-.....
@@ -48,7 +47,7 @@ export default function ManageAccount() {
           />
           <UserCard
             title={"Date of birth"}
-            details={"03.04.1998"}
+            details={data ? data.date_of_birth : ""}
             imgSrc={"/calendar.svg"}
             isModalOpen={isModalOpen}
             openModal={openModal}

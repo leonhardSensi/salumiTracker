@@ -18,6 +18,7 @@ import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
 import { User } from "../entities/user.entity";
 import Email from "../utils/email";
+import { string } from "zod";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -52,10 +53,11 @@ export const registerUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { name, password, email } = req.body;
+    const { name, dateOfBirth, password, email } = req.body;
 
     const newUser = await createUser({
       name,
+      date_of_birth: dateOfBirth,
       email: email.toLowerCase(),
       password,
     });

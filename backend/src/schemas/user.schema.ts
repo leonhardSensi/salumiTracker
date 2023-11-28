@@ -9,6 +9,7 @@ export const createUserSchema = object({
     email: string({
       required_error: "Email address is required",
     }).email("Invalid email address"),
+    dateOfBirth: string({ required_error: "Date of birth is required" }),
     password: string({
       required_error: "Password is required",
     })
@@ -57,6 +58,7 @@ export const updateUserSchema = object({
   body: object({
     name: string(),
     email: string(),
+    date_of_birth: string(),
     password: string(),
   }),
 });

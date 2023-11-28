@@ -68,7 +68,7 @@ export default function Information() {
             />
             <UserCard
               title={"Date of birth"}
-              details={"03.04.1998"}
+              details={data ? data.date_of_birth : ""}
               imgSrc={"/calendar.svg"}
               isModalOpen={isModalOpen}
               openModal={openModal}

@@ -32,13 +32,13 @@ export default function Modal(
         if (sessionStorage.getItem("name")) {
           return data?.name;
         } else if (sessionStorage.getItem("dateOfBirth")) {
-          return "03.04.1998";
+          return data?.date_of_birth;
         }
       case "/account/manage":
         if (sessionStorage.getItem("name")) {
           return data?.name;
         } else if (sessionStorage.getItem("dateOfBirth")) {
-          return "03.04.1998";
+          return data?.date_of_birth;
         }
       default:
         break;

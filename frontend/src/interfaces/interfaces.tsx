@@ -60,6 +60,7 @@ export interface IrecipeToUpdate {
 export interface IuserToUpdate {
   name: string;
   email: string;
+  dateOfBirth: string;
 }
 
 export interface IloginCredentials {
@@ -70,6 +71,7 @@ export interface IloginCredentials {
 export interface IregisterCredentials {
   name: string;
   email: string;
+  dateOfBirth: string;
   password: string;
   passwordConfirm: string;
 }
@@ -103,6 +105,7 @@ export interface IprofileData {
 export interface Iuser {
   created_at: string;
   email: string;
+  date_of_birth: string;
   id: string;
   name: string;
   role: string;

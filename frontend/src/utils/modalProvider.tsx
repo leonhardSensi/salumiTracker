@@ -10,7 +10,6 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
-    console.log("opened modal");
     setIsModalOpen(true);
   };
   const closeModal = () => setIsModalOpen(false);

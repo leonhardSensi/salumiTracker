@@ -21,12 +21,11 @@ export const getMeHandler = async (
 };
 
 export const updateUserHandler = async (
-  req: Request<UpdateUserInput["params"], {}, UpdateUserInput["body"]>,
+  req: Request<UpdateUserInput["params"], UpdateUserInput["body"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    console.log("hello");
     const user = await res.locals.user;
 
     Object.assign(user, req.body);

@@ -11,6 +11,9 @@ export default function UpdatePassword() {
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
+  const [dateOfBirth, setDateOfBirth] = useState(
+    data ? data.date_of_birth : ""
+  );
   const [password, setPassword] = useState("");
 
   const updateUser = useUpdateUserMutation();
@@ -28,6 +31,7 @@ export default function UpdatePassword() {
     const user = {
       name,
       email,
+      dateOfBirth,
       // password
     };
     updateUser.mutate(user);

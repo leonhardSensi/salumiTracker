@@ -11,6 +11,9 @@ export default function UpdateBirthday() {
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
+  const [dateOfBirth, setDateOfBirth] = useState(
+    data ? data.date_of_birth : ""
+  );
   const [password, setPassword] = useState("");
 
   const updateUser = useUpdateUserMutation();
@@ -20,7 +23,7 @@ export default function UpdateBirthday() {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    setPassword(e.target.value);
+    setDateOfBirth(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +31,7 @@ export default function UpdateBirthday() {
     const user = {
       name,
       email,
+      dateOfBirth,
       // password
     };
     updateUser.mutate(user);
