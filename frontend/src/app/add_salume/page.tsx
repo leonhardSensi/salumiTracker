@@ -1,7 +1,7 @@
 "use client";
 
 import PrivateLayout from "@/components/privateLayout/privateLayout";
-import SalumeInput from "@/components/generic/input/salumeInput";
+import SalumeInput from "@/components/generic/input/salumi/salumeInput";
 
 export default function NewSalume() {
   return (

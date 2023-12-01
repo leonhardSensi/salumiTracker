@@ -1,5 +1,8 @@
 import { getUser } from "@/api/userApi";
-import { useUpdateUserMutation } from "@/mutations/userMutations";
+import {
+  useLoginMutation,
+  useUpdateUserMutation,
+} from "@/mutations/userMutations";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { text } from "stream/consumers";
@@ -14,16 +17,31 @@ export default function UpdatePassword() {
   const [dateOfBirth, setDateOfBirth] = useState(
     data ? data.date_of_birth : ""
   );
-  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
   const updateUser = useUpdateUserMutation();
+  const loginUser = useLoginMutation();
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
+    data: string
   ) => {
-    setPassword(e.target.value);
+    switch (data) {
+      case "old-password":
+        setOldPassword(e.target.value);
+        break;
+      case "new-password":
+        setNewPassword(e.target.value);
+        break;
+      case "new-password-confirm":
+        setNewPasswordConfirm(e.target.value);
+      default:
+        break;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,11 +50,19 @@ export default function UpdatePassword() {
       name,
       email,
       dateOfBirth,
-      // password
+      password: newPassword,
     };
-    updateUser.mutate(user);
-    window.location.reload();
+    const validateUser = { email, password: oldPassword };
+    loginUser.mutate(validateUser);
+    if (loginUser.isSuccess) {
+      updateUser.mutate(user);
+      window.location.reload();
+    } else {
+      console.log(loginUser.status);
+    }
   };
+
+  console.log(oldPassword, newPassword, newPasswordConfirm);
 
   return (
     <form action="#" className="p-4" onSubmit={handleSubmit}>
@@ -50,7 +76,7 @@ export default function UpdatePassword() {
           </label>
           <UserInput
             width={"w-full"}
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "old-password")}
             type={"password"}
             name={"old-password"}
             id={"old-password"}
@@ -67,10 +93,10 @@ export default function UpdatePassword() {
           </label>
           <UserInput
             width={"w-full"}
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "new-password")}
             type={"password"}
-            name={"password"}
-            id={"password"}
+            name={"new-password"}
+            id={"new-password"}
             placeholder={"••••••••"}
             required={true}
             addStyle={"mb-4 w-full"}
@@ -84,10 +110,10 @@ export default function UpdatePassword() {
           </label>
           <UserInput
             width={"w-full"}
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "new-password-confirm")}
             type="password"
-            name="confirm-password"
-            id="confirm-password"
+            name="new-password-confirm"
+            id="new-password-confirm"
             placeholder="••••••••"
             required={true}
             addStyle={"mb-4 w-full"}

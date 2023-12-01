@@ -1,6 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from "typeorm";
+import { Curing } from "./curing.entity";
 import { Cut } from "./cuts.entity";
+import { Drying } from "./drying.entity";
 import Model from "./model.entity";
+import { Salting } from "./salting.entity";
 import { Spice } from "./spice.entity";
 import { Step } from "./step.entity";
 import { User } from "./user.entity";
@@ -19,6 +29,27 @@ export class Recipe extends Model {
   //   default: "default-recipe.png",
   // })
   // image: string;
+
+  // @OneToOne(() => Curing)
+  // @JoinColumn()
+  // curing: Curing;
+
+  // @OneToOne(() => Salting)
+  // @JoinColumn()
+  // salting: Salting;
+
+  // @OneToOne(() => Drying)
+  // @JoinColumn()
+  // drying: Drying;
+
+  @OneToOne(() => Curing, (curing) => curing.recipe, { cascade: true })
+  curing: Curing;
+
+  @OneToOne(() => Salting, (salting) => salting.recipe, { cascade: true })
+  salting: Salting;
+
+  @OneToOne(() => Drying, (drying) => drying.recipe, { cascade: true })
+  drying: Drying;
 
   @ManyToOne(() => User, (user) => user.recipes)
   @JoinColumn({ name: "userId" })

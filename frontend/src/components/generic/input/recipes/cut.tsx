@@ -1,6 +1,6 @@
 import { IItemProps } from "@/interfaces/interfaces";
 import React from "react";
-import UserInput from "./userInput";
+import UserInput from "../userInput";
 import Image from "next/image";
 import { handleCurrentItem } from "@/utils/typeChecker";
 

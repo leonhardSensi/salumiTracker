@@ -1,7 +1,7 @@
 "use client";
 
 import { getRecipe } from "@/api/recipeApi";
-import EditRecipeInput from "@/components/generic/input/editRecipeInput";
+import EditRecipeInput from "@/components/generic/input/recipes/editRecipeInput";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";

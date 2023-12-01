@@ -1,5 +1,5 @@
 import { IItemProps, IStep } from "@/interfaces/interfaces";
-import UserInput from "./userInput";
+import UserInput from "../userInput";
 import Image from "next/image";
 import { handleCurrentItem } from "@/utils/typeChecker";
 

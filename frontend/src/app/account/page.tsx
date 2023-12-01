@@ -1,8 +1,6 @@
 "use client";
 
 import { getUser } from "@/api/userApi";
-import SubmitButton from "@/components/generic/button/submitButton";
-import UserInput from "@/components/generic/input/userInput";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -12,25 +10,9 @@ export default function Account() {
   const { data } = useQuery(["user"], getUser);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [name, setName] = useState(data ? data.name : "");
-  const [email, setEmail] = useState(data ? data.email : "");
 
   const setModalVisibility = (visibility: boolean) => {
     setIsModalOpen(visibility);
-  };
-
-  const handleChange = (
-    event: React.ChangeEvent<
-      HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
-    >
-  ) => {
-    if (event.target.id === "name") {
-      setName(event.target.value);
-      console.log(name);
-    } else if (event.target.id === "email") {
-      setEmail(event.target.value);
-      console.log(email);
-    }
   };
 
   useEffect(() => {

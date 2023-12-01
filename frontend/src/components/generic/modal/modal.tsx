@@ -32,13 +32,13 @@ export default function Modal(
         if (sessionStorage.getItem("name")) {
           return data?.name;
         } else if (sessionStorage.getItem("dateOfBirth")) {
-          return data?.date_of_birth;
+          return data?.formattedDateOfBirth;
         }
       case "/account/manage":
         if (sessionStorage.getItem("name")) {
           return data?.name;
         } else if (sessionStorage.getItem("dateOfBirth")) {
-          return data?.date_of_birth;
+          return data?.formattedDateOfBirth;
         }
       default:
         break;
@@ -97,12 +97,12 @@ export default function Modal(
 
   return isModalOpen ? (
     <>
-      <div className="fixed bg-gray-300 blur-lg bg-opacity-50 w-full h-full z-40 flex overflow-y-auto overflow-x-hidden justify-center items-center m-auto max-h-full"></div>
+      <div className="fixed bg-gray-300 bg-opacity-50 w-full h-full z-40 flex overflow-y-auto overflow-x-hidden justify-center items-center m-auto max-h-full"></div>
       <div
         id="crud-modal"
         tabIndex={-1}
         aria-hidden="true"
-        className={` flex fixed overflow-y-auto overflow-x-hidden z-50 justify-center items-center m-auto w-1/3 h-fit md:inset-0 max-h-full`}
+        className={`flex fixed overflow-y-auto overflow-x-hidden z-50 justify-center items-center m-auto w-1/3 h-fit md:inset-0 max-h-full`}
       >
         <div className="relative w-full max-w-md max-h-full">
           <div className="relative bg-white border border-gray-600 rounded-xl">

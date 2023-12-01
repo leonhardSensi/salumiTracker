@@ -16,7 +16,7 @@ export interface Irecipe {
 
 export interface ICut {
   position?: number;
-  id: number;
+  id?: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -25,7 +25,7 @@ export interface ICut {
 
 export interface ISpice {
   position?: number;
-  id: number;
+  id?: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -34,7 +34,7 @@ export interface ISpice {
 
 export interface IStep {
   position?: number;
-  id: number;
+  id?: number;
   created_at?: string;
   updated_at?: string;
   name: string;
@@ -44,9 +44,17 @@ export interface IStep {
 
 export interface IrecipeToCreate {
   title: string;
+  curing: IrecipeState;
+  salting: IrecipeState;
+  drying: IrecipeState;
   cuts: IItem[];
   spices: IItem[];
   steps: IItem[];
+}
+
+export interface IrecipeState {
+  state: boolean;
+  duration: number;
 }
 
 export interface IrecipeToUpdate {
@@ -110,6 +118,7 @@ export interface Iuser {
   name: string;
   role: string;
   updated_at: string;
+  formattedDateOfBirth: string;
 }
 
 // UPLOAD
@@ -197,6 +206,7 @@ export interface IUserInput {
   required: boolean;
   defaultValue?: string;
   autoComplete?: string;
+  disabled?: boolean;
 }
 
 export interface ISubmitButtonProps {
@@ -248,4 +258,10 @@ export interface IItemProps {
   items: IItem[] | ICut[] | ISpice[] | IStep[];
   remove: React.MouseEventHandler<HTMLImageElement>;
   currentItem?: IItem;
+}
+
+export interface IManageProps {
+  titles: string[];
+  imgSrcs: string[];
+  data: string[];
 }

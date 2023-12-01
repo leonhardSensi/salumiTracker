@@ -52,12 +52,15 @@ export default function PrivateLayout({
     queryFn: getUser,
   });
 
-  const { isModalOpen, closeModal } = useModal();
+  const { isModalOpen } = useModal();
 
   return (
-    // <ModalProvider>
     <div>
-      <div className={`flex flex-row ${isModalOpen && "blur-sm"}`}>
+      <div
+        className={`flex flex-row ${
+          isModalOpen && "transition-all duration-100 blur-sm"
+        }`}
+      >
         <Sidebar />
         <div className="flex-col w-full flex">
           <Navbar user={user} />
@@ -74,7 +77,5 @@ export default function PrivateLayout({
         )}
       </Modal>
     </div>
-
-    // </ModalProvider>
   );
 }

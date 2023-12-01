@@ -3,6 +3,7 @@ import {
   IItem,
   Irecipe,
   IrecipeResponse,
+  IrecipeState,
   ISpice,
   IStep,
 } from "@/interfaces/interfaces";
@@ -41,6 +42,9 @@ export async function getRecipe(recipeId: string): Promise<Irecipe> {
 
 export async function submitRecipe(
   name: string,
+  curing: IrecipeState,
+  salting: IrecipeState,
+  drying: IrecipeState,
   cuts: IItem[],
   spices: IItem[],
   steps: IItem[]
@@ -71,12 +75,17 @@ export async function submitRecipe(
         })
     );
 
+    console.log(curing, salting, drying);
+
     const response = await fetch("http://localhost:8000/api/recipes", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
         title: name,
+        curing: curing,
+        salting: salting,
+        drying: drying,
         cuts: submitCuts,
         spices: submitSpices,
         steps: submitSteps,

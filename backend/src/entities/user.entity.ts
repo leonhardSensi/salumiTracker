@@ -22,7 +22,7 @@ export class User extends Model {
 
   @Column({
     unique: false,
-    default: "missing date of birth",
+    default: "1970-01-01",
   })
   date_of_birth: string;
 

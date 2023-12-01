@@ -1,9 +1,21 @@
-import { array, number, object, string, TypeOf } from "zod";
+import { array, boolean, number, object, string, TypeOf } from "zod";
 
 export const createRecipeSchema = object({
   body: object({
     title: string({
       required_error: "Title is required",
+    }),
+    curing: object({
+      state: boolean({ required_error: "Status is required" }),
+      duration: number({ required_error: "Duration is required" }),
+    }),
+    salting: object({
+      state: boolean({ required_error: "Status is required" }),
+      duration: number({ required_error: "Duration is required" }),
+    }),
+    drying: object({
+      state: boolean({ required_error: "Status is required" }),
+      duration: number({ required_error: "Duration is required" }),
     }),
     // content: string({
     //   required_error: "Content is required",

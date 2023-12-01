@@ -7,6 +7,9 @@ export const useRecipeMutation = () => {
     mutationFn: (recipe: IrecipeToCreate) => {
       return submitRecipe(
         recipe.title,
+        recipe.curing,
+        recipe.salting,
+        recipe.drying,
         recipe.cuts,
         recipe.spices,
         recipe.steps

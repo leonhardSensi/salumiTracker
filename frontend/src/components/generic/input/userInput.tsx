@@ -14,6 +14,7 @@ export default function UserInput({
   required,
   defaultValue,
   autoComplete,
+  disabled,
 }: IUserInput) {
   return (
     <input
@@ -28,6 +29,7 @@ export default function UserInput({
       min={min}
       defaultValue={defaultValue}
       autoComplete={autoComplete}
+      disabled={disabled}
     />
   );
 }

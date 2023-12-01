@@ -12,7 +12,9 @@ export async function getUser() {
     throw new UserError("Oh no, could not get the requested user information!");
   } else if (responseData.data) {
     const [year, month, day] = responseData.data.user.date_of_birth.split("-");
-    responseData.data.user.date_of_birth = `${day}.${month}.${year}`;
+    responseData.data.user.formattedDateOfBirth = `${day}.${month}.${year}`;
+
+    console.log(responseData.data.user);
     return responseData.data.user;
   }
 }

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
-import UserInput from "./userInput";
+import UserInput from "../userInput";
 import { IItem, Irecipe } from "@/interfaces/interfaces";
-import GenericButton from "../button/genericButton";
-import StatusButton from "../button/statusButton";
+import GenericButton from "../../button/genericButton";
+import StatusButton from "../../button/statusButton";
 import { useUpdateRecipeMutation } from "@/mutations/recipeMutations";
 
 export default function EditRecipeInput(props: { recipe: Irecipe }) {
@@ -36,8 +36,6 @@ export default function EditRecipeInput(props: { recipe: Irecipe }) {
 
   const [spices, setSpices] = useState<IItem[]>([...initSpices]);
   const [steps, setSteps] = useState<IItem[]>([...initSteps]);
-
-  // const [reqSuccess, setReqSuccess] = useState<string>("false");
 
   const updateRecipe = useUpdateRecipeMutation();
 

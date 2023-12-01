@@ -1,4 +1,4 @@
-import UserInput from "./userInput";
+import UserInput from "../userInput";
 import { IItemProps } from "@/interfaces/interfaces";
 import Image from "next/image";
 import { handleCurrentItem } from "@/utils/typeChecker";

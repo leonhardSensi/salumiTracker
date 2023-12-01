@@ -1,4 +1,4 @@
-import { ICut, IItem, ISpice, IStep } from "@/interfaces/interfaces";
+import { IItem } from "@/interfaces/interfaces";
 
 export function handleCurrentItem(
   currentItem: IItem | undefined,

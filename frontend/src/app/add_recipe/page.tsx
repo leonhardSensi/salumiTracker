@@ -1,7 +1,7 @@
 "use client";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import React, { useState } from "react";
-import RecipeInput from "@/components/generic/input/recipeInput";
+import RecipeInput from "@/components/generic/input/recipes/recipeInput";
 
 export default function NewRecipe() {
   return (

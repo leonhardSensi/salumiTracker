@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
-import StatusButton from "../button/statusButton";
+import StatusButton from "../../button/statusButton";
 
 export default function SalumeInput() {
   const [title, setTitle] = useState("");

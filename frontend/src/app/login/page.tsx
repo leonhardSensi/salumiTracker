@@ -35,10 +35,10 @@ export default function Login() {
       password,
     };
     loginUser.mutate(loginCredentials);
-
-    // login button needs to be clicked twice in order to be redirected.
-    loginUser.isSuccess && router.push("/");
   };
+
+  // works if outside handleSubmit, otherwise the form has to be submitted twice
+  loginUser.isSuccess && router.push("/");
 
   return (
     <PublicLayout>
