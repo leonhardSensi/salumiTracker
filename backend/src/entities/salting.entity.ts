@@ -5,7 +5,7 @@ import { Recipe } from "./recipe.entity";
 @Entity("salting")
 export class Salting extends Model {
   @Column()
-  state: string;
+  state: boolean;
 
   @Column()
   duration: number;

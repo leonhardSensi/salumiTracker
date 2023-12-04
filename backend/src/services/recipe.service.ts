@@ -2,8 +2,6 @@ import {
   FindOptionsRelations,
   FindOptionsSelect,
   FindOptionsWhere,
-  Relation,
-  RelationOptions,
 } from "typeorm";
 import { Recipe } from "../entities/recipe.entity";
 import { User } from "../entities/user.entity";
@@ -25,7 +23,7 @@ export const createRecipe = async (
 export const getRecipe = async (recipeId: string) => {
   return await postRepository.findOne({
     where: { id: recipeId },
-    relations: ["cuts", "spices", "steps"],
+    relations: ["curing", "salting", "drying", "cuts", "spices", "steps"],
   });
 };
 

@@ -3,10 +3,13 @@ import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
 import UserInput from "../userInput";
-import { IItem, Irecipe } from "@/interfaces/interfaces";
+import { ICut, IItem, Irecipe } from "@/interfaces/interfaces";
 import GenericButton from "../../button/genericButton";
 import StatusButton from "../../button/statusButton";
 import { useUpdateRecipeMutation } from "@/mutations/recipeMutations";
+import Curing from "./curing";
+import Salting from "./salting";
+import Drying from "./drying";
 
 export default function EditRecipeInput(props: { recipe: Irecipe }) {
   const initCuts = props.recipe.cuts.map((cut) => {
@@ -36,6 +39,10 @@ export default function EditRecipeInput(props: { recipe: Irecipe }) {
 
   const [spices, setSpices] = useState<IItem[]>([...initSpices]);
   const [steps, setSteps] = useState<IItem[]>([...initSteps]);
+
+  const [curing, setCuring] = useState(props.recipe.curing);
+  const [salting, setSalting] = useState(props.recipe.salting);
+  const [drying, setDrying] = useState(props.recipe.drying);
 
   const updateRecipe = useUpdateRecipeMutation();
 
@@ -142,16 +149,55 @@ export default function EditRecipeInput(props: { recipe: Irecipe }) {
     }
   };
 
+  const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const itemToChange = e.target.id;
+    const value = e.target.value;
+
+    switch (itemToChange) {
+      case "curing":
+        setCuring({ ...curing, state: e.target.checked, duration: 0 });
+        break;
+
+      case "curingDuration":
+        setCuring({ ...curing, duration: +value });
+        break;
+
+      case "salting":
+        setSalting({ ...salting, state: e.target.checked, duration: 0 });
+        break;
+
+      case "saltingDuration":
+        setSalting({ ...salting, duration: +value });
+        break;
+
+      case "drying":
+        setDrying({ ...drying, state: e.target.checked, duration: 0 });
+        break;
+
+      case "dryingDuration":
+        setDrying({ ...drying, duration: +value });
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const recipe = {
       id: props.recipe && props.recipe.id,
       title: name,
+      curing: curing,
+      salting: salting,
+      drying: drying,
       cuts: cuts,
       spices: spices,
       steps: steps,
     };
-    updateRecipe.mutate(recipe);
+
+    await updateRecipe.mutateAsync(recipe);
+    window.location.reload();
   };
 
   return (
@@ -168,6 +214,27 @@ export default function EditRecipeInput(props: { recipe: Irecipe }) {
           required={true}
           defaultValue={props.recipe && props.recipe.title}
         />
+        <div>
+          <h1 className="text-gray-900 text-3xl my-4 font-bold">Status</h1>
+          <Curing
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={curing.state}
+            checked={curing.state}
+            duration={curing.state && curing.duration}
+          />
+          <Salting
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={salting.state}
+            checked={salting.state}
+            duration={salting.state && salting.duration}
+          />
+          <Drying
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={drying.state}
+            checked={drying.state}
+            duration={drying.state && drying.duration}
+          />
+        </div>
 
         <h1 className="text-gray-900 text-3xl my-4 font-bold">Meats</h1>
         {/* {renderRecipe("cut")} */}

@@ -1,6 +1,11 @@
 import UserInput from "../userInput";
 
-export default function Drying({ handleCheckBoxChange, selected }: any) {
+export default function Drying({
+  handleCheckBoxChange,
+  selected,
+  checked,
+  duration,
+}: any) {
   return (
     <div className="flex">
       <UserInput
@@ -11,6 +16,7 @@ export default function Drying({ handleCheckBoxChange, selected }: any) {
         placeholder={""}
         required={false}
         addStyle={"accent-red-500"}
+        checked={checked}
       />
       <label htmlFor="drying" className="text-black text-2xl ml-2 my-auto">
         Drying
@@ -27,6 +33,7 @@ export default function Drying({ handleCheckBoxChange, selected }: any) {
         min={0}
         required={!selected}
         disabled={!selected}
+        defaultValue={duration}
       />
     </div>
   );

@@ -39,7 +39,7 @@ export default function Spice({
           type="number"
           id="spiceQuantity"
           placeholder="40"
-          step="0.1"
+          step="1"
           min={0}
           required={true}
           defaultValue={handleCurrentItem(currentItem, "quantity")}

@@ -98,6 +98,9 @@ export async function submitRecipe(
 export const updateRecipe = async (
   id: string,
   name: string,
+  curing: IrecipeState,
+  salting: IrecipeState,
+  drying: IrecipeState,
   cuts: IItem[],
   spices: IItem[],
   steps: IItem[]
@@ -133,6 +136,9 @@ export const updateRecipe = async (
       credentials: "include",
       body: JSON.stringify({
         title: name,
+        curing: curing,
+        salting: salting,
+        drying: drying,
         cuts: submitCuts,
         spices: submitSpices,
         steps: submitSteps,

@@ -8,9 +8,23 @@ export interface Irecipe {
   image: string;
   title: string;
   updated_at: string;
-  cuts: ICut[];
-  spices: ISpice[];
-  steps: IStep[];
+  curing: IRecipeStatus;
+  salting: IRecipeStatus;
+  drying: IRecipeStatus;
+  // cuts: ICut[];
+  // spices: ISpice[];
+  // steps: IStep[];
+  cuts: IItem[];
+  spices: IItem[];
+  steps: IItem[];
+}
+
+export interface IRecipeStatus {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  state: boolean;
+  duration: number;
 }
 
 export interface ICut {
@@ -59,6 +73,9 @@ export interface IrecipeState {
 export interface IrecipeToUpdate {
   id: string;
   title: string;
+  curing: IrecipeState;
+  salting: IrecipeState;
+  drying: IrecipeState;
   cuts: IItem[];
   spices: IItem[];
   steps: IItem[];
@@ -206,6 +223,7 @@ export interface IUserInput {
   defaultValue?: string;
   autoComplete?: string;
   disabled?: boolean;
+  checked?: boolean;
 }
 
 export interface ISubmitButtonProps {
@@ -233,6 +251,8 @@ export interface IItem {
   quantity?: number;
   description?: string;
   duration?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // export interface ICutProps {

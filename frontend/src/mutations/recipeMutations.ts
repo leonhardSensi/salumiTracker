@@ -24,6 +24,9 @@ export const useUpdateRecipeMutation = () => {
       return updateRecipe(
         recipe.id,
         recipe.title,
+        recipe.curing,
+        recipe.salting,
+        recipe.drying,
         recipe.cuts,
         recipe.spices,
         recipe.steps

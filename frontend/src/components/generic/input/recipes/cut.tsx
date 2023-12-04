@@ -41,7 +41,7 @@ export default function Cut({
           type="number"
           id="cutQuantity"
           placeholder="2000"
-          step="0.1"
+          step="1"
           min={0}
           required={true}
           defaultValue={handleCurrentItem(currentItem, "quantity")}

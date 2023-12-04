@@ -61,7 +61,7 @@ export default function Step({
         type="number"
         id="stepDuration"
         placeholder="20"
-        step="0.5"
+        step="1"
         min={0}
         required={true}
         defaultValue={handleCurrentItem(currentItem, "duration")}

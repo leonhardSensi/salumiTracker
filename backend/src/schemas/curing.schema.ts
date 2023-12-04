@@ -1,4 +1,4 @@
-import { number, object, string, TypeOf } from "zod";
+import { boolean, number, object, string, TypeOf } from "zod";
 
 const params = {
   params: object({
@@ -8,7 +8,7 @@ const params = {
 
 export const createCuringSchema = object({
   body: object({
-    state: string({
+    state: boolean({
       required_error: "State is required",
     }),
     duration: number({

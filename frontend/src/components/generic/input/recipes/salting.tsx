@@ -1,6 +1,11 @@
 import UserInput from "../userInput";
 
-export default function Salting({ handleCheckBoxChange, selected }: any) {
+export default function Salting({
+  handleCheckBoxChange,
+  selected,
+  checked,
+  duration,
+}: any) {
   return (
     <div className="flex mb-4">
       <UserInput
@@ -11,6 +16,7 @@ export default function Salting({ handleCheckBoxChange, selected }: any) {
         placeholder={""}
         required={false}
         addStyle={"accent-red-500"}
+        checked={checked}
       />
       <label htmlFor="salting" className="text-black text-2xl ml-2 my-auto">
         Salting
@@ -27,6 +33,7 @@ export default function Salting({ handleCheckBoxChange, selected }: any) {
         min={0}
         required={!selected}
         disabled={!selected}
+        defaultValue={duration}
       />
     </div>
   );

@@ -15,6 +15,7 @@ export default function UserInput({
   defaultValue,
   autoComplete,
   disabled,
+  checked,
 }: IUserInput) {
   return (
     <input
@@ -30,6 +31,7 @@ export default function UserInput({
       defaultValue={defaultValue}
       autoComplete={autoComplete}
       disabled={disabled}
+      checked={checked}
     />
   );
 }

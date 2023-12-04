@@ -175,7 +175,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
       spices: spices,
       steps: steps,
     };
-    createRecipe.mutate(recipe);
+    await createRecipe.mutate(recipe);
   };
 
   // const renderRecipe = (data: string) => {

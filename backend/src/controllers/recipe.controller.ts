@@ -115,6 +115,7 @@ export const getRecipeHandler = async (
     if (!recipe) {
       return next(new AppError(404, "Recipe with that ID not found"));
     }
+    console.log(recipe);
 
     res.status(200).json({
       status: "success",
