@@ -5,7 +5,7 @@ import { useState } from "react";
 import SubmitButton from "../../button/submitButton";
 import UserInput from "../userInput";
 
-export default function UpdateBirthday() {
+export default function UpdateName() {
   const { data } = useQuery(["user"], getUser);
 
   const [name, setName] = useState(data ? data.name : "");
@@ -22,19 +22,21 @@ export default function UpdateBirthday() {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    setDateOfBirth(e.target.value);
+    setName(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const user = {
-      name,
-      email,
-      dateOfBirth,
-      password,
-    };
-    updateUser.mutate(user);
-    window.location.reload();
+    if (data) {
+      e.preventDefault();
+      const user = {
+        name,
+        email,
+        dateOfBirth,
+        password,
+      };
+      updateUser.mutate(user);
+      window.location.reload();
+    }
   };
 
   return (
@@ -42,17 +44,17 @@ export default function UpdateBirthday() {
       <div className="flex flex-col mb-2 justify-center items-center">
         <div className="w-full">
           <label
-            htmlFor="dateOfBirth"
+            htmlFor="name"
             className="block mb-2 text-m font-medium text-black"
           >
             Date of birth
           </label>
           <UserInput
             handleChange={handleChange}
-            type={"date"}
-            name={"dateOfBirth"}
-            id={"dateOfBirth"}
-            placeholder={""}
+            type={"text"}
+            name={"name"}
+            id={"name"}
+            placeholder={"Your name"}
             required={true}
             addStyle={"mb-4 w-full"}
           />

@@ -11,10 +11,6 @@ export async function getUser() {
   if (responseData.status === "error") {
     throw new UserError("Oh no, could not get the requested user information!");
   } else if (responseData.data) {
-    const [year, month, day] = responseData.data.user.date_of_birth.split("-");
-    responseData.data.user.formattedDateOfBirth = `${day}.${month}.${year}`;
-
-    console.log(responseData.data.user);
     return responseData.data.user;
   }
 }
@@ -32,12 +28,19 @@ export async function login(email: string, password: string) {
   return response;
 }
 
+export async function refresh(email: string, password: string) {
+  const response = await fetch("http://localhost:8000/api/auth/refresh", {
+    method: "GET",
+    credentials: "include",
+  });
+  return response;
+}
+
 export async function logout() {
   const response = await fetch("http://localhost:8000/api/auth/logout", {
     method: "GET",
     credentials: "include",
   });
-  console.log("Response", response);
   return response;
 }
 
@@ -65,7 +68,8 @@ export async function register(
 export async function updateUser(
   name: string,
   email: string,
-  date_of_birth: string
+  date_of_birth: string,
+  password: string
 ) {
   console.log(date_of_birth);
   const response = await fetch("http://localhost:8000/api/users/update", {
@@ -78,6 +82,7 @@ export async function updateUser(
       name,
       email,
       date_of_birth,
+      password,
     }),
   });
   return response;

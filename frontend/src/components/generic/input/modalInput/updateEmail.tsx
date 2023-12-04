@@ -5,7 +5,7 @@ import { useState } from "react";
 import SubmitButton from "../../button/submitButton";
 import UserInput from "../userInput";
 
-export default function ModalInput({ text }: { text?: string }) {
+export default function UpdateEmail() {
   const { data } = useQuery(["user"], getUser);
 
   const [name, setName] = useState(data ? data.name : "");
@@ -13,27 +13,16 @@ export default function ModalInput({ text }: { text?: string }) {
   const [dateOfBirth, setDateOfBirth] = useState(
     data ? data.date_of_birth : ""
   );
+  const [password, setPassword] = useState("");
 
   const updateUser = useUpdateUserMutation();
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-    data: string | undefined
+    >
   ) => {
-    switch (data) {
-      case "Name":
-        setName(e.target.value);
-        break;
-      case "Email":
-        setEmail(e.target.value);
-      case "Date of birth":
-        console.log(e.target.value);
-        setDateOfBirth(e.target.value);
-      default:
-        break;
-    }
+    setEmail(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,8 +31,8 @@ export default function ModalInput({ text }: { text?: string }) {
       name,
       email,
       dateOfBirth,
+      password,
     };
-    console.log("USER", user);
     updateUser.mutate(user);
     window.location.reload();
   };
@@ -53,17 +42,17 @@ export default function ModalInput({ text }: { text?: string }) {
       <div className="flex flex-col mb-2 justify-center items-center">
         <div className="w-full">
           <label
-            htmlFor="update info"
+            htmlFor="email"
             className="block mb-2 text-m font-medium text-black"
           >
-            {text}
+            Date of birth
           </label>
           <UserInput
-            handleChange={(e) => handleChange(e, text)}
-            type={"text"}
-            name={"update info"}
-            id={"update info"}
-            placeholder={`New ${text}`}
+            handleChange={handleChange}
+            type={"email"}
+            name={"email"}
+            id={"email"}
+            placeholder={"yourname@email.com"}
             required={true}
             addStyle={"mb-4 w-full"}
           />

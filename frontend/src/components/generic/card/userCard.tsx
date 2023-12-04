@@ -93,7 +93,7 @@ IUserCardProps) {
               width={60}
               height={60}
               src={imgSrc}
-              alt="account"
+              alt="usercard-picture"
               className="pr-8"
             />
           </div>

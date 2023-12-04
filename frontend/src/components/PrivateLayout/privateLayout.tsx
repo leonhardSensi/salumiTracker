@@ -7,10 +7,12 @@ import { getUser } from "@/api/userApi";
 import { useQuery } from "@tanstack/react-query";
 import { useModal } from "@/utils/modalProvider";
 import Modal from "../generic/modal/modal";
-import ModalInput from "../generic/input/modalInput/modalInput";
+// import ModalInput from "../generic/input/modalInput/modalInput";
 import { usePathname } from "next/navigation";
 import UpdatePassword from "../generic/input/modalInput/updatePassword";
 import UpdateBirthday from "../generic/input/modalInput/updateBirthday";
+import UpdateEmail from "../generic/input/modalInput/updateEmail";
+import UpdateName from "../generic/input/modalInput/updateName";
 
 export default function PrivateLayout({
   children,
@@ -68,13 +70,17 @@ export default function PrivateLayout({
         </div>
       </div>
       <Modal>
-        {sessionStorage.getItem("password") ? (
-          <UpdatePassword />
-        ) : sessionStorage.getItem("dateOfBirth") ? (
-          <UpdateBirthday />
-        ) : (
-          <ModalInput text={handleText()} />
-        )}
+        {
+          sessionStorage.getItem("password") ? (
+            <UpdatePassword />
+          ) : sessionStorage.getItem("dateOfBirth") ? (
+            <UpdateBirthday />
+          ) : sessionStorage.getItem("email") ? (
+            <UpdateEmail />
+          ) : (
+            sessionStorage.getItem("name") && <UpdateName />
+          ) // <ModalInput text={handleText()} />
+        }
       </Modal>
     </div>
   );

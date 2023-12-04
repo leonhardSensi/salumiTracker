@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UpdateUserInput } from "../schemas/user.schema";
+const bcrypt = require("bcryptjs");
 
 export const getMeHandler = async (
   req: Request,
@@ -28,9 +29,13 @@ export const updateUserHandler = async (
   try {
     const user = await res.locals.user;
 
-    Object.assign(user, req.body);
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+    Object.assign(user, req.body, { password: hashedPassword });
 
     const updatedUser = await user.save();
+    // updatedUser.password =
+    console.log("UPDATED USER", updatedUser);
 
     res.status(200).json({
       status: "success",

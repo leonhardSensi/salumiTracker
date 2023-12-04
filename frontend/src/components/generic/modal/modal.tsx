@@ -1,6 +1,7 @@
 import { getUser, updateUser } from "@/api/userApi";
 import { IModalProps } from "@/interfaces/interfaces";
 import { useUpdateUserMutation } from "@/mutations/userMutations";
+import formatDate from "@/utils/formatDate";
 import { useModal } from "@/utils/modalProvider";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -20,28 +21,30 @@ export default function Modal(
   const pathname = usePathname();
 
   const checkData = () => {
-    switch (pathname) {
-      case "/account/manage/section/security":
-        if (sessionStorage.getItem("email")) {
-          return data?.email;
-        } else if (sessionStorage.getItem("password")) {
-          return "Last changed: 24 September 2023";
-        }
+    if (data) {
+      switch (pathname) {
+        case "/account/manage/section/security":
+          if (sessionStorage.getItem("email")) {
+            return data?.email;
+          } else if (sessionStorage.getItem("password")) {
+            return "Last changed: 24 September 2023";
+          }
 
-      case "/account/manage/section/information":
-        if (sessionStorage.getItem("name")) {
-          return data?.name;
-        } else if (sessionStorage.getItem("dateOfBirth")) {
-          return data?.formattedDateOfBirth;
-        }
-      case "/account/manage":
-        if (sessionStorage.getItem("name")) {
-          return data?.name;
-        } else if (sessionStorage.getItem("dateOfBirth")) {
-          return data?.formattedDateOfBirth;
-        }
-      default:
-        break;
+        case "/account/manage/section/information":
+          if (sessionStorage.getItem("name")) {
+            return data?.name;
+          } else if (sessionStorage.getItem("dateOfBirth")) {
+            return formatDate(data.date_of_birth);
+          }
+        case "/account/manage":
+          if (sessionStorage.getItem("name")) {
+            return data?.name;
+          } else if (sessionStorage.getItem("dateOfBirth")) {
+            return formatDate(data.date_of_birth);
+          }
+        default:
+          break;
+      }
     }
   };
 

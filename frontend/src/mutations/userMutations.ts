@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, register, updateUser } from "@/api/userApi";
+import { login, refresh, register, updateUser } from "@/api/userApi";
 import {
   IloginCredentials,
   IregisterCredentials,
@@ -32,11 +32,19 @@ export const useLoginMutation = () => {
   });
 };
 
+export const useRefreshTokenMutation = () => {
+  return useMutation({
+    mutationFn: (refreshCredentials: IloginCredentials) => {
+      return refresh(refreshCredentials.email, refreshCredentials.password);
+    },
+  });
+};
+
 export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: (user: IuserToUpdate) => {
       console.log("mutation", user);
-      return updateUser(user.name, user.email, user.dateOfBirth);
+      return updateUser(user.name, user.email, user.dateOfBirth, user.password);
     },
   });
 };

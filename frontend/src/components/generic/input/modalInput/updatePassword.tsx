@@ -1,6 +1,7 @@
 import { getUser } from "@/api/userApi";
 import {
   useLoginMutation,
+  useRefreshTokenMutation,
   useUpdateUserMutation,
 } from "@/mutations/userMutations";
 import { useQuery } from "@tanstack/react-query";
@@ -22,7 +23,7 @@ export default function UpdatePassword() {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
   const updateUser = useUpdateUserMutation();
-  const loginUser = useLoginMutation();
+  const loginUser = useRefreshTokenMutation();
 
   const handleChange = (
     e: React.ChangeEvent<

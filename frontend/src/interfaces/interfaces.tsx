@@ -1,5 +1,4 @@
 import { ChangeEventHandler } from "react";
-import { StringMappingType } from "typescript";
 
 // RECIPES
 export interface Irecipe {
@@ -69,6 +68,7 @@ export interface IuserToUpdate {
   name: string;
   email: string;
   dateOfBirth: string;
+  password: string;
 }
 
 export interface IloginCredentials {
@@ -118,7 +118,6 @@ export interface Iuser {
   name: string;
   role: string;
   updated_at: string;
-  formattedDateOfBirth: string;
 }
 
 // UPLOAD

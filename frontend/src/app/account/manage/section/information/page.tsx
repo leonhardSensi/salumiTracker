@@ -1,6 +1,7 @@
 "use client";
 import { getUser } from "@/api/userApi";
 import ManageAccount from "@/components/authentication/manage";
+import formatDate from "@/utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Information() {
@@ -10,7 +11,7 @@ export default function Information() {
     <ManageAccount
       titles={["Name", "Date of birth"]}
       imgSrcs={["/account.svg", "/calendar.svg"]}
-      data={[data ? data.name : "", data ? data.formattedDateOfBirth : ""]}
+      data={[data ? data.name : "", data ? formatDate(data.date_of_birth) : ""]}
     />
   );
 }

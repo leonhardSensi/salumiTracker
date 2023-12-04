@@ -2,6 +2,7 @@
 
 import { getUser } from "@/api/userApi";
 import ManageAccount from "@/components/authentication/manage";
+import formatDate from "@/utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Security() {
@@ -11,7 +12,10 @@ export default function Security() {
     <ManageAccount
       titles={["Email", "Password"]}
       imgSrcs={["/email.svg", "/password.svg"]}
-      data={[data ? data.email : "", "Last changed: 24 September 2023"]}
+      data={[
+        data ? data.email : "",
+        data ? `Last updated: ${formatDate(data.updated_at)}` : "",
+      ]}
     />
   );
 }
