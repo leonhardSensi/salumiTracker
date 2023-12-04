@@ -25,7 +25,7 @@ export default function UpdateBirthday() {
     setDateOfBirth(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = {
       name,

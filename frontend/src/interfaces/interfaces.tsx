@@ -210,6 +210,8 @@ export interface IUserInput {
 
 export interface ISubmitButtonProps {
   text: string;
+  addStyles?: string;
+  disabled?: boolean;
 }
 
 export interface ILinkButtonProps {

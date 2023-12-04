@@ -25,7 +25,7 @@ export default function UpdateName() {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (data) {
       e.preventDefault();
       const user = {

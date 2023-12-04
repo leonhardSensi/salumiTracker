@@ -7,15 +7,22 @@ import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
 import { useLoginMutation } from "@/mutations/userMutations";
+import Error from "next/error";
+import Modal from "@/components/generic/modal/modal";
+import { render } from "react-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [invalidCredentialsMessage, setInvalidCredentialsMessage] =
+    useState("");
+
   const router = useRouter();
 
   const loginUser = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInvalidCredentialsMessage("");
     switch (e.target.id) {
       case "email":
         setEmail(e.currentTarget.value);
@@ -34,11 +41,18 @@ export default function Login() {
       email,
       password,
     };
-    loginUser.mutate(loginCredentials);
-  };
 
-  // works if outside handleSubmit, otherwise the form has to be submitted twice
-  loginUser.isSuccess && router.push("/");
+    try {
+      const result = await loginUser.mutateAsync(loginCredentials);
+      if (result.status === 401) {
+        setInvalidCredentialsMessage("Invalid email or password!");
+      } else if (result.status === 200) {
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   return (
     <PublicLayout>
@@ -103,7 +117,19 @@ export default function Login() {
                     </Link>
                   </div>
 
-                  <SubmitButton text={"Login"} />
+                  <SubmitButton
+                    disabled={invalidCredentialsMessage ? true : false}
+                    addStyles={
+                      invalidCredentialsMessage
+                        ? "cursor-not-allowed opacity-75"
+                        : ""
+                    }
+                    text={
+                      invalidCredentialsMessage
+                        ? invalidCredentialsMessage
+                        : "Login"
+                    }
+                  />
                   <div className="text-black">
                     <label htmlFor="terms" className=" text-black">
                       Don't have an account yet?{" "}

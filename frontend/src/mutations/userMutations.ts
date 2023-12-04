@@ -28,7 +28,6 @@ export const useLoginMutation = () => {
     mutationFn: (loginCredentials: IloginCredentials) => {
       return login(loginCredentials.email, loginCredentials.password);
     },
-    // onSuccess: () => router.push("/"),
   });
 };
 

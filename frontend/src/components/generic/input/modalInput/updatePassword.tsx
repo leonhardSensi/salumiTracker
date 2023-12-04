@@ -1,12 +1,11 @@
 import { getUser } from "@/api/userApi";
 import {
   useLoginMutation,
-  useRefreshTokenMutation,
   useUpdateUserMutation,
 } from "@/mutations/userMutations";
+import inputMatch from "@/utils/inputMatch";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { text } from "stream/consumers";
 import SubmitButton from "../../button/submitButton";
 import UserInput from "../userInput";
 
@@ -22,8 +21,11 @@ export default function UpdatePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
+  const [invalidCredentialsMessage, setInvalidCredentialsMessage] =
+    useState("");
+
   const updateUser = useUpdateUserMutation();
-  const loginUser = useRefreshTokenMutation();
+  const loginUser = useLoginMutation();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -33,6 +35,7 @@ export default function UpdatePassword() {
   ) => {
     switch (data) {
       case "old-password":
+        setInvalidCredentialsMessage("");
         setOldPassword(e.target.value);
         break;
       case "new-password":
@@ -45,7 +48,7 @@ export default function UpdatePassword() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = {
       name,
@@ -54,16 +57,14 @@ export default function UpdatePassword() {
       password: newPassword,
     };
     const validateUser = { email, password: oldPassword };
-    loginUser.mutate(validateUser);
-    if (loginUser.isSuccess) {
-      updateUser.mutate(user);
+    const result = await loginUser.mutateAsync(validateUser);
+    if (result.status === 401) {
+      setInvalidCredentialsMessage("Incorrect password!");
+    } else if (result.status === 200) {
+      await updateUser.mutateAsync(user);
       window.location.reload();
-    } else {
-      console.log(loginUser.status);
     }
   };
-
-  console.log(oldPassword, newPassword, newPasswordConfirm);
 
   return (
     <form action="#" className="p-4" onSubmit={handleSubmit}>
@@ -120,8 +121,33 @@ export default function UpdatePassword() {
             addStyle={"mb-4 w-full"}
           />
         </div>
-        <div className="w-1/4">
-          <SubmitButton text={"Save"} />
+        {/* <p className={`${!checkPasswordMatch() ? "text-red-500" : ""}`}>
+          Passwords must match!
+        </p> */}
+        <div className="w-fit">
+          <SubmitButton
+            disabled={
+              invalidCredentialsMessage
+                ? true
+                : !inputMatch(newPassword, newPasswordConfirm)
+                ? true
+                : false
+            }
+            addStyles={
+              invalidCredentialsMessage
+                ? "cursor-not-allowed opacity-75"
+                : !inputMatch(newPassword, newPasswordConfirm)
+                ? "cursor-not-allowed opacity-75"
+                : ""
+            }
+            text={
+              invalidCredentialsMessage
+                ? invalidCredentialsMessage
+                : !inputMatch(newPassword, newPasswordConfirm)
+                ? "Passwords must match!"
+                : "Save"
+            }
+          />
         </div>
       </div>
     </form>

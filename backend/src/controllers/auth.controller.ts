@@ -111,8 +111,15 @@ export const loginUserHandler = async (
 
     // 1. Check if user exist
     if (!user) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(401, "Invalid email or password"));
     }
+
+    // if (!user) {
+    //   return res.status(401).json({
+    //     status: "error",
+    //     message: "Invalid email or password.",
+    //   });
+    // }
 
     // 2.Check if user is verified
     // if (!user.verified) {
@@ -126,8 +133,13 @@ export const loginUserHandler = async (
 
     //3. Check if password is valid
     if (!(await User.comparePasswords(password, user.password))) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(401, "Invalid email or password"));
     }
+    // if (!(await User.comparePasswords(password, user.password))) {
+    //   return res
+    //     .status(401)
+    //     .json({ status: "error", message: "Invalid email or password." });
+    // }
 
     // 4. Sign Access and Refresh Tokens
     const { access_token, refresh_token } = await signTokens(user);

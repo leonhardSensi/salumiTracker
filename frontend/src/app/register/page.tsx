@@ -4,13 +4,10 @@ import PublicLayout from "@/components/publicLayout/publicLayout";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
-import { useMutation } from "@tanstack/react-query";
-import { register } from "@/api/userApi";
-import { IregisterCredentials } from "@/interfaces/interfaces";
 import { useRegisterMutation } from "@/mutations/userMutations";
+import inputMatch from "@/utils/inputMatch";
 
 export default function Registration() {
   const [name, setName] = useState("");
@@ -18,7 +15,6 @@ export default function Registration() {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const router = useRouter();
 
   const createUser = useRegisterMutation();
 
@@ -55,21 +51,8 @@ export default function Registration() {
       passwordConfirm,
     };
     console.log(registerCredentials);
-    // registerMutation.mutate(registerCredentials);
-    createUser.mutate(registerCredentials);
+    createUser.mutateAsync(registerCredentials);
   };
-
-  // const registerMutation = useMutation({
-  //   mutationFn: (registerCredentials: IregisterCredentials) => {
-  //     return register(
-  //       registerCredentials.name,
-  //       registerCredentials.email,
-  //       registerCredentials.password,
-  //       registerCredentials.passwordConfirm
-  //     );
-  //   },
-  //   onSuccess: () => router.push("/"),
-  // });
 
   return (
     <PublicLayout>
@@ -244,7 +227,21 @@ export default function Registration() {
                       </label>
                     </div>
                   </div>
-                  <SubmitButton text={"Get started"} />
+                  <SubmitButton
+                    disabled={
+                      !inputMatch(password, passwordConfirm) ? true : false
+                    }
+                    addStyles={
+                      !inputMatch(password, passwordConfirm)
+                        ? "cursor-not-allowed opacity-75"
+                        : ""
+                    }
+                    text={
+                      !inputMatch(password, passwordConfirm)
+                        ? "Passwords must match!"
+                        : "Get started!"
+                    }
+                  />
                 </form>
               </div>
             </div>
