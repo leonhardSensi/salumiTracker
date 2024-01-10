@@ -5,6 +5,8 @@ import { Inter } from "next/font/google";
 import { useRouter, usePathname } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useEffect } from "react";
+import { ModalProvider } from "@/utils/modalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +34,29 @@ export default function RootLayout({
   ) {
     router.push("/login");
   }
+
+  const checkAuth = () => {
+    try {
+      if (
+        !document.cookie.includes("logged_in=true") &&
+        pathname !== "/register" &&
+        pathname !== "/login"
+      ) {
+        console.log(pathname !== "/register");
+        router.push("/logout");
+      }
+    } catch (e) {
+      console.log("Error checking authentication status:", e);
+    }
+  };
+
+  // useEffect(() => {
+  //   checkAuth();
+  //   const interval = setInterval(checkAuth, 6000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   return (
     <html lang="en">

@@ -20,6 +20,12 @@ export class User extends Model {
   })
   email: string;
 
+  @Column({
+    unique: false,
+    default: "1970-01-01",
+  })
+  date_of_birth: string;
+
   @Column()
   password: string;
 

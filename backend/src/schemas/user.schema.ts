@@ -1,4 +1,4 @@
-import { object, string, TypeOf, z } from "zod";
+import { date, object, string, TypeOf, z } from "zod";
 import { RoleEnumType } from "../entities/user.entity";
 
 export const createUserSchema = object({
@@ -9,6 +9,7 @@ export const createUserSchema = object({
     email: string({
       required_error: "Email address is required",
     }).email("Invalid email address"),
+    dateOfBirth: string({ required_error: "Date of birth is required" }),
     password: string({
       required_error: "Password is required",
     })
@@ -46,5 +47,22 @@ export type CreateUserInput = Omit<
   "passwordConfirm"
 >;
 
+const params = {
+  params: object({
+    id: string(),
+  }),
+};
+
+export const updateUserSchema = object({
+  ...params,
+  body: object({
+    name: string(),
+    email: string(),
+    date_of_birth: string(),
+    password: string(),
+  }),
+});
+
 export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
 export type VerifyEmailInput = TypeOf<typeof verifyEmailSchema>["params"];
+export type UpdateUserInput = TypeOf<typeof updateUserSchema>;

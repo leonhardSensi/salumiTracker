@@ -19,5 +19,6 @@ export default function PublicLayout({
       router.push("/");
     }
   }, []);
+
   return <div className="">{children}</div>;
 }

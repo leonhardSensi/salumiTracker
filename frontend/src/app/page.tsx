@@ -1,4 +1,5 @@
 import PrivateLayout from "@/components/privateLayout/privateLayout";
+import { ModalProvider } from "@/utils/modalProvider";
 
 export default function Home() {
   return (

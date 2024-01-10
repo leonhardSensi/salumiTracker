@@ -18,6 +18,7 @@ import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
 import { User } from "../entities/user.entity";
 import Email from "../utils/email";
+import { string } from "zod";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -28,16 +29,18 @@ if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
-  expires: new Date(Date.now() + 86400000), //24
-  /*new Date(
+  // expires: new Date(Date.now() + 86400000),
+  // maxAge: Date.now() + 86400000, //24
+  expires: new Date(
     Date.now() + config.get<number>("accessTokenExpiresIn") * 60 * 1000
-  )*/
-  // maxAge: Date.now() + 86400000,
-  /*config.get<number>("accessTokenExpiresIn") * 60 * 1000,*/
+  ),
+  maxAge: config.get<number>("accessTokenExpiresIn") * 60 * 1000,
 };
 
 const refreshTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
+  // expires: new Date(Date.now() + 86400000),
+  // maxAge: Date.now() + 86400000, //24
   expires: new Date(
     Date.now() + config.get<number>("refreshTokenExpiresIn") * 60 * 1000
   ),
@@ -50,10 +53,11 @@ export const registerUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { name, password, email } = req.body;
+    const { name, dateOfBirth, password, email } = req.body;
 
     const newUser = await createUser({
       name,
+      date_of_birth: dateOfBirth,
       email: email.toLowerCase(),
       password,
     });
@@ -107,8 +111,15 @@ export const loginUserHandler = async (
 
     // 1. Check if user exist
     if (!user) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(401, "Invalid email or password"));
     }
+
+    // if (!user) {
+    //   return res.status(401).json({
+    //     status: "error",
+    //     message: "Invalid email or password.",
+    //   });
+    // }
 
     // 2.Check if user is verified
     // if (!user.verified) {
@@ -122,8 +133,13 @@ export const loginUserHandler = async (
 
     //3. Check if password is valid
     if (!(await User.comparePasswords(password, user.password))) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(401, "Invalid email or password"));
     }
+    // if (!(await User.comparePasswords(password, user.password))) {
+    //   return res
+    //     .status(401)
+    //     .json({ status: "error", message: "Invalid email or password." });
+    // }
 
     // 4. Sign Access and Refresh Tokens
     const { access_token, refresh_token } = await signTokens(user);

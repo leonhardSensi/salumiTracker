@@ -2,50 +2,86 @@
 
 import "../../app/globals.css";
 import Navbar from "@/components/navigation/navbar";
-import { useEffect } from "react";
-import { useState } from "react";
 import Sidebar from "@/components/navigation/sidebar";
-import { IresponseData, IprofileData } from "../../interfaces/interfaces";
-import { useRouter, usePathname } from "next/navigation";
+import { getUser } from "@/api/userApi";
+import { useQuery } from "@tanstack/react-query";
+import { useModal } from "@/utils/modalProvider";
+import Modal from "../generic/modal/modal";
+// import ModalInput from "../generic/input/modalInput/modalInput";
+import { usePathname } from "next/navigation";
+import UpdatePassword from "../generic/input/modalInput/updatePassword";
+import UpdateBirthday from "../generic/input/modalInput/updateBirthday";
+import UpdateEmail from "../generic/input/modalInput/updateEmail";
+import UpdateName from "../generic/input/modalInput/updateName";
 
 export default function PrivateLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [profileData, setProfileData] = useState<IprofileData>();
-  const router = useRouter();
   const pathname = usePathname();
-  useEffect(() => {
-    const getProfile = async () => {
-      const response = await fetch("http://localhost:8000/api/users/me", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: IresponseData = await response.json();
-      if (data.status) {
-        setProfileData(data.data);
-        sessionStorage.setItem("email", data.data.user.email);
-        sessionStorage.setItem("name", data.data.user.name);
-      } else {
-        console.log("request failed");
-        router.push("/login");
-      }
-    };
-    if (document.cookie.includes("logged_in=true")) {
-      getProfile();
-    } else if (pathname !== "/login") {
-      router.push("/login");
+
+  const handleText = () => {
+    switch (pathname) {
+      case "/account/manage/section/security":
+        if (sessionStorage.getItem("email")) {
+          return "Email";
+        } else if (sessionStorage.getItem("password")) {
+          return "Password";
+        }
+      case "/account/manage/section/information":
+        if (sessionStorage.getItem("name")) {
+          return "Name";
+        } else if (sessionStorage.getItem("dateOfBirth")) {
+          return "Date of birth";
+        }
+      case "/account/manage":
+        if (sessionStorage.getItem("name")) {
+          return "Name";
+        } else if (sessionStorage.getItem("dateOfBirth")) {
+          return "Date of birth";
+        }
+      default:
+        break;
     }
-  }, []);
+  };
+  const {
+    status: statusUser,
+    error: errorMessage,
+    data: user,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
+
+  const { isModalOpen } = useModal();
 
   return (
-    <div className="flex flex-row">
-      <Sidebar />
-      <div className="flex-col w-full flex">
-        <Navbar person={profileData} />
-        {children}
+    <div>
+      <div
+        className={`flex flex-row ${
+          isModalOpen && "transition-all duration-100 blur-sm"
+        }`}
+      >
+        <Sidebar />
+        <div className="flex-col w-full flex">
+          <Navbar user={user} />
+          {children}
+        </div>
       </div>
+      <Modal>
+        {
+          sessionStorage.getItem("password") ? (
+            <UpdatePassword />
+          ) : sessionStorage.getItem("dateOfBirth") ? (
+            <UpdateBirthday />
+          ) : sessionStorage.getItem("email") ? (
+            <UpdateEmail />
+          ) : (
+            sessionStorage.getItem("name") && <UpdateName />
+          ) // <ModalInput text={handleText()} />
+        }
+      </Modal>
     </div>
   );
 }

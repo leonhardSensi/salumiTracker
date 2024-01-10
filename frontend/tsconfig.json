@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "ProtectedRoute.tsx"
+    "ProtectedRoute.tsx",
+    "src/components/generic/input/modalInput"
   ],
   "exclude": ["node_modules"]
 }

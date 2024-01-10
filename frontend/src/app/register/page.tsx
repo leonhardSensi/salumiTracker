@@ -4,16 +4,19 @@ import PublicLayout from "@/components/publicLayout/publicLayout";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
+import { useRegisterMutation } from "@/mutations/userMutations";
+import inputMatch from "@/utils/inputMatch";
 
 export default function Registration() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const router = useRouter();
+
+  const createUser = useRegisterMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.id) {
@@ -22,6 +25,10 @@ export default function Registration() {
         break;
       case "email":
         setEmail(e.target.value);
+        break;
+      case "dateOfBirth":
+        setDateOfBirth(e.target.value);
+        console.log(dateOfBirth);
         break;
       case "password":
         setPassword(e.target.value);
@@ -34,28 +41,23 @@ export default function Registration() {
     }
   };
 
-  const handleSubmit = async () => {
-    if (name && email && password && passwordConfirm) {
-      const response = await fetch("http://localhost:8000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          passwordConfirm,
-        }),
-      });
-      const data = await response.json();
-      console.log("response data:", data);
-      router.push("/");
-    }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const registerCredentials = {
+      name,
+      email,
+      dateOfBirth,
+      password,
+      passwordConfirm,
+    };
+    console.log(registerCredentials);
+    createUser.mutateAsync(registerCredentials);
   };
 
   return (
     <PublicLayout>
-      <div className="bg-white flex flex-row justify-center pt-24">
-        <section className="bg-white flex flex-col items-center justify-center w-1/2">
+      <div className="bg-register-bg bg-auto bg-no-repeat bg-right-top flex flex-row justify-center pt-24">
+        <section className=" flex flex-col items-center justify-center w-1/2">
           <div className="">
             <Image
               src="/salami.svg"
@@ -77,9 +79,9 @@ export default function Registration() {
             </h3>
           </div>
         </section>
-        <section className="bg-white flex flex-col items-center justify-center w-1/2">
+        <section className=" flex flex-col items-center justify-center w-1/2">
           <div className="">
-            <div className="w-full bg-white rounded-lg shadow dark:border border-gray-700">
+            <div className="w-full bg-white bg-opacity-90 rounded-lg shadow-xl">
               <div className="p-6 space-y-6 sm:p-8">
                 <div className="text-center">
                   <p className="text-black">
@@ -132,6 +134,23 @@ export default function Registration() {
                       name={"email"}
                       id={"email"}
                       placeholder={"name@company.com"}
+                      required={true}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="dateOfBirth"
+                      className="block mb-2 text-sm font-medium text-gray-500"
+                    >
+                      Your date of birth
+                    </label>
+                    <UserInput
+                      width={"w-full"}
+                      handleChange={handleChange}
+                      type={"date"}
+                      name={"dateOfBirth"}
+                      id={"dateOfBirth"}
+                      placeholder={""}
                       required={true}
                     />
                   </div>
@@ -208,7 +227,21 @@ export default function Registration() {
                       </label>
                     </div>
                   </div>
-                  <SubmitButton text={"Get started"} />
+                  <SubmitButton
+                    disabled={
+                      !inputMatch(password, passwordConfirm) ? true : false
+                    }
+                    addStyles={
+                      !inputMatch(password, passwordConfirm)
+                        ? "cursor-not-allowed opacity-75"
+                        : ""
+                    }
+                    text={
+                      !inputMatch(password, passwordConfirm)
+                        ? "Passwords must match!"
+                        : "Get started!"
+                    }
+                  />
                 </form>
               </div>
             </div>

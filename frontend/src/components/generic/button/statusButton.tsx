@@ -6,9 +6,9 @@ export default function StatusButton(props: { reqSuccess: string }) {
           return (
             <button
               type="submit"
-              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
             >
-              {"Success"}
+              Success
             </button>
           );
 
@@ -16,7 +16,7 @@ export default function StatusButton(props: { reqSuccess: string }) {
           return (
             <button
               type="button"
-              className="flex text-white bg-red-500 font-medium rounded-lg text-sm px-5 py-2.5 bg-primary-600"
+              className="text-white bg-red-500 font-medium rounded-lg text-l px-5 py-2.5 bg-primary-600"
             >
               <div
                 className="mr-2 animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-gray-800 rounded-full dark:text-white"
@@ -30,9 +30,9 @@ export default function StatusButton(props: { reqSuccess: string }) {
           return (
             <button
               type="submit"
-              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
             >
-              {"Submit"}
+              Save
             </button>
           );
         default:
@@ -40,5 +40,5 @@ export default function StatusButton(props: { reqSuccess: string }) {
       }
     }
   };
-  return <div>{renderButton()}</div>;
+  return <>{renderButton()}</>;
 }

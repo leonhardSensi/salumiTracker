@@ -11,7 +11,7 @@ export default function Card({
   link,
 }: ICardProps) {
   return (
-    <div className="w-2/3 bg-white h-fit rounded overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer">
+    <div className="w-2/3 bg-white rounded overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer">
       <Link href={link}>
         <CardDetails
           details={details}
