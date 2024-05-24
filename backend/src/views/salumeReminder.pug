@@ -1,0 +1,25 @@
+extends base
+
+block content
+  p Hi #{firstName},
+  p Some of your salumi are <span>ready soon</span>:
+  <ul>
+  -
+    const list = salumiToNotifyArr
+  each item in list 
+    if (item.daysRemaining < 0) 
+      li= item.salume + ' - ' + item.daysRemaining.toString().replace('-', '') + ' day(s) ago'
+    else 
+      li= item.salume + ' - ' + item.daysRemaining.toString() + ' day(s) left'
+  </ul>
+  table.btn.btn-primary(role='presentation' border='0' cellpadding='0' cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation' border='0' cellpadding='0' cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`localhost:3000/dashboard` target='_blank') Check out your salumi now!
+
+  p Your Salumi Tracker Team
