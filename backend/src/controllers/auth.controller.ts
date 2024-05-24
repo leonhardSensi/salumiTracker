@@ -17,8 +17,6 @@ import AppError from "../utils/appError";
 import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
 import { User } from "../entities/user.entity";
-import Email from "../utils/email";
-import { string } from "zod";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -62,6 +60,8 @@ export const registerUserHandler = async (
       password,
     });
 
+    // await newUser.save();
+
     const { hashedVerificationCode, verificationCode } =
       User.createVerificationCode();
     newUser.verificationCode = hashedVerificationCode;
@@ -73,6 +73,7 @@ export const registerUserHandler = async (
     )}/verifyemail/${verificationCode}`;
 
     try {
+      // EMAILS NOT WORKING YET
       // await new Email(newUser, redirectUrl).sendVerificationCode();
 
       res.status(201).json({
@@ -82,7 +83,7 @@ export const registerUserHandler = async (
       });
     } catch (error) {
       newUser.verificationCode = null;
-      await newUser.save();
+      // await newUser.save();
 
       return res.status(500).json({
         status: "error",
@@ -108,6 +109,8 @@ export const loginUserHandler = async (
   try {
     const { email, password } = req.body;
     const user = await findUserByEmail({ email });
+    console.log("Access Token Expiration:", accessTokenCookieOptions.expires);
+    console.log("Refresh Token Expiration:", refreshTokenCookieOptions.expires);
 
     // 1. Check if user exist
     if (!user) {
@@ -248,6 +251,7 @@ export const refreshAccessTokenHandler = async (
       access_token,
     });
   } catch (err: any) {
+    console.log("REFRESH ERROR", err);
     next(err);
   }
 };

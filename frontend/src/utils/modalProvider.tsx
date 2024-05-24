@@ -12,7 +12,13 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const openModal = () => {
     setIsModalOpen(true);
   };
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    sessionStorage.removeItem("password");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("name");
+    sessionStorage.removeItem("dateOfBirth");
+  };
 
   return (
     <ModalContext.Provider value={{ isModalOpen, openModal, closeModal }}>

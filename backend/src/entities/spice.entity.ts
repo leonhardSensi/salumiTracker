@@ -10,7 +10,7 @@ export class Spice extends Model {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.spices)
+  @ManyToOne(() => Recipe, (recipe) => recipe.spices, { onDelete: "CASCADE" })
   @JoinColumn({ name: "recipeId" })
   recipe: Recipe;
 }

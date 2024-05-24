@@ -5,6 +5,7 @@ export default function UserInput({
   height,
   step,
   min,
+  max,
   addStyle,
   handleChange,
   type,
@@ -16,6 +17,8 @@ export default function UserInput({
   autoComplete,
   disabled,
   checked,
+  value,
+  onClick,
 }: IUserInput) {
   return (
     <input
@@ -23,15 +26,18 @@ export default function UserInput({
       type={type}
       name={name}
       id={id}
-      className={`${addStyle} ${width} ${height} text-white border text-xl rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500`}
+      className={`${addStyle} ${width} ${height} text-black border text-xl rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-100 border-gray-300 placeholder-gray-600 focus:ring-blue-500 focus:border-blue-500`}
       placeholder={placeholder}
       required={required}
       step={step}
       min={min}
+      max={max}
       defaultValue={defaultValue}
       autoComplete={autoComplete}
       disabled={disabled}
       checked={checked}
+      value={value}
+      onClick={onClick}
     />
   );
 }

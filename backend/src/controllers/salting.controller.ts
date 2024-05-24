@@ -1,13 +1,10 @@
-import { NextFunction } from "express";
-import { createCuring, getCuring } from "../services/curing.service";
+import { NextFunction, Request, Response } from "express";
 import { createSalting, getSalting } from "../services/salting.service";
-// import { Recipe } from "../entities/recipe.entity";
-// import { findRecipeById } from "../services/recipe.service";
 import AppError from "../utils/appError";
 
 export const createSaltingHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -31,8 +28,8 @@ export const createSaltingHandler = async (
 };
 
 export const getSaltingHandler = async (
-  req: any, //Request<GetSaltingInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

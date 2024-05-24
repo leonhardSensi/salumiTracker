@@ -8,6 +8,9 @@ import UserInput from "../userInput";
 export default function UpdateBirthday() {
   const { data } = useQuery(["user"], getUser);
 
+  const maxBirthday = new Date().toLocaleDateString("en-ca");
+  console.log(maxBirthday);
+
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
   const [dateOfBirth, setDateOfBirth] = useState(
@@ -31,10 +34,11 @@ export default function UpdateBirthday() {
       name,
       email,
       dateOfBirth,
-      password,
+      // password,
     };
+    console.log("DATE OF BIRTH", user);
     updateUser.mutate(user);
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
@@ -49,6 +53,7 @@ export default function UpdateBirthday() {
           </label>
           <UserInput
             handleChange={handleChange}
+            max={maxBirthday}
             type={"date"}
             name={"dateOfBirth"}
             id={"dateOfBirth"}

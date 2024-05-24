@@ -1,9 +1,10 @@
 import { IresponseData } from "@/interfaces/interfaces";
+const backend = process.env.BACKEND;
 
 export class UserError extends Error {}
 
 export async function getUser() {
-  const response = await fetch("http://localhost:8000/api/users/me", {
+  const response = await fetch(`${backend}/api/users/me`, {
     method: "GET",
     credentials: "include",
   });
@@ -16,7 +17,7 @@ export async function getUser() {
 }
 
 export async function login(email: string, password: string) {
-  const response = await fetch("http://localhost:8000/api/auth/login", {
+  const response = await fetch(`${backend}/api/auth/login`, {
     method: "POST",
     headers: { "Content-type": "application/json" },
     credentials: "include",
@@ -28,8 +29,8 @@ export async function login(email: string, password: string) {
   return response;
 }
 
-export async function refresh(email: string, password: string) {
-  const response = await fetch("http://localhost:8000/api/auth/refresh", {
+export async function refresh() {
+  const response = await fetch(`${backend}/api/auth/refresh`, {
     method: "GET",
     credentials: "include",
   });
@@ -37,7 +38,7 @@ export async function refresh(email: string, password: string) {
 }
 
 export async function logout() {
-  const response = await fetch("http://localhost:8000/api/auth/logout", {
+  const response = await fetch(`${backend}/api/auth/logout`, {
     method: "GET",
     credentials: "include",
   });
@@ -51,7 +52,7 @@ export async function register(
   password: string,
   passwordConfirm: string
 ) {
-  const response = await fetch("http://localhost:8000/api/auth/register", {
+  const response = await fetch(`${backend}/api/auth/register`, {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -62,17 +63,29 @@ export async function register(
       passwordConfirm,
     }),
   });
+  console.log("Register respone", response);
   return response;
 }
 
 export async function updateUser(
-  name: string,
-  email: string,
-  date_of_birth: string,
-  password: string
+  name?: string,
+  email?: string,
+  date_of_birth?: string,
+  password?: string,
+  photo?: File
 ) {
-  console.log(date_of_birth);
-  const response = await fetch("http://localhost:8000/api/users/update", {
+  if (photo) {
+    const formData = new FormData();
+    formData.append("photo", photo);
+
+    const response = await fetch(`${backend}/api/users/update`, {
+      method: "PATCH",
+      credentials: "include",
+      body: formData,
+    });
+    return response;
+  }
+  const response = await fetch(`${backend}/api/users/update`, {
     method: "PATCH",
     credentials: "include",
     headers: {
@@ -83,6 +96,7 @@ export async function updateUser(
       email,
       date_of_birth,
       password,
+      photo,
     }),
   });
   return response;

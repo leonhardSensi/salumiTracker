@@ -5,6 +5,7 @@ import { AppDataSource } from "../utils/data-source";
 const cutRepository = AppDataSource.getRepository(Cut);
 
 export const createCut = async (input: Partial<Cut>) => {
+  console.log("INPUT", input);
   return await cutRepository.save(cutRepository.create({ ...input }));
 };
 

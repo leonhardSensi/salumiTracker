@@ -1,10 +1,10 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createSpice, getSpice } from "../services/spice.service";
 import AppError from "../utils/appError";
 
 export const createSpiceHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -30,8 +30,8 @@ export const createSpiceHandler = async (
 };
 
 export const getSpiceHandler = async (
-  req: any, //Request<GetSpiceInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

@@ -1,4 +1,4 @@
-import { submitRecipe, updateRecipe } from "@/api/recipeApi";
+import { deleteRecipe, submitRecipe, updateRecipe } from "@/api/recipeApi";
 import { IrecipeToCreate, IrecipeToUpdate } from "@/interfaces/interfaces";
 import { useMutation } from "@tanstack/react-query";
 
@@ -31,6 +31,14 @@ export const useUpdateRecipeMutation = () => {
         recipe.spices,
         recipe.steps
       );
+    },
+  });
+};
+
+export const useDeleteRecipeMutation = () => {
+  return useMutation({
+    mutationFn: (id: string) => {
+      return deleteRecipe(id);
     },
   });
 };

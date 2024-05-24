@@ -11,8 +11,8 @@ export default function Spice({
 }: IItemProps) {
   return (
     <>
-      <div className="flex flex-col w-full">
-        <label htmlFor="spice" className="text-gray-900 text-xl">
+      <div className="flex flex-col w-full text-salumeWhite">
+        <label htmlFor="spice" className="text-xl">
           Spice
         </label>
         <UserInput
@@ -27,8 +27,8 @@ export default function Spice({
           defaultValue={handleCurrentItem(currentItem, "name")}
         />
       </div>
-      <div className="flex flex-col ml-4 w-fit">
-        <label htmlFor="spiceQuantity" className="text-gray-900 text-xl">
+      <div className="flex flex-col ml-4 w-fit text-salumeWhite">
+        <label htmlFor="spiceQuantity" className="text-xl">
           Quantity (g)
         </label>
         <UserInput
@@ -45,10 +45,12 @@ export default function Spice({
           defaultValue={handleCurrentItem(currentItem, "quantity")}
         />
       </div>
-      <div className="w-8">
+      <div className="w-12">
         <Image
-          className={items.length > 1 ? "mt-10 cursor-pointer" : " hidden"}
-          src={"/x-button.svg"}
+          className={
+            items.length > 1 ? "mt-10 cursor-pointer invert" : " hidden"
+          }
+          src={"/delete.svg"}
           width={100}
           height={100}
           onClick={remove}

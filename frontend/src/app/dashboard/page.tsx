@@ -3,126 +3,357 @@
 import { useEffect, useState } from "react";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
 import DashboardCardDetails from "@/components/dashboard/dashboardCardDetails";
-import { Isalume } from "@/interfaces/interfaces";
+import {
+  ISalumeProps,
+  ISalumeWithDuration,
+  ISalume,
+  IDashboardSalumeState,
+} from "@/interfaces/interfaces";
 import Card from "@/components/generic/card/card";
+import { getSalumi } from "@/api/salumeApi";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipe } from "@/api/recipeApi";
+import { useDrop } from "react-dnd";
+import { useRecoilState } from "recoil";
+import { curingState, saltingState, dryingState } from "@/atoms/salumiAtoms";
+import { useUpdateSalumeStateMutation } from "@/mutations/salumeMutation";
+import Image from "next/image";
+import Link from "next/link";
+import { calculateSalumeDuration } from "@/utils/salumeDuration";
 
 export default function Dashboard() {
-  const curingArr = [
-    {
-      state: "Curing",
-      name: "Coppa",
-      date: new Date("2023-09-17"),
-      image: "/cure.svg",
-      daysLeft: 0,
-    },
-    {
-      state: "Curing",
-      name: "Bresaiola",
-      date: new Date("2023-09-13"),
-      image: "/cure.svg",
-      daysLeft: 0,
-    },
-  ];
+  const { data: salumiData } = useQuery(["salumi"], getSalumi);
+  const updateSalumeState = useUpdateSalumeStateMutation();
+  const [salumi, setSalumi] = useState(salumiData && salumiData);
+  console.log(salumi);
 
-  const saltingArr = [
-    {
-      state: "Salting",
-      name: "Pancetta",
-      date: new Date("2023-09-25"),
-      image: "/salt.svg",
-      daysLeft: 0,
-    },
-    {
-      state: "Salting",
-      name: "Coppa",
-      date: new Date("2023-09-05"),
-      image: "/salt.svg",
-      daysLeft: 0,
-    },
-  ];
-
-  const dryingArr: Isalume[] = [
-    // {
-    //   state: "Drying",
-    //   name: "Coppa",
-    //   date: new Date("2023-09-23"),
-    //   image: "/salt.svg",
-    //   daysLeft: 0,
-    // },
-  ];
-
-  const [curing, setCuring] = useState<Isalume[]>([]);
-  const [salting, setSalting] = useState<Isalume[]>([]);
-  const [drying, setDrying] = useState<Isalume[]>([]);
+  const fetchSalumi = async () => {
+    const data = await getSalumi();
+    if (data) {
+      setSalumi(data);
+    }
+  };
 
   useEffect(() => {
-    curingArr.length > 0 &&
-      curingArr.forEach((salume) => {
-        const currentDate = new Date();
-        const targetDate = salume.date;
+    fetchSalumi();
+  }, [salumiData]);
 
-        const timeDifference = targetDate.getTime() - currentDate.getTime();
-        const newDaysLeft =
-          Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
-        salume.daysLeft = newDaysLeft;
-        setCuring(curingArr);
+  // const {
+  //   status,
+  //   error: errorMessage,
+  //   data: salumi,
+  // } = useQuery({
+  //   queryKey: ["salumi"],
+  //   queryFn: getSalumi,
+  // });
+
+  const [curing, setCuring] =
+    useRecoilState<IDashboardSalumeState[]>(curingState);
+  const [salting, setSalting] =
+    useRecoilState<IDashboardSalumeState[]>(saltingState);
+  const [drying, setDrying] =
+    useRecoilState<IDashboardSalumeState[]>(dryingState);
+
+  const [hideHints, setHideHints] = useState(false);
+
+  useEffect(() => {
+    calcDuration();
+  }, [salumiData]);
+
+  const updateSalumiStateWithDuration = (salumi: ISalumeWithDuration[]) => {
+    const dryingArr = salumi.filter((item) => item.salume.state === "drying");
+    const saltingArr = salumi.filter((item) => item.salume.state === "salting");
+    const curingArr = salumi.filter((item) => item.salume.state === "curing");
+
+    setDrying(dryingArr);
+    setSalting(saltingArr);
+    setCuring(curingArr);
+  };
+
+  const calcDuration = async () => {
+    // if (salumiData) {
+    //   const salumiArr = await Promise.all(
+    //     salumiData.map(async (salume) => calculateSalumeDuration(salume))
+    //   );
+    //   if (salumiArr) {
+    //     updateSalumiStateWithDuration(salumiArr);
+    //   }
+    // }
+    if (salumiData) {
+      const salumiArr = await Promise.all(
+        salumiData.map(async (salume) => calculateSalumeDuration(salume))
+      );
+      if (salumiArr) {
+        updateSalumiStateWithDuration(salumiArr);
+      }
+    }
+  };
+
+  const [{ isOverDrying, getDropResultDrying }, dropTargetDrying] = useDrop({
+    accept: "salume",
+    drop: (droppedSalume) => {
+      addSalumeToSection(droppedSalume as ISalumeProps, isOverDrying);
+    },
+    // item: () => {
+    //   return { id, index };
+    // },
+    collect: (monitor: any) => ({
+      isOverDrying: !!monitor.isOver(),
+      getDropResultDrying: monitor.getDropResult(),
+    }),
+  });
+
+  const [{ isOverSalting, getDropResultSalting }, dropTargetSalting] = useDrop({
+    accept: "salume",
+    drop: (droppedSalume) => {
+      addSalumeToSection(droppedSalume as ISalumeProps, isOverSalting);
+    },
+    // item: () => {
+    //   return { id, index };
+    // },
+    collect: (monitor: any) => ({
+      isOverSalting: !!monitor.isOver(),
+      getDropResultSalting: monitor.getDropResult(),
+    }),
+  });
+  const [{ isOverCuring, getDropResultCuring }, dropTargetCuring] = useDrop({
+    accept: "salume",
+    drop: (droppedSalume) => {
+      addSalumeToSection(droppedSalume as ISalumeProps, isOverCuring);
+    },
+    collect: (monitor: any) => ({
+      isOverCuring: !!monitor.isOver(),
+      getDropResultCuring: monitor.getDropResult(),
+    }),
+  });
+
+  const [{ isOverDone, getDropResultDone }, dropTargetDone] = useDrop({
+    accept: "salume",
+    drop: (droppedSalume) => {
+      addSalumeToSection(droppedSalume as ISalumeProps, isOverDone);
+    },
+    collect: (monitor) => ({
+      isOverDone: !!monitor.isOver(),
+      getDropResultDone: monitor.getDropResult(),
+    }),
+  });
+
+  //-------
+  //-------
+  //-------
+  //-------
+  //-------
+  //-------
+  const addSalumeToSection = async (salume: ISalumeProps, isOver: boolean) => {
+    // Extract salume data
+    const { created_at, id, name, notes, recipe, state, updated_at } =
+      salume.salume;
+    // Create newSalume object with updated state
+    const newSalume: ISalume = {
+      created_at,
+      id,
+      name,
+      notes,
+      recipe: { id: recipe.id },
+      state: isOver
+        ? isOverDrying
+          ? "drying"
+          : isOverSalting
+          ? "salting"
+          : isOverCuring
+          ? "curing"
+          : isOverDone
+          ? "done"
+          : state
+        : state,
+      updated_at: updated_at,
+      rating: 0,
+    };
+
+    // Update state based on drop target
+    if (isOverDrying) {
+      if (state === "drying") {
+        return;
+      }
+      console.log("IMAGE", newSalume.image);
+      updateSalumeState.mutate({
+        id: newSalume.id,
+        name: newSalume.name,
+        notes: newSalume.notes,
+        recipeId: newSalume.recipe.id,
+        state: newSalume.state,
+        rating: 0,
+      });
+      const { duration } = await calculateSalumeDuration(newSalume);
+      console.log(duration);
+      setDrying([
+        ...drying,
+        {
+          salume: newSalume,
+          duration: duration,
+        },
+      ]);
+
+      //-------
+      setSalting(salting.filter((item) => item.salume.id !== id));
+      setCuring(curing.filter((item) => item.salume.id !== id));
+    } else if (isOverSalting) {
+      if (state === "salting") {
+        return;
+      }
+      updateSalumeState.mutate({
+        id: newSalume.id,
+        name: newSalume.name,
+        notes: newSalume.notes,
+        recipeId: newSalume.recipe.id,
+        state: newSalume.state,
+        rating: 0,
+      });
+      const { duration } = await calculateSalumeDuration(newSalume);
+
+      setSalting([
+        ...salting,
+        {
+          salume: newSalume,
+          duration: duration,
+        },
+      ]);
+
+      //-----
+      setDrying(drying.filter((item) => item.salume.id !== id));
+      setCuring(curing.filter((item) => item.salume.id !== id));
+    } else if (isOverCuring) {
+      if (state === "curing") {
+        return;
+      }
+      updateSalumeState.mutate({
+        id: newSalume.id,
+        name: newSalume.name,
+        notes: newSalume.notes,
+        recipeId: newSalume.recipe.id,
+        state: newSalume.state,
+        rating: 0,
+      });
+      const { duration } = await calculateSalumeDuration(newSalume);
+
+      setCuring([
+        ...curing,
+        {
+          salume: newSalume,
+          duration: duration,
+        },
+      ]);
+
+      //------
+      setDrying(drying.filter((item) => item.salume.id !== id));
+      setSalting(salting.filter((item) => item.salume.id !== id));
+    } else if (isOverDone) {
+      updateSalumeState.mutate({
+        id: newSalume.id,
+        name: newSalume.name,
+        notes: newSalume.notes,
+        recipeId: newSalume.recipe.id,
+        state: newSalume.state,
+        rating: 0,
       });
 
-    saltingArr.length > 0 &&
-      saltingArr.forEach((salume) => {
-        const currentDate = new Date();
-        const targetDate = salume.date;
+      console.log(newSalume);
 
-        const timeDifference = targetDate.getTime() - currentDate.getTime();
-        const newDaysLeft =
-          Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
-        salume.daysLeft = newDaysLeft;
-        setSalting(saltingArr);
-      });
+      setDrying(drying.filter((item) => item.salume.id !== id));
+      setSalting(salting.filter((item) => item.salume.id !== id));
+      setCuring(curing.filter((item) => item.salume.id !== id));
+    }
+  };
 
-    dryingArr.length > 0 &&
-      dryingArr.forEach((salume) => {
-        const currentDate = new Date();
-        const targetDate = salume.date;
-
-        const timeDifference = targetDate.getTime() - currentDate.getTime();
-        const newDaysLeft =
-          Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
-        salume.daysLeft = newDaysLeft;
-        setDrying(dryingArr);
-      });
-  }, []);
+  setTimeout(() => {
+    setHideHints(true);
+  }, 5000);
 
   return (
     <PrivateLayout>
-      <div className="flex flex-col items-center">
-        <h1 className="text-black text-4xl m-16">Dashboard</h1>
-        {curing && salting && drying && (
-          <div className="grid grid-cols-2 gap-24 w-full justify-items-center">
-            <Card
-              details={curing}
-              image={"/cure.svg"}
-              imageSize={{ width: 100, height: 100 }}
-              link={""}
+      <div className="flex flex-col items-center h-full overflow-hidden">
+        <h1 className="w-fit text-6xl text-salumeWhite border-b-salumeWhite border-b-4 border-double font-bold font-Montserrat mt-8">
+          Dashboard
+        </h1>
+        {salumi && (
+          <div className="w-full flex flex-col justify-around h-full">
+            <div className="flex flex-row w-full justify-around">
+              <div
+                className="w-1/3 justify-center flex"
+                ref={dropTargetSalting}
+              >
+                <Card
+                  details={salting}
+                  image={"/salt.svg"}
+                  imageSize={{ width: 100, height: 100 }}
+                  link={""}
+                  status={"Salting"}
+                  addStyles={
+                    "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl w-full"
+                    // "hover:-translate-x-2/3 group-hover:translate-x-full transition-transform duration-300 ease-in-out"
+                  }
+                >
+                  <DashboardCardDetails salumi={salting} status={"Salting"} />
+                </Card>
+              </div>
+              <div className="w-1/3 justify-center flex" ref={dropTargetDrying}>
+                <Card
+                  details={drying}
+                  image={"/dry.svg"}
+                  imageSize={{ width: 100, height: 100 }}
+                  link={""}
+                  status={"Drying"}
+                  addStyles={
+                    "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl w-full"
+                    // "hover:-translate-x-1/2 group-hover:translate-x-2/3 transition-transform duration-300 ease-in-out group-hover:scale-150"
+                  }
+                >
+                  <DashboardCardDetails salumi={drying} status={"Drying"} />
+                </Card>
+              </div>
+            </div>
+            <div className="w-full justify-center flex" ref={dropTargetCuring}>
+              <Card
+                details={curing}
+                image={"/cure.svg"}
+                imageSize={{ width: 100, height: 100 }}
+                link={""}
+                status={"Curing"}
+                addStyles={
+                  "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl"
+                  // "hover:-translate-y-full group-hover:translate-y-full transition-transform duration-300 ease-in-out"
+                }
+
+                // onClick={() => {
+                //   handleClick("curing");
+                // }}
+              >
+                <DashboardCardDetails salumi={curing} status={"Curing"} />
+              </Card>
+            </div>
+            <div
+              className="pr-16 w-full flex justify-end align-top mb-8 group"
+              ref={dropTargetDone}
             >
-              <DashboardCardDetails salumi={curing} status={"Curing"} />
-            </Card>
-            <Card
-              details={salting}
-              image={"/salt.svg"}
-              imageSize={{ width: 100, height: 100 }}
-              link={""}
-            >
-              <DashboardCardDetails salumi={salting} status={"Salting"} />
-            </Card>
-            <Card
-              details={drying}
-              image={"/dry.svg"}
-              imageSize={{ width: 100, height: 100 }}
-              link={""}
-            >
-              <DashboardCardDetails salumi={drying} status={"Drying"} />
-            </Card>
+              <div>
+                <p
+                  className={`group-hover:opacity-100 bg-salumeWhite text-salumeBlue shadow-2xl rounded-t-xl rounded-l-xl p-1 transition-opacity ease-in-out duration-300 mr-2 ${
+                    hideHints ? "opacity-0" : ""
+                  }`}
+                >
+                  Drop and view your completed salumi here!
+                </p>
+              </div>
+              <Link href="/salumi/completed" className="">
+                <Image
+                  src={"/waiter.svg"}
+                  alt={"waiter"}
+                  width={100}
+                  height={100}
+                  className="hover:scale-110 transition-all duration-300 ease-in-out hover:cursor-pointer"
+                />
+              </Link>
+            </div>
           </div>
         )}
       </div>

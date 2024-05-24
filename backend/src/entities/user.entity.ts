@@ -1,8 +1,17 @@
 import crypto from "crypto";
-import { Entity, Column, Index, BeforeInsert, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  Index,
+  BeforeInsert,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import bcrypt from "bcryptjs";
 import Model from "./model.entity";
 import { Recipe } from "./recipe.entity";
+import { Salume } from "./salumi.entity";
 
 export enum RoleEnumType {
   USER = "user",
@@ -56,6 +65,9 @@ export class User extends Model {
 
   @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
+
+  @OneToMany(() => Salume, (salume) => salume.user)
+  salumi: Salume[];
 
   @BeforeInsert()
   async hashPassword() {

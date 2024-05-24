@@ -8,7 +8,9 @@ import {
 import {
   createRecipe,
   findRecipes,
+  findRecipesByUser,
   getRecipe,
+  updateRecipe,
 } from "../services/recipe.service";
 import { findUserById } from "../services/user.service";
 import AppError from "../utils/appError";
@@ -17,6 +19,7 @@ import sharp from "sharp";
 import { Recipe } from "../entities/recipe.entity";
 import { Cut } from "../entities/cuts.entity";
 import { getRepository } from "typeorm";
+import { AppDataSource } from "../utils/data-source";
 
 const multerStorage = multer.memoryStorage();
 
@@ -67,11 +70,12 @@ export const resizeRecipeImage = async (
 };
 
 export const createRecipeHandler = async (
-  req: any, //Request<{}, {}, CreateRecipeInput>,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    console.log(res);
     const user = await findUserById(res.locals.user.id as string);
 
     const recipe = await createRecipe(req.body, user!);
@@ -85,7 +89,7 @@ export const createRecipeHandler = async (
     //   return newCut;
     // });
 
-    await createRecipe(recipe, user!, recipe);
+    await createRecipe(recipe, user!);
 
     res.status(201).json({
       status: "success",
@@ -115,7 +119,6 @@ export const getRecipeHandler = async (
     if (!recipe) {
       return next(new AppError(404, "Recipe with that ID not found"));
     }
-    console.log(recipe);
 
     res.status(200).json({
       status: "success",
@@ -134,15 +137,19 @@ export const getRecipesHandler = async (
   next: NextFunction
 ) => {
   try {
-    const recipes = await findRecipes({}, {}, {});
-
-    res.status(200).json({
-      status: "success",
-      nbrResults: recipes.length,
-      data: {
-        recipes,
-      },
-    });
+    const user = await findUserById(res.locals.user.id as string);
+    if (user) {
+      const recipes = await findRecipesByUser(user.id);
+      console.log(recipes);
+      res.status(200).json({
+        status: "success",
+        nbrResults: recipes.length,
+        data: {
+          recipes,
+        },
+      });
+    }
+    // const recipes = await findRecipes({}, {}, {});
   } catch (err: any) {
     next(err);
   }
@@ -154,23 +161,25 @@ export const updateRecipeHandler = async (
   next: NextFunction
 ) => {
   try {
-    const recipe = await getRecipe(req.params.recipeId);
+    const existingRecipe = await getRecipe(req.params.recipeId);
 
-    if (!recipe) {
+    if (!existingRecipe) {
       return next(new AppError(404, "Recipe with that ID not found"));
     }
 
-    Object.assign(recipe, req.body);
+    Object.assign(existingRecipe, req.body);
 
-    const updatedRecipe = await recipe.save();
+    await existingRecipe.save();
+    // await updateRecipe(existingRecipe, existingRecipe);
 
     res.status(200).json({
       status: "success",
       data: {
-        recipe: updatedRecipe,
+        recipe: existingRecipe,
       },
     });
   } catch (err: any) {
+    console.log(err);
     next(err);
   }
 };

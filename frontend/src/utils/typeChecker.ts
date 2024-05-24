@@ -1,4 +1,4 @@
-import { IItem } from "@/interfaces/interfaces";
+import { IItem, ISalume } from "@/interfaces/interfaces";
 
 export function handleCurrentItem(
   currentItem: IItem | undefined,
@@ -27,4 +27,11 @@ export function handleCurrentItem(
         break;
     }
   }
+}
+
+export function instanceOf(object: any): object is ISalume {
+  if (object && "id" in object) {
+    return "id" in object;
+  }
+  return false;
 }

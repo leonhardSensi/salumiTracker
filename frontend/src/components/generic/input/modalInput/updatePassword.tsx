@@ -1,16 +1,23 @@
 import { getUser } from "@/api/userApi";
+import { notificationState } from "@/atoms/notificationAtoms";
 import {
   useLoginMutation,
   useUpdateUserMutation,
 } from "@/mutations/userMutations";
-import inputMatch from "@/utils/inputMatch";
+import { inputMatch } from "@/utils/inputValidation";
+import { useModal } from "@/utils/modalProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 import SubmitButton from "../../button/submitButton";
 import UserInput from "../userInput";
 
 export default function UpdatePassword() {
   const { data } = useQuery(["user"], getUser);
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const [notificationDetails, setNotificationDetails] =
+    useRecoilState(notificationState);
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
@@ -61,8 +68,14 @@ export default function UpdatePassword() {
     if (result.status === 401) {
       setInvalidCredentialsMessage("Incorrect password!");
     } else if (result.status === 200) {
-      await updateUser.mutateAsync(user);
-      window.location.reload();
+      const response = await updateUser.mutateAsync(user);
+      if (response.status === 200) {
+        closeModal();
+        setNotificationDetails({
+          type: "passwordSubmit",
+          message: "Password updated successfully!",
+        });
+      }
     }
   };
 
@@ -81,6 +94,7 @@ export default function UpdatePassword() {
             handleChange={(e) => handleChange(e, "old-password")}
             type={"password"}
             name={"old-password"}
+            autoComplete="old-password"
             id={"old-password"}
             placeholder={"••••••••"}
             required={true}
@@ -98,6 +112,7 @@ export default function UpdatePassword() {
             handleChange={(e) => handleChange(e, "new-password")}
             type={"password"}
             name={"new-password"}
+            autoComplete="new-password"
             id={"new-password"}
             placeholder={"••••••••"}
             required={true}
@@ -115,6 +130,7 @@ export default function UpdatePassword() {
             handleChange={(e) => handleChange(e, "new-password-confirm")}
             type="password"
             name="new-password-confirm"
+            autoComplete="new-password-confirm"
             id="new-password-confirm"
             placeholder="••••••••"
             required={true}

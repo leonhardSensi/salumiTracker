@@ -10,7 +10,7 @@ export class Drying extends Model {
   @Column()
   duration: number;
 
-  @OneToOne(() => Recipe, (recipe) => recipe.drying)
+  @OneToOne(() => Recipe, (recipe) => recipe.drying, { onDelete: "CASCADE" })
   @JoinColumn({ name: "recipeId" })
   recipe: Recipe;
 }

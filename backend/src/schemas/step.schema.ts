@@ -11,11 +11,17 @@ export const createStepSchema = object({
     name: string({
       required_error: "Name is required",
     }),
-    description: number({
+    description: string({
       required_error: "Description is required",
     }),
     duration: number({
       required_error: "Duration is required",
+    }),
+    status: string({
+      required_error: "Status is required",
+    }),
+    statusDuration: number({
+      required_error: "Status duration is required",
     }),
   }),
 });

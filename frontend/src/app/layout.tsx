@@ -3,10 +3,19 @@ import "./globals.css";
 // import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { useRouter, usePathname } from "next/navigation";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect } from "react";
 import { ModalProvider } from "@/utils/modalProvider";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { RecoilRoot } from "recoil";
+import { getSalumi } from "@/api/salumeApi";
+import { refreshToken } from "@/utils/refreshToken";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +36,15 @@ export default function RootLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  if (
-    !document.cookie.includes("logged_in=true") &&
-    pathname !== "/login" &&
-    pathname !== "/register"
-  ) {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (
+      !document.cookie.includes("logged_in=true") &&
+      pathname !== "/login" &&
+      pathname !== "/register"
+    ) {
+      router.push("/login");
+    }
+  }, []);
 
   const checkAuth = () => {
     try {
@@ -58,13 +69,44 @@ export default function RootLayout({
   //   };
   // }, []);
 
+  useEffect(() => {
+    const setupTokenRefresh = () => {
+      const accessTokenExpiry = 10 * 60 * 1000; // 10 minutes
+      const interval = setInterval(async () => {
+        const newAccessToken = await refreshToken();
+        if (newAccessToken) {
+          // Optionally update your state/store with the new access token
+          console.log("Access token refreshed:", newAccessToken);
+        } else {
+          console.log("Failed to refresh the access token!");
+          router.push("/login");
+        }
+      }, accessTokenExpiry);
+
+      return () => clearInterval(interval);
+    };
+
+    setupTokenRefresh();
+  }, []);
+
   return (
     <html lang="en">
+      <head>
+        {/* <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"
+          rel="stylesheet"
+        /> */}
+      </head>
       <body className={inter.className}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-          <ReactQueryDevtools />
-        </QueryClientProvider>
+        <RecoilRoot>
+          <DndProvider backend={HTML5Backend}>
+            <QueryClientProvider client={queryClient}>
+              {children}
+              <ReactQueryDevtools />
+            </QueryClientProvider>
+          </DndProvider>
+        </RecoilRoot>
+        {/* <script src="../path/to/flowbite/dist/flowbite.min.js"></script> */}
       </body>
     </html>
   );

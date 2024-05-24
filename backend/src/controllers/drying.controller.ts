@@ -1,12 +1,12 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createDrying, getDrying } from "../services/drying.service";
 // import { Recipe } from "../entities/recipe.entity";
 // import { findRecipeById } from "../services/recipe.service";
 import AppError from "../utils/appError";
 
 export const createDryingHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -30,8 +30,8 @@ export const createDryingHandler = async (
 };
 
 export const getDryingHandler = async (
-  req: any, //Request<GetDryingInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

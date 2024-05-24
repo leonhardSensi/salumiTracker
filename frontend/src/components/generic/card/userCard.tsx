@@ -1,52 +1,109 @@
 "use client";
 import Image from "next/image";
 import { IUserCardProps } from "@/interfaces/interfaces";
-import { useEffect, useState } from "react";
-import UserInput from "../input/userInput";
-import SubmitButton from "../button/submitButton";
-import Modal from "../modal/modal";
-import { ModalProvider, useModal } from "@/utils/modalProvider";
+import { useEffect } from "react";
+import { useModal } from "@/utils/modalProvider";
+import { modalData } from "@/atoms/modalAtoms";
+import { useRecoilState } from "recoil";
 
-export default function UserCard({
-  title,
-  details,
-  imgSrc,
-}: // isModalOpen,
-// openModal,
-// closeModal,
-IUserCardProps) {
+export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [modalDetails, setModalDetails] = useRecoilState(modalData);
 
   const handleModalData = (id: string) => {
     switch (id) {
       case "Name":
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("password");
-        sessionStorage.removeItem("dateOfBirth");
-
-        sessionStorage.setItem("name", "name");
+        setModalDetails({
+          type: "name",
+          inputType: "text",
+          info: {
+            image: "",
+            title,
+            details,
+            inputLabel: "New name",
+            placeHolder: "Your name",
+            data: {
+              name: "",
+              duration: 0,
+              statusDuration: 0,
+              description: 0,
+              created_at: "",
+              updated_at: "",
+              id: "",
+              status: "",
+            },
+          },
+        });
         break;
       case "Email":
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("password");
-        sessionStorage.removeItem("dateOfBirth");
-
-        sessionStorage.setItem("email", "email");
+        setModalDetails({
+          type: "email",
+          inputType: "email",
+          info: {
+            image: "",
+            title,
+            details,
+            inputLabel: "New email address",
+            placeHolder: "yourname@company.com",
+            data: {
+              name: "",
+              duration: 0,
+              statusDuration: 0,
+              description: 0,
+              created_at: "",
+              updated_at: "",
+              id: "",
+              status: "",
+            },
+          },
+        });
         break;
 
       case "Date of birth":
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("password");
-        sessionStorage.removeItem("name");
-
-        sessionStorage.setItem("dateOfBirth", "dateOfBirth");
+        setModalDetails({
+          type: "dateOfBirth",
+          inputType: "date",
+          info: {
+            image: "",
+            title,
+            details,
+            inputLabel: "New date of birth",
+            placeHolder: "",
+            data: {
+              name: "",
+              duration: 0,
+              statusDuration: 0,
+              description: 0,
+              created_at: "",
+              updated_at: "",
+              id: "",
+              status: "",
+            },
+          },
+        });
         break;
       case "Password":
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("dateOfBirth");
-
-        sessionStorage.setItem("password", "password");
+        setModalDetails({
+          type: "password",
+          inputType: "password",
+          info: {
+            image: "",
+            title,
+            details,
+            inputLabel: "",
+            placeHolder: "",
+            data: {
+              name: "",
+              duration: 0,
+              statusDuration: 0,
+              description: 0,
+              created_at: "",
+              updated_at: "",
+              id: "",
+              status: "",
+            },
+          },
+        });
         break;
       default:
         break;
@@ -72,7 +129,7 @@ IUserCardProps) {
 
   return (
     <>
-      <div className="my-16 w-full bg-white rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer h-fit">
+      <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer h-fit">
         <button
           onClick={() => {
             openModal();
@@ -80,7 +137,7 @@ IUserCardProps) {
           }}
           className="w-full"
         >
-          <div className="flex">
+          <div className="flex items-center">
             <div className="w-full p-8">
               <div className="mb-2">
                 <h1 className="text-black font-bold text-xl text-left">
@@ -90,11 +147,11 @@ IUserCardProps) {
               <p className="text-black text-left">{details}</p>
             </div>
             <Image
-              width={60}
-              height={60}
+              width={100}
+              height={100}
               src={imgSrc}
               alt="usercard-picture"
-              className="pr-8"
+              className="pr-8 items-center w-1/4 h-1/4"
             />
           </div>
         </button>

@@ -1,7 +1,8 @@
-import { IItemProps, IStep } from "@/interfaces/interfaces";
+import { IStepProps } from "@/interfaces/interfaces";
 import UserInput from "../userInput";
 import Image from "next/image";
 import { handleCurrentItem } from "@/utils/typeChecker";
+import { Dropdown } from "../dropdown/dropdown";
 
 export default function Step({
   handleChange,
@@ -9,27 +10,32 @@ export default function Step({
   items,
   remove,
   currentItem,
-}: IItemProps) {
+  statusArr,
+  handleSelect,
+  currentId,
+  dropdownText,
+  stepStatus,
+}: IStepProps) {
   return (
     <>
-      <div className="flex items-center w-full">
-        <label htmlFor="stepName" className="text-gray-900 text-xl">
+      <div className="flex justify-between items-center w-full text-salumeWhite">
+        <label htmlFor="stepName" className="text-xl mb-2">
           Step {stepNum}
         </label>
         <Image
           className={
-            items.length > 1 ? "h-5 w-5 cursor-pointer ml-2" : " hidden"
+            items.length > 1 ? "cursor-pointer ml-2 mb-2 invert" : " hidden"
           }
-          src={"/x-button.svg"}
-          width={100}
-          height={100}
+          src={"/delete.svg"}
+          width={30}
+          height={30}
           onClick={remove}
           alt="delete"
         />
       </div>
       <UserInput
         width={"w-1/2"}
-        addStyle={"mt-1 mb-4"}
+        addStyle={"mb-4"}
         name="step"
         handleChange={handleChange}
         type="text"
@@ -38,7 +44,10 @@ export default function Step({
         required={true}
         defaultValue={currentItem && currentItem.name}
       />
-      <label htmlFor="stepDescription" className="text-gray-900 text-xl">
+      <label
+        htmlFor="stepDescription"
+        className="text-xl text-salumeWhite mb-4"
+      >
         Step description
       </label>
       <textarea
@@ -46,16 +55,26 @@ export default function Step({
         onChange={handleChange}
         id="stepDescription"
         placeholder="Cut all the meats in small pieces and add all the spices"
-        className="w-full h-32 text-white mt-1 mb-4 border text-l rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full h-32 text-black mb-4 border text-xl rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-100 border-gray-300 placeholder-gray-600 focus:ring-blue-500 focus:border-blue-500"
         required={true}
         defaultValue={handleCurrentItem(currentItem, "description")}
       />
-      <label htmlFor="stepDuration" className="text-gray-900 text-xl">
+      <div className="relative group mb-2 w-fit">
+        <label className="text-xl text-salumeWhite mb-4">Status</label>
+        <Dropdown
+          dropDownOptions={statusArr}
+          disabled={statusArr?.length === 0}
+          handleSelect={handleSelect}
+          currentId={currentId}
+          dropdownText={dropdownText}
+        />
+      </div>
+      <label htmlFor="stepDuration" className="text-xl text-salumeWhite mb-4">
         Duration (minutes)
       </label>
       <UserInput
         width={"w-1/4"}
-        addStyle={"mt-1 mb-4"}
+        addStyle={"mb-8"}
         name="stepDuration"
         handleChange={handleChange}
         type="number"
@@ -65,6 +84,7 @@ export default function Step({
         min={0}
         required={true}
         defaultValue={handleCurrentItem(currentItem, "duration")}
+        disabled={stepStatus ? true : false}
       />
     </>
   );

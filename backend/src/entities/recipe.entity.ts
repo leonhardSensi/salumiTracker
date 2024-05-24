@@ -11,6 +11,7 @@ import { Cut } from "./cuts.entity";
 import { Drying } from "./drying.entity";
 import Model from "./model.entity";
 import { Salting } from "./salting.entity";
+import { Salume } from "./salumi.entity";
 import { Spice } from "./spice.entity";
 import { Step } from "./step.entity";
 import { User } from "./user.entity";
@@ -18,7 +19,7 @@ import { User } from "./user.entity";
 @Entity("recipes")
 export class Recipe extends Model {
   @Column({
-    unique: true,
+    unique: false,
   })
   title: string;
 
@@ -42,13 +43,19 @@ export class Recipe extends Model {
   // @JoinColumn()
   // drying: Drying;
 
-  @OneToOne(() => Curing, (curing) => curing.recipe, { cascade: true })
+  @OneToOne(() => Curing, (curing) => curing.recipe, {
+    cascade: true,
+  })
   curing: Curing;
 
-  @OneToOne(() => Salting, (salting) => salting.recipe, { cascade: true })
+  @OneToOne(() => Salting, (salting) => salting.recipe, {
+    cascade: true,
+  })
   salting: Salting;
 
-  @OneToOne(() => Drying, (drying) => drying.recipe, { cascade: true })
+  @OneToOne(() => Drying, (drying) => drying.recipe, {
+    cascade: true,
+  })
   drying: Drying;
 
   @ManyToOne(() => User, (user) => user.recipes)
@@ -73,24 +80,28 @@ export class Recipe extends Model {
   @JoinColumn({ name: "recipeId" })
   steps: Step[];
 
-  addStep(step: Step) {
-    if (this.steps === null) {
-      this.steps = new Array<Step>();
-    }
-    this.steps.push(step);
-  }
+  @OneToMany(() => Salume, (salume) => salume.recipe)
+  @JoinColumn({ name: "recipeId" })
+  salumi: Salume[];
 
-  addSpice(spice: Spice) {
-    if (this.spices === null) {
-      this.spices = new Array<Spice>();
-    }
-    this.spices.push(spice);
-  }
+  // addStep(step: Step) {
+  //   if (this.steps === null) {
+  //     this.steps = new Array<Step>();
+  //   }
+  //   this.steps.push(step);
+  // }
 
-  addCut(cut: Cut) {
-    if (this.cuts == null) {
-      this.cuts = new Array<Cut>();
-    }
-    this.cuts.push(cut);
-  }
+  // addSpice(spice: Spice) {
+  //   if (this.spices === null) {
+  //     this.spices = new Array<Spice>();
+  //   }
+  //   this.spices.push(spice);
+  // }
+
+  // addCut(cut: Cut) {
+  //   if (this.cuts == null) {
+  //     this.cuts = new Array<Cut>();
+  //   }
+  //   this.cuts.push(cut);
+  // }
 }

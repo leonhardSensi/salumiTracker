@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Cut from "./cut";
 import Spice from "./spice";
@@ -7,41 +8,64 @@ import { IItem, Irecipe } from "@/interfaces/interfaces";
 import GenericButton from "../../button/genericButton";
 import StatusButton from "../../button/statusButton";
 import { useRecipeMutation } from "@/mutations/recipeMutations";
-import Curing from "./curing";
-import Drying from "./drying";
-import Salting from "./salting";
+import Status from "./status";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { modalData } from "@/atoms/modalAtoms";
+import { useModal } from "@/utils/modalProvider";
+import { useRecoilState } from "recoil";
+import { notificationState } from "@/atoms/notificationAtoms";
 
 export default function RecipeInput(props: { recipe?: Irecipe }) {
+  const router = useRouter();
+  const [notificationDetails, setNotificationDetails] =
+    useRecoilState(notificationState);
   const [name, setName] = useState("");
   const [curing, setCuring] = useState({ state: false, duration: 0 });
   const [salting, setSalting] = useState({ state: false, duration: 0 });
   const [drying, setDrying] = useState({ state: false, duration: 0 });
 
-  const [cuts, setCuts] = useState<IItem[]>([{ id: 1, name: "", quantity: 0 }]);
+  const [cuts, setCuts] = useState<IItem[]>([
+    { listId: 1, name: "", quantity: 0 },
+  ]);
 
   const [spices, setSpices] = useState<IItem[]>([
-    { id: 1, name: "", quantity: 0 },
+    { listId: 1, name: "", quantity: 0 },
   ]);
   const [steps, setSteps] = useState<IItem[]>([
-    { id: 1, name: "", description: "", duration: 0 },
+    {
+      listId: 1,
+      name: "",
+      description: "",
+      duration: 0,
+      status: "",
+      statusDuration: 0,
+    },
   ]);
 
   const createRecipe = useRecipeMutation();
 
   const add = (items: IItem[], type: string) => {
-    const nextId = items[items.length - 1].id + 1;
+    const nextId = items[items.length - 1].listId + 1;
 
     switch (type) {
       case "cuts":
-        setCuts([...cuts, { id: nextId, name: "", quantity: 0 }]);
+        setCuts([...cuts, { listId: nextId, name: "", quantity: 0 }]);
         break;
       case "spices":
-        setSpices([...spices, { id: nextId, name: "", quantity: 0 }]);
+        setSpices([...spices, { listId: nextId, name: "", quantity: 0 }]);
         break;
       case "steps":
         setSteps([
           ...steps,
-          { id: nextId, name: "", description: "", duration: 0 },
+          {
+            listId: nextId,
+            name: "",
+            description: "",
+            duration: 0,
+            status: "",
+            statusDuration: 0,
+          },
         ]);
         break;
 
@@ -52,7 +76,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
 
   const remove = (items: IItem[], id: number, type: string) => {
     console.log(id);
-    const newItems = items.filter((item) => item.id !== id);
+    const newItems = items.filter((item) => item.listId !== id);
     switch (type) {
       case "cuts":
         setCuts(newItems);
@@ -81,14 +105,14 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
     switch (itemToChange) {
       case "cut":
         const updatedCuts = cuts.map((cut) =>
-          cut.id === id ? { ...cut, name: value } : cut
+          cut.listId === id ? { ...cut, name: value } : cut
         );
         console.log(updatedCuts);
         setCuts(updatedCuts);
         break;
       case "cutQuantity":
         const updatedCutQuantity = cuts.map((cut) =>
-          cut.id === id ? { ...cut, quantity: +value } : cut
+          cut.listId === id ? { ...cut, quantity: +value } : cut
         );
         console.log(updatedCutQuantity);
         setCuts(updatedCutQuantity);
@@ -96,32 +120,32 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
 
       case "spice":
         const updatedSpices = spices.map((spice) =>
-          spice.id === id ? { ...spice, name: value } : spice
+          spice.listId === id ? { ...spice, name: value } : spice
         );
         setSpices(updatedSpices);
         break;
 
       case "spiceQuantity":
         const updatedSpiceQuantity = spices.map((spice) =>
-          spice.id === id ? { ...spice, quantity: +value } : spice
+          spice.listId === id ? { ...spice, quantity: +value } : spice
         );
         setSpices(updatedSpiceQuantity);
         break;
       case "step":
         const updatedSteps = steps.map((step) =>
-          step.id === id ? { ...step, name: value } : step
+          step.listId === id ? { ...step, name: value } : step
         );
         setSteps(updatedSteps);
         break;
       case "stepDescription":
         const updatedStepDescription = steps.map((step) =>
-          step.id === id ? { ...step, description: value } : step
+          step.listId === id ? { ...step, description: value } : step
         );
         setSteps(updatedStepDescription);
         break;
       case "stepDuration":
         const updatedStepDuration = steps.map((step) =>
-          step.id === id ? { ...step, duration: +value } : step
+          step.listId === id ? { ...step, duration: +value } : step
         );
         setSteps(updatedStepDuration);
         break;
@@ -136,26 +160,26 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
     const value = e.target.value;
 
     switch (itemToChange) {
-      case "curing":
+      case "Curing":
         console.log("item to change", e.target.checked);
         setCuring({ ...curing, state: e.target.checked });
         console.log(value);
         break;
-      case "curingDuration":
+      case "CuringDuration":
         setCuring({ ...curing, duration: +value });
         break;
 
-      case "salting":
+      case "Salting":
         setSalting({ ...salting, state: e.target.checked });
         break;
-      case "saltingDuration":
+      case "SaltingDuration":
         setSalting({ ...salting, duration: +value });
         break;
 
-      case "drying":
+      case "Drying":
         setDrying({ ...drying, state: e.target.checked });
         break;
-      case "dryingDuration":
+      case "DryingDuration":
         setDrying({ ...drying, duration: +value });
         break;
 
@@ -175,179 +199,179 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
       spices: spices,
       steps: steps,
     };
-    await createRecipe.mutate(recipe);
+
+    const response = await createRecipe.mutateAsync(recipe);
+    if (response && response.status === 201) {
+      setNotificationDetails({
+        type: "recipeSubmit",
+        message: "Recipe created successfully!",
+      });
+
+      router.push("/recipes");
+    }
   };
 
-  // const renderRecipe = (data: string) => {
-  //   if (props.recipe) {
-  //     switch (data) {
-  //       case "cut":
-  //         add(cuts, "cut");
-  //         return props.recipe.cuts.map((cut, index) => (
-  //           <div
-  //             key={`cut-${cut.id}`}
-  //             className="flex flex-row justify-between"
-  //           >
-  //             <>
-  //               <Cut
-  //                 handleChange={(e) => handleChange(e, index)}
-  //                 remove={() => remove(cuts, index, "cuts")}
-  //                 items={cuts}
-  //                 currentItem={cut}
-  //               />
-  //             </>
-  //           </div>
-  //         ));
-  //       case "spice":
-  //         return props.recipe.spices.map((spice, index) => (
-  //           <div
-  //             key={`step-${spice.id}`}
-  //             className="flex flex-row justify-between"
-  //           >
-  //             <>
-  //               <Spice
-  //                 handleChange={(e) => handleChange(e, index)}
-  //                 stepNum={index}
-  //                 remove={() => remove(steps, index, "spices")}
-  //                 items={steps}
-  //                 currentItem={spice}
-  //               />
-  //             </>
-  //           </div>
-  //         ));
+  const getStatusArr = () => {
+    return Object.entries({
+      Salting: salting,
+      Drying: drying,
+      Curing: curing,
+    })
+      .filter(([_, step]) => step.state)
+      .map(([status]) => status);
+  };
 
-  //       case "step":
-  //         return props.recipe.steps.map((step, index) => (
-  //           <div key={`step-${step.id}`}>
-  //             <>
-  //               <Step
-  //                 handleChange={(e) => handleChange(e, index)}
-  //                 stepNum={index}
-  //                 remove={() => remove(steps, index, "steps")}
-  //                 items={steps}
-  //                 currentItem={step}
-  //               />
-  //             </>
-  //           </div>
-  //         ));
+  const handleSelect = (value: string, id?: number) => {
+    switch (value) {
+      case "Salting":
+        const updatedSaltingStepStatus = steps.map((step) =>
+          step.listId === id
+            ? { ...step, status: value, statusDuration: salting.duration }
+            : step
+        );
+        setSteps(updatedSaltingStepStatus);
+        break;
+      case "Drying":
+        const updatedDryingStepStatus = steps.map((step) =>
+          step.listId === id
+            ? { ...step, status: value, statusDuration: drying.duration }
+            : step
+        );
+        setSteps(updatedDryingStepStatus);
+        break;
+      case "Curing":
+        const updatedCuringStepStatus = steps.map((step) =>
+          step.listId === id
+            ? { ...step, status: value, statusDuration: curing.duration }
+            : step
+        );
+        setSteps(updatedCuringStepStatus);
+        break;
 
-  //       default:
-  //         break;
-  //     }
-  //   }
-  // };
+      default:
+        break;
+    }
+  };
+
   return (
-    <div className="my-4 w-full">
+    <div className="my-4 w-full text-salumeWhite">
       <form onSubmit={handleSubmit}>
-        <UserInput
-          width={"w-1/2"}
-          addStyle={"mt-1 mb-4 text-xl"}
-          name="name"
-          type="text"
-          handleChange={(e) => setName(e.target.value)}
-          id="name"
-          placeholder="Recipe Name"
-          required={true}
-          defaultValue={props.recipe && props.recipe.title}
-        />
-        <div>
-          <h1 className="text-gray-900 text-3xl my-4 font-bold">Status</h1>
-          <Curing
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={curing.state}
-          />
-          <Salting
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={salting.state}
-          />
-          <Drying
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={drying.state}
+        <div className="flex flex-col items-left border-b-salumeWhite border-b-4 pb-4">
+          <label htmlFor="name" className="text-3xl font-bold mr-4">
+            Add name
+          </label>
+          <UserInput
+            width={"w-1/2"}
+            addStyle={"mt-1 mb-4 text-xl"}
+            name="name"
+            type="text"
+            handleChange={(e) => setName(e.target.value)}
+            id="name"
+            placeholder="Recipe Name"
+            required={true}
+            defaultValue={props.recipe && props.recipe.title}
           />
         </div>
-        <div>
-          <h1 className="text-gray-900 text-3xl my-4 font-bold">Meats</h1>
-          {/* {renderRecipe("cut")} */}
+        <div className="border-b-salumeWhite border-b-4  pb-4">
+          <h1 className="text-3xl my-4 font-bold text-salumeWhite">Status</h1>
+          <Status
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={salting.state}
+            statusName={"Salting"}
+          />
+          <Status
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={drying.state}
+            statusName={"Drying"}
+          />
+          <Status
+            handleCheckBoxChange={handleCheckBoxChange}
+            selected={curing.state}
+            statusName={"Curing"}
+          />
+        </div>
+        <div className="border-b-salumeWhite border-b-4 mt-8">
+          <h1 className="text-3xl my-4 font-bold">Meats</h1>
           {cuts.map((cut) => (
             <div
-              key={`cut-${cut.id}`}
+              key={`cut-${cut.listId}`}
               className="flex flex-row justify-between"
             >
               {cut !== null && (
                 <>
                   <Cut
-                    handleChange={(e) => handleChange(e, cut.id)}
-                    remove={() => remove(cuts, cut.id, "cuts")}
+                    handleChange={(e) => handleChange(e, cut.listId)}
+                    remove={() => remove(cuts, cut.listId, "cuts")}
                     items={cuts}
                   />
                 </>
               )}
             </div>
           ))}
-          <GenericButton
-            text="Add a cut"
+          <Image
+            className="cursor-pointer invert mb-8"
+            src={"/plusButton.svg"}
+            width={40}
+            height={40}
             onClick={() => add(cuts, "cuts")}
-            addStyles="w-fit p-2"
+            alt="add"
           />
         </div>
-        <div>
-          <h1 className="text-gray-900 text-3xl my-4 font-bold">Spices</h1>
-          {/* {renderRecipe("spice")} */}
+        <div className="border-b-salumeWhite border-b-4 mt-8">
+          <h1 className="text-3xl my-4 font-bold">Spices</h1>
           {spices.map((spice) => (
             <div
-              key={`spice-${spice.id}`}
+              key={`spice-${spice.listId}`}
               className="flex flex-row justify-between"
             >
               {spice !== null && (
                 <>
                   <Spice
-                    handleChange={(e) => handleChange(e, spice.id)}
-                    remove={() => remove(spices, spice.id, "spices")}
+                    handleChange={(e) => handleChange(e, spice.listId)}
+                    remove={() => remove(spices, spice.listId, "spices")}
                     items={spices}
                   />
                 </>
               )}
             </div>
           ))}
-          <GenericButton
-            text="Add a spice"
+          <Image
+            className="cursor-pointer invert mb-8"
+            src={"/plusButton.svg"}
+            width={40}
+            height={40}
             onClick={() => add(spices, "spices")}
-            addStyles="w-fit p-2"
+            alt="add"
           />
         </div>
-        <div>
-          <h1 className="text-gray-900 text-3xl my-4 font-bold">Steps</h1>
-          {/* {renderRecipe("step")} */}
+        <div className="mt-8">
+          <h1 className="text-3xl my-4 font-bold">Steps</h1>
           {steps.map((step) => (
-            <div key={`step-${step.id}`}>
+            <div key={`step-${step.listId}`}>
               {step !== null && (
                 <>
                   <Step
-                    handleChange={(e) => handleChange(e, step.id)}
+                    handleChange={(e) => handleChange(e, step.listId)}
                     stepNum={steps.indexOf(step) + 1}
-                    remove={() => remove(steps, step.id, "steps")}
+                    remove={() => remove(steps, step.listId, "steps")}
                     items={steps}
+                    statusArr={getStatusArr()}
+                    handleSelect={handleSelect}
+                    currentId={step.listId}
+                    dropdownText={step.status ? step.status : "Select status"}
+                    stepStatus={step.status}
                   />
-                  {/* <div className="w-4">
-                <Image
-                  className={
-                    steps.length > 1 ? "h-4 w-4 mb-4 cursor-pointer" : " hidden"
-                  }
-                  src={"./x-button.svg"}
-                  width={100}
-                  height={100}
-                  onClick={() => remove(steps, step.id)}
-                  alt="delete"
-                />
-              </div> */}
                 </>
               )}
             </div>
           ))}
-          <GenericButton
-            text="Add a step"
+          <Image
+            className="cursor-pointer invert mb-8"
+            src={"/plusButton.svg"}
+            width={40}
+            height={40}
             onClick={() => add(steps, "steps")}
-            addStyles="w-fit p-2"
+            alt="add"
           />
         </div>
         <div className="flex justify-end mt-16">

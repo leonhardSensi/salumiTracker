@@ -4,36 +4,31 @@ export default function StatusButton(props: { reqSuccess: string }) {
       switch (props.reqSuccess) {
         case "true":
           return (
-            <button
-              type="submit"
-              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-            >
-              Success
-            </button>
+            <div className="text-salumeBlue bg-salumeWhite hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">
+              <button type="submit">Success</button>
+            </div>
           );
 
         case "pending":
           return (
-            <button
-              type="button"
-              className="text-white bg-red-500 font-medium rounded-lg text-l px-5 py-2.5 bg-primary-600"
-            >
-              <div
-                className="mr-2 animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-gray-800 rounded-full dark:text-white"
-                role="status"
-                aria-label="loading"
-              ></div>
-              Processing...
-            </button>
+            <div className="text-salumeBlue bg-salumeWhite hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">
+              <button type="button">
+                <div
+                  className="mr-2 animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-gray-800 rounded-full dark:text-white"
+                  role="status"
+                  aria-label="loading"
+                ></div>
+                Processing...
+              </button>
+            </div>
           );
         case "false":
           return (
-            <button
-              type="submit"
-              className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-            >
-              Save
-            </button>
+            <div className="text-salumeBlue bg-salumeWhite hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-l text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">
+              <button type="submit" className="w-full h-full px-5 py-2.5">
+                Save
+              </button>{" "}
+            </div>
           );
         default:
           break;

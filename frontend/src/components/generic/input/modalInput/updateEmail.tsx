@@ -31,10 +31,10 @@ export default function UpdateEmail() {
       name,
       email,
       dateOfBirth,
-      password,
+      // password,
     };
+    console.log("EMAIL", user);
     updateUser.mutate(user);
-    window.location.reload();
   };
 
   return (

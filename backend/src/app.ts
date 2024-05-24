@@ -54,10 +54,48 @@ import AppError from "./utils/appError";
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
 import recipeRouter from "./routes/recipe.routes";
+import salumeRouter from "./routes/salume.routes";
 import validateEnv from "./utils/validateEnv";
 import cluster from "cluster";
 import os from "os";
 import path from "path";
+import Email from "./utils/email";
+import { findUserById, getAllUsers } from "./services/user.service";
+import { calcRemainingDuration } from "./utils/salumeDuration";
+
+const schedule = require("node-schedule");
+
+schedule.scheduleJob("*/30 * * * * *", async () => {
+  const allUsers = await getAllUsers();
+
+  await Promise.all(
+    allUsers.map(async (user) => {
+      const salumiToNotifyArr = await calcRemainingDuration(user.id);
+      if (user && salumiToNotifyArr.length > 0) {
+        const emailInstance = new Email(
+          {
+            name: user.name,
+            email: user.email,
+          },
+          "",
+          salumiToNotifyArr
+          // {
+          //   salume: salume.name,
+          //   daysRemaining: duration,
+          //   totalSalumi: salumi.length.toString(),
+          // },
+        );
+        // UNCOMMENT TO SEND NOTIFICATIONS
+        try {
+          // await emailInstance.salumeReminder();
+          console.log("Email sent to", user.email);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })
+  );
+});
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -106,10 +144,9 @@ AppDataSource.initialize()
     app.use("/api/auth", authRouter);
     app.use("/api/users", userRouter);
     app.use("/api/recipes", recipeRouter);
-    app.use(
-      "/recipes",
-      express.static(path.join(__dirname, "../public/recipes"))
-    );
+    app.use("/api/salume", salumeRouter);
+
+    app.use(express.static("public"));
 
     // HEALTH CHECKER
     app.get("/api/healthChecker", async (_, res: Response) => {
@@ -140,18 +177,20 @@ AppDataSource.initialize()
     );
 
     const port = config.get<number>("port");
-    if (cluster.isPrimary) {
-      for (let i = 0; i < numCpus; i++) {
-        cluster.fork();
-      }
+    // run on multiple cpu cores
 
-      cluster.on("exit", (worker, code, signal) => {
-        console.log(`Worker pid: ${worker.process.pid} died`);
-        cluster.fork();
-      });
-    } else {
-      app.listen(port);
-      console.log(`Server started with pid: ${process.pid} on port: ${port}`);
-    }
+    // if (cluster.isPrimary) {
+    //   for (let i = 0; i < numCpus; i++) {
+    //     cluster.fork();
+    //   }
+
+    //   cluster.on("exit", (worker, code, signal) => {
+    //     console.log(`Worker pid: ${worker.process.pid} died`);
+    //     cluster.fork();
+    //   });
+    // } else {
+    app.listen(port);
+    console.log(`Server started with pid: ${process.pid} on port: ${port}`);
+    // }
   })
   .catch((error) => console.log(error));

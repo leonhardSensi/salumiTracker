@@ -1,15 +1,13 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createStep, getStep } from "../services/step.service";
 import AppError from "../utils/appError";
 
 export const createStepHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
-    // const recipe = await findRecipeById(res.recipe.id as string);
-    // console.log(res.recipe);
     const step = await createStep(req.body);
 
     res.status(201).json({
@@ -30,8 +28,8 @@ export const createStepHandler = async (
 };
 
 export const getStepHandler = async (
-  req: any, //Request<GetStepInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
+
+// is still the correct way of adding environment variables?
 const nextConfig = {
   images: {
     domains: ["localhost"],
+  },
+  env: {
+    BACKEND: "http://localhost:8000",
   },
 };
 

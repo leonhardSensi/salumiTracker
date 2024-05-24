@@ -1,12 +1,12 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createCuring, getCuring } from "../services/curing.service";
 // import { Recipe } from "../entities/recipe.entity";
 // import { findRecipeById } from "../services/recipe.service";
 import AppError from "../utils/appError";
 
 export const createCuringHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -30,8 +30,8 @@ export const createCuringHandler = async (
 };
 
 export const getCuringHandler = async (
-  req: any, //Request<GetCuringInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

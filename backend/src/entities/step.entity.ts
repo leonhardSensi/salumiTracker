@@ -13,7 +13,13 @@ export class Step extends Model {
   @Column()
   duration: number;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.steps)
+  @Column({ default: "" })
+  status: string;
+
+  @Column({ default: 0 })
+  statusDuration: number;
+
+  @ManyToOne(() => Recipe, (recipe) => recipe.steps, { onDelete: "CASCADE" })
   @JoinColumn({ name: "recipeId" })
   recipe: Recipe;
 }

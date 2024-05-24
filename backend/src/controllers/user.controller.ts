@@ -26,16 +26,19 @@ export const updateUserHandler = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("UPDATED USER", req.body.photo);
+  console.log("res locals user", res.locals.user);
+
   try {
     const user = await res.locals.user;
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 12);
-
-    Object.assign(user, req.body, { password: hashedPassword });
+    if (req.body.password) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 12);
+      Object.assign(user, req.body, { password: hashedPassword });
+    } else {
+      Object.assign(user, req.body);
+    }
 
     const updatedUser = await user.save();
-    // updatedUser.password =
-    console.log("UPDATED USER", updatedUser);
 
     res.status(200).json({
       status: "success",
@@ -44,6 +47,7 @@ export const updateUserHandler = async (
       },
     });
   } catch (err: any) {
+    console.log(err);
     next(err);
   }
 };

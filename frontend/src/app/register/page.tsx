@@ -7,18 +7,26 @@ import React, { useState } from "react";
 import UserInput from "@/components/generic/input/userInput";
 import SubmitButton from "@/components/generic/button/submitButton";
 import { useRegisterMutation } from "@/mutations/userMutations";
-import inputMatch from "@/utils/inputMatch";
+import { inputMatch, validatePasswordLength } from "@/utils/inputValidation";
+import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/generic/error/errorMessage";
 
 export default function Registration() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [invalidCredentialsMessage, setInvalidCredentialsMessage] =
+    useState("");
+
+  const maxBirthday = new Date().toLocaleDateString("en-ca");
 
   const createUser = useRegisterMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInvalidCredentialsMessage("");
     switch (e.target.id) {
       case "name":
         setName(e.target.value);
@@ -28,7 +36,6 @@ export default function Registration() {
         break;
       case "dateOfBirth":
         setDateOfBirth(e.target.value);
-        console.log(dateOfBirth);
         break;
       case "password":
         setPassword(e.target.value);
@@ -50,14 +57,21 @@ export default function Registration() {
       password,
       passwordConfirm,
     };
-    console.log(registerCredentials);
-    createUser.mutateAsync(registerCredentials);
+    try {
+      const response = await createUser.mutateAsync(registerCredentials);
+      console.log("REGISTER RESPONSE", response);
+      if (response.status === 409) {
+        setInvalidCredentialsMessage("Email already in use!");
+      } else if (response.status === 201) {
+        router.push("/login");
+      }
+    } catch (error) {}
   };
 
   return (
     <PublicLayout>
-      <div className="bg-register-bg bg-auto bg-no-repeat bg-right-top flex flex-row justify-center pt-24">
-        <section className=" flex flex-col items-center justify-center w-1/2">
+      <div className="text-black bg-register-bg bg-contain bg-no-repeat bg-right-top flex flex-row justify-center py-24 bg-salumeBlue h-screen">
+        <section className="flex flex-col items-center justify-center w-1/2">
           <div className="">
             <Image
               src="/salami.svg"
@@ -65,23 +79,23 @@ export default function Registration() {
               height={200}
               alt="salami"
             ></Image>
-            <h1 className="text-6xl font-bold text-black indent-28">
+            <h1 className="text-6xl font-bold text-salumeWhite indent-28">
               Welcome to the
             </h1>
-            <h1 className="text-6xl font-bold text-black indent-28 leading-relaxed">
+            <h1 className="text-6xl font-bold text-salumeWhite indent-28 leading-relaxed">
               Salumi Tracker
             </h1>
-            <h3 className="text-2xl text-gray-400 indent-28">
-              The only and last tracker you'll ever need for your
+            <h3 className="text-2xl text-salumeWhite indent-28">
+              The last and only tracker you'll ever need for your
             </h3>
-            <h3 className="text-2xl text-gray-400 indent-28 leading-relaxed">
+            <h3 className="text-2xl text-salumeWhite indent-28 leading-relaxed">
               cured meats
             </h3>
           </div>
         </section>
         <section className=" flex flex-col items-center justify-center w-1/2">
           <div className="">
-            <div className="w-full bg-white bg-opacity-90 rounded-lg shadow-xl">
+            <div className="w-full bg-salumeWhite bg-opacity-90 rounded-lg shadow-xl">
               <div className="p-6 space-y-6 sm:p-8">
                 <div className="text-center">
                   <p className="text-black">
@@ -94,7 +108,7 @@ export default function Registration() {
                     </Link>
                   </p>
                 </div>
-                <h1 className="font-bold leading-tight tracking-tight text-gray-900 text-2xl text-center">
+                <h1 className="font-bold leading-tight tracking-tight text-2xl text-center">
                   Create new account
                 </h1>
                 <form
@@ -105,7 +119,7 @@ export default function Registration() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium  text-gray-500"
+                      className="block mb-2 text-sm font-medium "
                     >
                       Your name
                     </label>
@@ -121,12 +135,29 @@ export default function Registration() {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block mb-2 text-sm font-medium  text-gray-500"
-                    >
-                      Your email address
-                    </label>
+                    <div className="flex mb-2">
+                      <label
+                        htmlFor="email"
+                        className="w-fit text-sm font-medium mr-2"
+                      >
+                        Your email address
+                      </label>
+                      {invalidCredentialsMessage && (
+                        <>
+                          {" "}
+                          <Image
+                            src={"/cross.svg"}
+                            alt={"email in use"}
+                            width={100}
+                            height={100}
+                            className={`w-4 h-4 mr-2`}
+                          />
+                          <ErrorMessage
+                            errorMessage={"Email is already in use!"}
+                          />
+                        </>
+                      )}
+                    </div>
                     <UserInput
                       width={"w-full"}
                       handleChange={handleChange}
@@ -140,7 +171,7 @@ export default function Registration() {
                   <div>
                     <label
                       htmlFor="dateOfBirth"
-                      className="block mb-2 text-sm font-medium text-gray-500"
+                      className="block mb-2 text-sm font-medium"
                     >
                       Your date of birth
                     </label>
@@ -148,6 +179,7 @@ export default function Registration() {
                       width={"w-full"}
                       handleChange={handleChange}
                       type={"date"}
+                      max={maxBirthday}
                       name={"dateOfBirth"}
                       id={"dateOfBirth"}
                       placeholder={""}
@@ -155,34 +187,105 @@ export default function Registration() {
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-500"
-                    >
-                      Password
-                    </label>
+                    <div className="flex">
+                      <label
+                        htmlFor="password"
+                        className="block mb-2 text-sm font-medium mr-2"
+                      >
+                        Password
+                      </label>
+                      {!inputMatch(password, passwordConfirm) ? (
+                        <>
+                          <Image
+                            src={"/cross.svg"}
+                            alt={"password invalid"}
+                            width={100}
+                            height={100}
+                            className={`w-4 h-4 mr-2 `}
+                          />
+                          <ErrorMessage
+                            errorMessage={"Passwords must match!"}
+                          />
+                        </>
+                      ) : (
+                        !validatePasswordLength(password) &&
+                        password.length > 0 && (
+                          <>
+                            <Image
+                              src={"/cross.svg"}
+                              alt={"password invalid"}
+                              width={100}
+                              height={100}
+                              className={`w-4 h-4 mr-2 `}
+                            />
+                            <ErrorMessage
+                              errorMessage={
+                                "Password must have at least 8 characters!"
+                              }
+                            />
+                          </>
+                        )
+                      )}
+                    </div>
                     <UserInput
                       width={"w-full"}
                       handleChange={handleChange}
                       type={"password"}
                       name={"password"}
+                      autoComplete="password"
                       id={"password"}
                       placeholder={"••••••••"}
                       required={true}
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="confirm-password"
-                      className="block mb-2 text-sm font-medium text-gray-500"
-                    >
-                      Repeat password
-                    </label>
+                    <div className="flex">
+                      <label
+                        htmlFor="confirm-password"
+                        className="block mb-2 text-sm font-medium mr-2"
+                      >
+                        Repeat password
+                      </label>
+                      {!inputMatch(password, passwordConfirm) ? (
+                        <>
+                          <Image
+                            src={"/cross.svg"}
+                            alt={"confirm password invalid"}
+                            width={100}
+                            height={100}
+                            className={`w-4 h-4 mr-2`}
+                          />
+
+                          <ErrorMessage
+                            errorMessage={"Passwords must match!"}
+                          />
+                        </>
+                      ) : (
+                        !validatePasswordLength(passwordConfirm) &&
+                        passwordConfirm.length > 0 && (
+                          <>
+                            <Image
+                              src={"/cross.svg"}
+                              alt={"confirm password invalid"}
+                              width={100}
+                              height={100}
+                              className={`w-4 h-4 mr-2`}
+                            />
+                            <ErrorMessage
+                              errorMessage={
+                                "Password must have at least 8 characters!"
+                              }
+                            />
+                          </>
+                        )
+                      )}
+                    </div>
                     <UserInput
                       width={"w-full"}
                       handleChange={handleChange}
                       type="password"
                       name="confirm-password"
+                      autoComplete="confirm-password"
                       id="confirm-password"
                       placeholder="••••••••"
                       required={true}
@@ -194,15 +297,12 @@ export default function Registration() {
                         id="terms"
                         aria-describedby="terms"
                         type="checkbox"
-                        className="w-4 h-4 border rounded focus:ring-3 focus:ring-primary-300 bg-gray-700 border-gray-600 focus:ring-primary-600 ring-offset-gray-800"
+                        className="w-4 h-4 border rounded bg-salumeBlue border-salumeBlue"
                         required={true}
                       />
                     </div>
                     <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="terms"
-                        className="font-light text-gray-500"
-                      >
+                      <label htmlFor="terms" className="font-light">
                         By signing up, you agree to our{" "}
                         <Link
                           className="font-medium text-blue-400 hover:underline "
@@ -236,11 +336,7 @@ export default function Registration() {
                         ? "cursor-not-allowed opacity-75"
                         : ""
                     }
-                    text={
-                      !inputMatch(password, passwordConfirm)
-                        ? "Passwords must match!"
-                        : "Get started!"
-                    }
+                    text={"Get started!"}
                   />
                 </form>
               </div>

@@ -8,6 +8,7 @@ const params = {
 
 export const createCutSchema = object({
   body: object({
+    id: string(),
     name: string({
       required_error: "Name is required",
     }),

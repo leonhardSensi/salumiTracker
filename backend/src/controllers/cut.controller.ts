@@ -1,4 +1,4 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 // import { Cut } from "../entities/cuts.entity";
 // import { Recipe } from "../entities/recipe.entity";
 // import { GetCutInput } from "../schemas/cut.schema";
@@ -7,8 +7,8 @@ import { createCut, getCut } from "../services/cut.service";
 import AppError from "../utils/appError";
 
 export const createCutHandler = async (
-  req: any,
-  res: any,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -34,8 +34,8 @@ export const createCutHandler = async (
 };
 
 export const getCutHandler = async (
-  req: any, //Request<GetCutInput>,
-  res: any, //Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {

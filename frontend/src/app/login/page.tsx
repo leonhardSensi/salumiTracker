@@ -44,10 +44,10 @@ export default function Login() {
 
     try {
       const result = await loginUser.mutateAsync(loginCredentials);
-      if (result.status === 401) {
-        setInvalidCredentialsMessage("Invalid email or password!");
-      } else if (result.status === 200) {
+      if (result.status === 200) {
         router.push("/");
+      } else {
+        setInvalidCredentialsMessage("Invalid email or password!");
       }
     } catch (error: any) {
       console.log(error);
@@ -56,24 +56,35 @@ export default function Login() {
 
   return (
     <PublicLayout>
-      <div className="flex flex-col mx-auto bg-login-bg bg-contain h-screen bg-no-repeat bg-top-left">
-        <section className="text-center">
-          <h1 className="text-black text-5xl pt-24 mx-auto font-bold">
-            Welcome back!
-          </h1>
-          <h3 className="text-2xl text-gray-400 leading-loose">
-            Your salumi are waiting
-          </h3>
-        </section>
+      <div className="flex flex-col mx-auto bg-login-bg bg-contain h-screen bg-no-repeat bg-salumeBlue justify-center">
         <section>
           <div className="flex flex-col items-center justify-start px-6 py-8 mx-auto h-full w-screen">
-            <div className="w-screen bg-white bg-opacity-90 rounded-lg shadow-xl max-w-md">
+            <div className="w-screen bg-salumeWhite bg-opacity-90 rounded-lg shadow-xl max-w-md">
+              <div>
+                <section className="text-center">
+                  <h1 className="text-black text-5xl pt-8 mx-auto font-bold ">
+                    Welcome back!
+                  </h1>
+                  <div className="text-3xl text-black">
+                    Your salumi are{" "}
+                    <span className="text-salumeBlue inline-flex flex-col overflow-hidden h-[calc(theme(fontSize.3xl)*theme(lineHeight.tight))] ">
+                      <ul className="block leading-tight text-left animate-text-slide font-extrabold">
+                        <li>salting</li>
+                        <li>drying</li>
+                        <li>curing</li>
+                        <li>waiting</li>
+                        <li aria-hidden="true">salting</li>
+                      </ul>
+                    </span>
+                  </div>
+                </section>
+              </div>
               <div className="p-8 space-y-4">
                 <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-500"
+                      className="block mb-2 text-sm font-medium text-black"
                     >
                       Your email address
                     </label>
@@ -92,7 +103,7 @@ export default function Login() {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-500"
+                      className="block mb-2 text-sm font-medium text-black"
                     >
                       Password
                     </label>
@@ -111,7 +122,7 @@ export default function Login() {
                   <div>
                     <Link
                       href="#"
-                      className="block text-sm font-medium text-blue-400 hover:underline"
+                      className="block text-sm font-medium text-blue-500 hover:underline"
                     >
                       I forgot my password
                     </Link>
@@ -121,7 +132,7 @@ export default function Login() {
                     disabled={invalidCredentialsMessage ? true : false}
                     addStyles={
                       invalidCredentialsMessage
-                        ? "cursor-not-allowed opacity-75"
+                        ? "cursor-not-allowed bg-red-500"
                         : ""
                     }
                     text={
@@ -134,7 +145,7 @@ export default function Login() {
                     <label htmlFor="terms" className=" text-black">
                       Don't have an account yet?{" "}
                       <Link
-                        className="font-medium text-blue-400 hover:underline "
+                        className="font-medium text-blue-500 hover:underline "
                         href="/register"
                       >
                         Register here

@@ -20,5 +20,5 @@ export default function PublicLayout({
     }
   }, []);
 
-  return <div className="">{children}</div>;
+  return <div className="font-Montserrat">{children}</div>;
 }
