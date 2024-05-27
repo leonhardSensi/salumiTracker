@@ -7,7 +7,7 @@ export class Cut extends Model {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: "integer" })
   quantity: number;
 
   @ManyToOne(() => Recipe, (recipe) => recipe.cuts, { onDelete: "CASCADE" })
