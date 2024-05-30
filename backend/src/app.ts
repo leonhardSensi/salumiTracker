@@ -176,7 +176,7 @@ AppDataSource.initialize()
       }
     );
 
-    const port = config.get<number>("port");
+    const port = config.get<number>("port") || 4000;
     // run on multiple cpu cores
 
     // if (cluster.isPrimary) {
