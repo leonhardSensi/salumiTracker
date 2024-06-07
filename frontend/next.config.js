@@ -2,7 +2,7 @@
 
 // is still the correct way of adding environment variables?
 const nextConfig = {
-  output: "export",
+  // output: "export",
   images: {
     domains: ["localhost"],
   },
