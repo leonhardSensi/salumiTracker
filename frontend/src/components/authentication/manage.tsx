@@ -2,7 +2,7 @@
 
 import AccountMenu from "@/components/authentication/accountMenu";
 import UserCard from "@/components/generic/card/userCard";
-import PrivateLayout from "@/components/privateLayout/privateLayout";
+import { PrivateLayout } from "@/components/privateLayout/privateLayout";
 import { Iuser, IUserProps } from "@/interfaces/interfaces";
 import { ModalProvider, useModal } from "@/utils/modalProvider";
 import formatDate from "@/utils/formatDate";

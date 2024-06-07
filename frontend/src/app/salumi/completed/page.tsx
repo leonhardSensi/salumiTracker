@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useEffect } from "react"; // Import useRef and useEffect hooks
 import { getSalumi } from "@/api/salumeApi";
-import PrivateLayout from "@/components/privateLayout/privateLayout";
+import { PrivateLayout } from "@/components/privateLayout/privateLayout";
 import SalumeList from "@/components/salumi/salumeList";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
