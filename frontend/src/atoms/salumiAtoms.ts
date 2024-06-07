@@ -2,7 +2,7 @@ import {
   ICompletedSalume,
   ISalume,
   IDashboardSalumeState,
-} from "@/interfaces/interfaces";
+} from "../interfaces/interfaces";
 import { atom } from "recoil";
 
 const curingState = atom({

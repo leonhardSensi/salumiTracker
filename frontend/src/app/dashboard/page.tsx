@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PrivateLayout } from "@/components/privateLayout/privateLayout";
-import DashboardCardDetails from "@/components/dashboard/dashboardCardDetails";
+import { PrivateLayout } from "../../components/privateLayout/PrivateLayout";
+import DashboardCardDetails from "../../components/dashboard/dashboardCardDetails";
 import {
   ISalumeProps,
   ISalumeWithDuration,
   ISalume,
   IDashboardSalumeState,
-} from "@/interfaces/interfaces";
-import Card from "@/components/generic/card/card";
-import { getSalumi } from "@/api/salumeApi";
+} from "../../interfaces/interfaces";
+import Card from "../../components/generic/card/card";
+import { getSalumi } from "../../api/salumeApi";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipe } from "@/api/recipeApi";
 import { useDrop } from "react-dnd";
 import { useRecoilState } from "recoil";
-import { curingState, saltingState, dryingState } from "@/atoms/salumiAtoms";
-import { useUpdateSalumeStateMutation } from "@/mutations/salumeMutation";
+import {
+  curingState,
+  saltingState,
+  dryingState,
+} from "../../atoms/salumiAtoms";
+import { useUpdateSalumeStateMutation } from "../../mutations/salumeMutation";
 import Image from "next/image";
 import Link from "next/link";
-import { calculateSalumeDuration } from "@/utils/salumeDuration";
+import { calculateSalumeDuration } from "../../utils/salumeDuration";
 
 export default function Dashboard() {
   const { data: salumiData } = useQuery(["salumi"], getSalumi);

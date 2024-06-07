@@ -1,4 +1,4 @@
-import { IDropDown } from "@/interfaces/interfaces";
+import { IDropDown } from "../../../../interfaces/interfaces";
 
 export const Dropdown: React.FC<IDropDown> = ({
   dropDownOptions,

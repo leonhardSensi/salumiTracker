@@ -1,4 +1,4 @@
-import { Irecipe } from "@/interfaces/interfaces";
+import { Irecipe } from "../../interfaces/interfaces";
 
 export default function RecipeCardDetails(props: { recipe: Irecipe }) {
   return (

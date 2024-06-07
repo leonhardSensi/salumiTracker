@@ -1,4 +1,4 @@
-import { modalData } from "@/atoms/modalAtoms";
+import { modalData } from "../../../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";

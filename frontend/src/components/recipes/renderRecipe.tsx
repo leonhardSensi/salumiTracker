@@ -1,19 +1,15 @@
-import { getRecipe } from "@/api/recipeApi";
-import { IItem, Irecipe, IRecipeProps } from "@/interfaces/interfaces";
+import { getRecipe } from "../../api/recipeApi";
+import { IItem, Irecipe, IRecipeProps } from "../../interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards, Pagination, Navigation } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/effect-cards";
-
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import UserInput from "../generic/input/userInput";
-import { useModal } from "@/utils/modalProvider";
+import { useModal } from "../../utils/modalProvider";
 import { useRecoilState } from "recoil";
-import { modalData } from "@/atoms/modalAtoms";
+import { modalData } from "../../atoms/modalAtoms";
 
 export default function RenderRecipe({ recipe }: IRecipeProps) {
   const {

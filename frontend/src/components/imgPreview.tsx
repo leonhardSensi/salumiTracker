@@ -1,4 +1,4 @@
-import { IimageFileProp } from "@/interfaces/interfaces";
+import { IimageFileProp } from "../interfaces/interfaces";
 import Image from "next/image";
 
 export default function ImgPreview(props: IimageFileProp) {

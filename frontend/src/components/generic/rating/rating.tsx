@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useUpdateSalumeRatingMutation } from "@/mutations/salumeMutation";
-import { ISalumeProps } from "@/interfaces/interfaces";
-import NewSalume from "@/app/add_salume/page";
+import { useUpdateSalumeRatingMutation } from "../../../mutations/salumeMutation";
+import { ISalumeProps } from "../../../interfaces/interfaces";
 
 export default function Rating({ salume }: ISalumeProps) {
   //   refetch;

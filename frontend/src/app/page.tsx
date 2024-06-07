@@ -1,8 +1,8 @@
 "use client";
-import PrivateLayout from "@/components/privateLayout/privateLayout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
+import { PrivateLayout } from "../components/privateLayout/PrivateLayout";
 
 import "swiper/css";
 // import "swiper/css/effect-cards";
@@ -10,7 +10,7 @@ import "swiper/css";
 // import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useQuery } from "@tanstack/react-query";
-import { getSalumi } from "@/api/salumeApi";
+import { getSalumi } from "../api/salumeApi";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
@@ -18,10 +18,9 @@ import {
   dryingState,
   curingState,
   completedState,
-} from "@/atoms/salumiAtoms";
-import { getRecipe } from "@/api/recipeApi";
-import { ISalume, ISalumeWithDuration } from "@/interfaces/interfaces";
-import { calculateSalumeDuration } from "@/utils/salumeDuration";
+} from "../atoms/salumiAtoms";
+import { ISalume, ISalumeWithDuration } from "../interfaces/interfaces";
+import { calculateSalumeDuration } from "../utils/salumeDuration";
 
 export default function Home() {
   const {

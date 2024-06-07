@@ -1,4 +1,4 @@
-import { IModalDetails, IUpdateUserData } from "@/interfaces/atomInterfaces";
+import { IModalDetails, IUpdateUserData } from "../interfaces/atomInterfaces";
 import { atom } from "recoil";
 
 const updateUserData = atom({

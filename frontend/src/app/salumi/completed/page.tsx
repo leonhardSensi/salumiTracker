@@ -1,13 +1,11 @@
 "use client";
 import { useRef, useEffect } from "react"; // Import useRef and useEffect hooks
-import { getSalumi } from "@/api/salumeApi";
-import { PrivateLayout } from "@/components/privateLayout/privateLayout";
-import SalumeList from "@/components/salumi/salumeList";
+import { getSalumi } from "../../../api/salumeApi";
+import { PrivateLayout } from "../../../components/privateLayout/PrivateLayout";
+import SalumeList from "../../../components/salumi/salumeList";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Image from "next/image";
-import gsap from "gsap";
-import { Draggable } from "gsap/Draggable";
 
 export default function CompletedSalumi() {
   const { data: salumiData } = useQuery(["salumi"], getSalumi);

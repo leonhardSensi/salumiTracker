@@ -4,12 +4,12 @@ import {
   submitSalume,
   updateSalumeRating,
   updateSalumeState,
-} from "@/api/salumeApi";
+} from "../api/salumeApi";
 import {
   ISalumeToCreate,
   ISalume,
   ISalumeToUpdate,
-} from "@/interfaces/interfaces";
+} from "../interfaces/interfaces";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSalumeMutation = () => {

@@ -1,4 +1,4 @@
-import { IresponseData } from "@/interfaces/interfaces";
+import { IresponseData } from "../interfaces/interfaces";
 const backend = process.env.BACKEND;
 
 export class UserError extends Error {}

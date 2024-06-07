@@ -1,4 +1,4 @@
-import { ICardDetailsProps } from "@/interfaces/interfaces";
+import { ICardDetailsProps } from "../../../interfaces/interfaces";
 import Image from "next/image";
 
 export default function CardDetails({

@@ -1,16 +1,15 @@
-import { getSalume } from "@/api/salumeApi";
+import { getSalume } from "../../api/salumeApi";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import LoadingSpinner from "../generic/loading/loadingSpinner";
 import Image from "next/image";
 import React, { useState } from "react";
-import { getUser } from "@/api/userApi";
+import { getUser } from "../../api/userApi";
 import Link from "next/link";
-import { ISalume } from "@/interfaces/interfaces";
-import { instanceOf } from "@/utils/typeChecker";
-import { useModal } from "@/utils/modalProvider";
+import { instanceOf } from "../../utils/typeChecker";
+import { useModal } from "../../utils/modalProvider";
 import { useRecoilState } from "recoil";
-import { modalData } from "@/atoms/modalAtoms";
+import { modalData } from "../../atoms/modalAtoms";
 
 export default function SalumeDetails() {
   const { data: userData } = useQuery(["user"], getUser);

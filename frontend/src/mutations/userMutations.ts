@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, refresh, register, updateUser } from "@/api/userApi";
+import { login, refresh, register, updateUser } from "../api/userApi";
 import {
   IloginCredentials,
   IregisterCredentials,
   IuserToUpdate,
-} from "@/interfaces/interfaces";
+} from "../interfaces/interfaces";
 
 export const useRegisterMutation = () => {
   // const router = useRouter();

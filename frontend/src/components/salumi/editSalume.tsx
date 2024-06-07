@@ -1,22 +1,19 @@
-import { addSalumeImage, getSalume } from "@/api/salumeApi";
+import { getSalume } from "../../api/salumeApi";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import LoadingSpinner from "../generic/loading/loadingSpinner";
 import Image from "next/image";
-import { useAddSalumeImageMutation } from "@/mutations/salumeMutation";
+import { useAddSalumeImageMutation } from "../../mutations/salumeMutation";
 import React, { useState } from "react";
-import { getUser } from "@/api/userApi";
-import Link from "next/link";
+import { getUser } from "../../api/userApi";
 import Rating from "../generic/rating/rating";
 import UserInput from "../generic/input/userInput";
-import SubmitButton from "../generic/button/submitButton";
-import { ISalume } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
 import GenericButton from "../generic/button/genericButton";
 import StatusButton from "../generic/button/statusButton";
-import { instanceOf } from "@/utils/typeChecker";
+import { instanceOf } from "../../utils/typeChecker";
 import { useRecoilState } from "recoil";
-import { notificationState } from "@/atoms/notificationAtoms";
+import { notificationState } from "../../atoms/notificationAtoms";
 
 export default function EditSalume() {
   const { data: userData } = useQuery(["user"], getUser);

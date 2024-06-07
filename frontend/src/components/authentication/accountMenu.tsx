@@ -1,7 +1,7 @@
 "use client";
 
-import { IManageProps, IprofileData, Iuser } from "@/interfaces/interfaces";
-import { useUpdateUserMutation } from "@/mutations/userMutations";
+import { IManageProps, IprofileData, Iuser } from "../../interfaces/interfaces";
+import { useUpdateUserMutation } from "../../mutations/userMutations";
 import Image from "next/image";
 
 export default function AccountMenu(props: IprofileData) {

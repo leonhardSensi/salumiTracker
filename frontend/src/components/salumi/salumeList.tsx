@@ -1,8 +1,6 @@
 "use client";
-import { getSalumi } from "@/api/salumeApi";
-import { completedState } from "@/atoms/salumiAtoms";
-import { ICompletedSalume, ISalume } from "@/interfaces/interfaces";
-import { useQuery } from "@tanstack/react-query";
+import { completedState } from "../../atoms/salumiAtoms";
+import { ISalume } from "../../interfaces/interfaces";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";

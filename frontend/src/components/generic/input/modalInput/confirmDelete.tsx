@@ -1,22 +1,14 @@
-import { getRecipe } from "@/api/recipeApi";
-import { modalData } from "@/atoms/modalAtoms";
-import { notificationState } from "@/atoms/notificationAtoms";
-import { useDeleteRecipeMutation } from "@/mutations/recipeMutations";
-import { useDeleteSalumeMutation } from "@/mutations/salumeMutation";
-import { useModal } from "@/utils/modalProvider";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { modalData } from "../../../../atoms/modalAtoms";
+import { notificationState } from "../../../../atoms/notificationAtoms";
+import { useDeleteRecipeMutation } from "../../../../mutations/recipeMutations";
+import { useDeleteSalumeMutation } from "../../../../mutations/salumeMutation";
+import { useModal } from "../../../../utils/modalProvider";
 import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import GenericButton from "../../button/genericButton";
 import SubmitButton from "../../button/submitButton";
-import ModalDetails from "../../modal/modalDetails";
-import UserInput from "../userInput";
 
 export default function ConfirmDelete() {
-  const router = useRouter();
-
   const { isModalOpen, openModal, closeModal } = useModal();
   const modalDetails = useRecoilValue(modalData);
   const [notificationDetails, setNotificationDetails] =

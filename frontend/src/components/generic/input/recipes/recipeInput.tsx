@@ -4,17 +4,14 @@ import Cut from "./cut";
 import Spice from "./spice";
 import Step from "./step";
 import UserInput from "../userInput";
-import { IItem, Irecipe } from "@/interfaces/interfaces";
-import GenericButton from "../../button/genericButton";
+import { IItem, Irecipe } from "../../../../interfaces/interfaces";
 import StatusButton from "../../button/statusButton";
-import { useRecipeMutation } from "@/mutations/recipeMutations";
+import { useRecipeMutation } from "../../../../mutations/recipeMutations";
 import Status from "./status";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { modalData } from "@/atoms/modalAtoms";
-import { useModal } from "@/utils/modalProvider";
 import { useRecoilState } from "recoil";
-import { notificationState } from "@/atoms/notificationAtoms";
+import { notificationState } from "../../../../atoms/notificationAtoms";
 
 export default function RecipeInput(props: { recipe?: Irecipe }) {
   const router = useRouter();

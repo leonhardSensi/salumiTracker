@@ -1,4 +1,4 @@
-import { ILinkButtonProps } from "@/interfaces/interfaces";
+import { ILinkButtonProps } from "../../../interfaces/interfaces";
 import Link from "next/link";
 
 export default function LinkButton({

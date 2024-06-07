@@ -1,5 +1,5 @@
-import { deleteRecipe, submitRecipe, updateRecipe } from "@/api/recipeApi";
-import { IrecipeToCreate, IrecipeToUpdate } from "@/interfaces/interfaces";
+import { deleteRecipe, submitRecipe, updateRecipe } from "../api/recipeApi";
+import { IrecipeToCreate, IrecipeToUpdate } from "../interfaces/interfaces";
 import { useMutation } from "@tanstack/react-query";
 
 export const useRecipeMutation = () => {

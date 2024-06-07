@@ -1,4 +1,4 @@
-import { IItem, ISalume } from "@/interfaces/interfaces";
+import { IItem, ISalume } from "../interfaces/interfaces";
 
 export function handleCurrentItem(
   currentItem: IItem | undefined,

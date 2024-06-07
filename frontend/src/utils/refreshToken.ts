@@ -1,4 +1,4 @@
-import { refresh } from "@/api/userApi";
+import { refresh } from "../api/userApi";
 
 export const refreshToken = async () => {
   try {

@@ -1,7 +1,7 @@
-import { IStepProps } from "@/interfaces/interfaces";
+import { IStepProps } from "../../../../interfaces/interfaces";
 import UserInput from "../userInput";
 import Image from "next/image";
-import { handleCurrentItem } from "@/utils/typeChecker";
+import { handleCurrentItem } from "../../../../utils/typeChecker";
 import { Dropdown } from "../dropdown/dropdown";
 
 export default function Step({

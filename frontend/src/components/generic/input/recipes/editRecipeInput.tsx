@@ -9,14 +9,14 @@ import {
   IItem,
   IItemToEdit,
   Irecipe,
-} from "@/interfaces/interfaces";
+} from "../../../../interfaces/interfaces";
 import GenericButton from "../../button/genericButton";
 import StatusButton from "../../button/statusButton";
-import { useUpdateRecipeMutation } from "@/mutations/recipeMutations";
+import { useUpdateRecipeMutation } from "../../../../mutations/recipeMutations";
 import Status from "./status";
 import Image from "next/image";
 import { useRecoilState } from "recoil";
-import { notificationState } from "@/atoms/notificationAtoms";
+import { notificationState } from "../../../../atoms/notificationAtoms";
 import { useRouter } from "next/navigation";
 
 export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {

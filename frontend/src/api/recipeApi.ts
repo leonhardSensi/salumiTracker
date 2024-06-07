@@ -7,7 +7,7 @@ import {
   IrecipeState,
   ISpice,
   IStep,
-} from "@/interfaces/interfaces";
+} from "../interfaces/interfaces";
 const backend = process.env.BACKEND;
 
 export class RecipeError extends Error {}

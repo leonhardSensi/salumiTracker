@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-export default function PublicLayout({
-  children,
-}: {
+export const PublicLayout: React.FC<{
   children: React.ReactNode;
-}) {
+}> = ({ children }) => {
   const router = useRouter();
 
   const pathname = usePathname();
@@ -21,4 +19,4 @@ export default function PublicLayout({
   }, []);
 
   return <div className="font-Montserrat">{children}</div>;
-}
+};

@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import { IUserCardProps } from "@/interfaces/interfaces";
+import { IUserCardProps } from "../../../interfaces/interfaces";
 import { useEffect } from "react";
-import { useModal } from "@/utils/modalProvider";
-import { modalData } from "@/atoms/modalAtoms";
+import { useModal } from "../../../utils/modalProvider";
+import { modalData } from "../../../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 
 export default function UserCard({ title, details, imgSrc }: IUserCardProps) {

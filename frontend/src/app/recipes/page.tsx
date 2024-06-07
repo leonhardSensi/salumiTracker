@@ -1,11 +1,11 @@
 "use client";
 
-import RecipeList from "@/components/recipes/recipeList";
-import PrivateLayout from "@/components/privateLayout/privateLayout";
+import RecipeList from "../../components/recipes/recipeList";
+import { PrivateLayout } from "../../components/privateLayout/PrivateLayout";
 import { useQuery } from "@tanstack/react-query";
-import { RecipeError, getRecipes } from "@/api/recipeApi";
-import { Irecipe } from "@/interfaces/interfaces";
-import { ModalProvider } from "@/utils/modalProvider";
+import { RecipeError, getRecipes } from "../../api/recipeApi";
+import { Irecipe } from "../../interfaces/interfaces";
+import { ModalProvider } from "../../utils/modalProvider";
 import Link from "next/link";
 import Image from "next/image";
 

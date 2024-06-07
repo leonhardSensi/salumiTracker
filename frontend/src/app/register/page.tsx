@@ -1,15 +1,18 @@
 "use client";
 
-import PublicLayout from "@/components/publicLayout/publicLayout";
+import { PublicLayout } from "../../components/publicLayout/publicLayout";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import UserInput from "@/components/generic/input/userInput";
-import SubmitButton from "@/components/generic/button/submitButton";
-import { useRegisterMutation } from "@/mutations/userMutations";
-import { inputMatch, validatePasswordLength } from "@/utils/inputValidation";
+import UserInput from "../../components/generic/input/userInput";
+import SubmitButton from "../../components/generic/button/submitButton";
+import { useRegisterMutation } from "../../mutations/userMutations";
+import {
+  inputMatch,
+  validatePasswordLength,
+} from "../../utils/inputValidation";
 import { useRouter } from "next/navigation";
-import ErrorMessage from "@/components/generic/error/errorMessage";
+import ErrorMessage from "../../components/generic/error/errorMessage";
 
 export default function Registration() {
   const router = useRouter();
@@ -59,7 +62,6 @@ export default function Registration() {
     };
     try {
       const response = await createUser.mutateAsync(registerCredentials);
-      console.log("REGISTER RESPONSE", response);
       if (response.status === 409) {
         setInvalidCredentialsMessage("Email already in use!");
       } else if (response.status === 201) {

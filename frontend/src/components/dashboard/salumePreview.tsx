@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDrag, DragPreviewImage } from "react-dnd";
 import Image from "next/image";
 import Link from "next/link";
-import { ISalumeWithDuration } from "@/interfaces/interfaces";
+import { ISalumeWithDuration } from "../../interfaces/interfaces";
 
 export default function SalumePreview({
   salume,

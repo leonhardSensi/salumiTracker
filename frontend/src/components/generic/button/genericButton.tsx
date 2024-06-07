@@ -1,4 +1,4 @@
-import { IGenericButtonProps } from "@/interfaces/interfaces";
+import { IGenericButtonProps } from "../../../interfaces/interfaces";
 
 export default function GenericButton({
   text,

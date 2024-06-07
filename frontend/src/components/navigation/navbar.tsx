@@ -1,24 +1,16 @@
 "use client";
-import { Iuser } from "@/interfaces/interfaces";
+import { Iuser } from "../../interfaces/interfaces";
 import Link from "next/link";
 import Image from "next/image";
-import Sidebar from "./sidebar";
 import { usePathname } from "next/navigation";
-import HomeIcon from "./Icons/homeIcon";
-import DashboardIcon from "./Icons/dashboardIcon";
-import RecipesIcon from "./Icons/recipesIcon";
-import AddRecipeIcon from "./Icons/addRecipeIcon";
-import AddSalume from "./Icons/addSalumeIcon";
 import { useEffect, useState } from "react";
-import { getUser } from "@/api/userApi";
+import { getUser } from "../../api/userApi";
 import { useRecoilState } from "recoil";
-import { updateUserData } from "@/atoms/userAtoms";
+import { updateUserData } from "../../atoms/userAtoms";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Navbar() {
   const { data: user } = useQuery(["user"], getUser);
-
-  console.log("NAVBAr");
 
   const pathname = usePathname();
   const [nav, setNav] = useState(false);

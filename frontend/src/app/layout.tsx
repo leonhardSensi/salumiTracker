@@ -10,12 +10,10 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect } from "react";
-import { ModalProvider } from "@/utils/modalProvider";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { RecoilRoot } from "recoil";
-import { getSalumi } from "@/api/salumeApi";
-import { refreshToken } from "@/utils/refreshToken";
+import { refreshToken } from "../utils/refreshToken";
 
 const inter = Inter({ subsets: ["latin"] });
 

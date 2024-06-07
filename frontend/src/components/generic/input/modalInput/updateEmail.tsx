@@ -1,5 +1,5 @@
-import { getUser } from "@/api/userApi";
-import { useUpdateUserMutation } from "@/mutations/userMutations";
+import { getUser } from "../../../../api/userApi";
+import { useUpdateUserMutation } from "../../../../mutations/userMutations";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import SubmitButton from "../../button/submitButton";

@@ -1,4 +1,4 @@
-import { IErrorMessage } from "@/interfaces/interfaces";
+import { IErrorMessage } from "../../../interfaces/interfaces";
 
 export default function ErrorMessage({ errorMessage }: IErrorMessage) {
   return (

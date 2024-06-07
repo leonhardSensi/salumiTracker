@@ -1,4 +1,4 @@
-import { ICardProps } from "@/interfaces/interfaces";
+import { ICardProps } from "../../../interfaces/interfaces";
 import Link from "next/link";
 import React from "react";
 import CardDetails from "./cardDetails";

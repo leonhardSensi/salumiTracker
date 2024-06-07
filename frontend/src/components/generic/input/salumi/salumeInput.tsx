@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import UserInput from "@/components/generic/input/userInput";
+import UserInput from "../../../../components/generic/input/userInput";
 import StatusButton from "../../button/statusButton";
-import { getRecipe, getRecipes } from "@/api/recipeApi";
+import { getRecipe, getRecipes } from "../../../../api/recipeApi";
 import { useQuery } from "@tanstack/react-query";
-import { Irecipe } from "@/interfaces/interfaces";
-import RenderRecipe from "@/components/recipes/renderRecipe";
-import { useSalumeMutation } from "@/mutations/salumeMutation";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { notificationState } from "@/atoms/notificationAtoms";
+import { Irecipe } from "../../../../interfaces/interfaces";
+import RenderRecipe from "../../../../components/recipes/renderRecipe";
+import { useSalumeMutation } from "../../../../mutations/salumeMutation";
+import { useRecoilState } from "recoil";
+import { notificationState } from "../../../../atoms/notificationAtoms";
 
 export default function SalumeInput() {
   const [currentRecipe, setCurrentRecipe] = useState<Irecipe>();

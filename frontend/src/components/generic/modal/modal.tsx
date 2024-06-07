@@ -1,10 +1,5 @@
-import { getUser, updateUser } from "@/api/userApi";
-import { modalData } from "@/atoms/modalAtoms";
-import { IModalProps } from "@/interfaces/interfaces";
-import { useUpdateUserMutation } from "@/mutations/userMutations";
-import formatDate from "@/utils/formatDate";
-import { useModal } from "@/utils/modalProvider";
-import { useQuery } from "@tanstack/react-query";
+import { modalData } from "../../../atoms/modalAtoms";
+import { useModal } from "../../../utils/modalProvider";
 import Image from "next/image";
 import React from "react";
 import { useRecoilState } from "recoil";

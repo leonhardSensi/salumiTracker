@@ -1,5 +1,5 @@
-import { getRecipe } from "@/api/recipeApi";
-import { ISalume } from "@/interfaces/interfaces";
+import { getRecipe } from "../api/recipeApi";
+import { ISalume } from "../interfaces/interfaces";
 
 export async function calculateSalumeDuration(salume: ISalume) {
   const recipe = await getRecipe(salume.recipe.id);

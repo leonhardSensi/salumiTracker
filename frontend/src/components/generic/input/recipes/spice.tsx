@@ -1,7 +1,7 @@
 import UserInput from "../userInput";
-import { IItemProps } from "@/interfaces/interfaces";
+import { IItemProps } from "../../../../interfaces/interfaces";
 import Image from "next/image";
-import { handleCurrentItem } from "@/utils/typeChecker";
+import { handleCurrentItem } from "../../../../utils/typeChecker";
 
 export default function Spice({
   handleChange,

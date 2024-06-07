@@ -1,14 +1,11 @@
 "use client";
 
 import "../../app/globals.css";
-import Navbar from "../../components/navigation/navbar";
-import { useQuery } from "@tanstack/react-query";
+import Navbar from "../navigation/navbar";
 import { useModal } from "../../utils/modalProvider";
 import Modal from "../generic/modal/modal";
 // import ModalInput from "../generic/input/modalInput/modalInput";
 import UpdatePassword from "../generic/input/modalInput/updatePassword";
-import UpdateBirthday from "../generic/input/modalInput/updateBirthday";
-import UpdateEmail from "../generic/input/modalInput/updateEmail";
 import UpdateAccountInfo from "../generic/input/modalInput/updateAccountInfo";
 import ConfirmDelete from "../generic/input/modalInput/confirmDelete";
 import ModalDetails from "../generic/modal/modalDetails";

@@ -1,8 +1,8 @@
-import { IItemProps } from "@/interfaces/interfaces";
+import { IItemProps } from "../../../../interfaces/interfaces";
 import React from "react";
 import UserInput from "../userInput";
 import Image from "next/image";
-import { handleCurrentItem } from "@/utils/typeChecker";
+import { handleCurrentItem } from "../../../../utils/typeChecker";
 
 export default function Cut({
   handleChange,

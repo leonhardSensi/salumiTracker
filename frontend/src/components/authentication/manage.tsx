@@ -1,15 +1,15 @@
 "use client";
 
-import AccountMenu from "@/components/authentication/accountMenu";
-import UserCard from "@/components/generic/card/userCard";
-import { PrivateLayout } from "@/components/privateLayout/privateLayout";
-import { Iuser, IUserProps } from "@/interfaces/interfaces";
-import { ModalProvider, useModal } from "@/utils/modalProvider";
-import formatDate from "@/utils/formatDate";
+import AccountMenu from "../../components/authentication/accountMenu";
+import UserCard from "../../components/generic/card/userCard";
+import { PrivateLayout } from "../privateLayout/PrivateLayout";
+import { Iuser, IUserProps } from "../../interfaces/interfaces";
+import { ModalProvider, useModal } from "../../utils/modalProvider";
+import formatDate from "../../utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "@/api/userApi";
+import { getUser } from "../../api/userApi";
 import { useRecoilState } from "recoil";
-import { updateUserData } from "@/atoms/userAtoms";
+import { updateUserData } from "../../atoms/userAtoms";
 import { useEffect, useState } from "react";
 
 export default function ManageAccount() {

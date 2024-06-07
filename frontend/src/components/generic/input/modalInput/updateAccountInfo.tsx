@@ -1,14 +1,14 @@
-import { getUser } from "@/api/userApi";
-import { modalData } from "@/atoms/modalAtoms";
-import { useUpdateUserMutation } from "@/mutations/userMutations";
+import { getUser } from "../../../../api/userApi";
+import { modalData } from "../../../../atoms/modalAtoms";
+import { useUpdateUserMutation } from "../../../../mutations/userMutations";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import SubmitButton from "../../button/submitButton";
 import UserInput from "../userInput";
-import { notificationState } from "@/atoms/notificationAtoms";
-import { useModal } from "@/utils/modalProvider";
-import { updateUserData } from "@/atoms/userAtoms";
+import { notificationState } from "../../../../atoms/notificationAtoms";
+import { useModal } from "../../../../utils/modalProvider";
+import { updateUserData } from "../../../../atoms/userAtoms";
 
 export default function UpdateAccountInfo() {
   const [updatedUser, setUpdatedUser] = useRecoilState(updateUserData);

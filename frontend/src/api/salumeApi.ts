@@ -1,4 +1,4 @@
-import { ISalume } from "@/interfaces/interfaces";
+import { ISalume } from "../interfaces/interfaces";
 const backend = process.env.BACKEND;
 
 export async function getSalumi(): Promise<ISalume[]> {

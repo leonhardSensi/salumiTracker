@@ -1,9 +1,8 @@
 "use client";
 
-import PrivateLayout from "@/components/privateLayout/privateLayout";
-import SalumeInput from "@/components/generic/input/salumi/salumeInput";
-import { ModalProvider } from "@/utils/modalProvider";
-import NotificationBanner from "@/components/generic/error/notificationBanner";
+import { PrivateLayout } from "../../components/privateLayout/PrivateLayout";
+import SalumeInput from "../../components/generic/input/salumi/salumeInput";
+import { ModalProvider } from "../../utils/modalProvider";
 
 export default function NewSalume() {
   return (

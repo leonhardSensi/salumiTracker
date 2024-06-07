@@ -1,15 +1,12 @@
 "use client";
 
-import PublicLayout from "@/components/publicLayout/publicLayout";
+import { PublicLayout } from "../../components/publicLayout/publicLayout";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import UserInput from "@/components/generic/input/userInput";
-import SubmitButton from "@/components/generic/button/submitButton";
-import { useLoginMutation } from "@/mutations/userMutations";
-import Error from "next/error";
-import Modal from "@/components/generic/modal/modal";
-import { render } from "react-dom";
+import UserInput from "../../components/generic/input/userInput";
+import SubmitButton from "../../components/generic/button/submitButton";
+import { useLoginMutation } from "../../mutations/userMutations";
 
 export default function Login() {
   const [email, setEmail] = useState("");

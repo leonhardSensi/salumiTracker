@@ -1,6 +1,5 @@
-import { ISalumiProps } from "@/interfaces/interfaces";
+import { ISalumiProps } from "../../interfaces/interfaces";
 import SalumePreview from "./salumePreview";
-import Image from "next/image";
 import { useState } from "react";
 
 export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {

@@ -1,4 +1,4 @@
-import { IModalDetails } from "@/interfaces/atomInterfaces";
+import { IModalDetails } from "../interfaces/atomInterfaces";
 import { atom } from "recoil";
 
 const modalData = atom({

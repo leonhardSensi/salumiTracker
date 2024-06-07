@@ -1,4 +1,4 @@
-import { IUserInput } from "@/interfaces/interfaces";
+import { IUserInput } from "../../../interfaces/interfaces";
 
 export default function UserInput({
   width,

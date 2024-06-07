@@ -1,4 +1,4 @@
-import { notificationState } from "@/atoms/notificationAtoms";
+import { notificationState } from "../../../atoms/notificationAtoms";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Image from "next/image";

@@ -1,11 +1,11 @@
-import { getUser } from "@/api/userApi";
-import { notificationState } from "@/atoms/notificationAtoms";
+import { getUser } from "../../../../api/userApi";
+import { notificationState } from "../../../../atoms/notificationAtoms";
 import {
   useLoginMutation,
   useUpdateUserMutation,
-} from "@/mutations/userMutations";
-import { inputMatch } from "@/utils/inputValidation";
-import { useModal } from "@/utils/modalProvider";
+} from "../../../../mutations/userMutations";
+import { inputMatch } from "../../../../utils/inputValidation";
+import { useModal } from "../../../../utils/modalProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useRecoilState } from "recoil";

@@ -1,4 +1,4 @@
-import { useModal } from "@/utils/modalProvider";
+import { useModal } from "../../../utils/modalProvider";
 
 export default function DeleteIcon() {
   const { isModalOpen, openModal, closeModal } = useModal();

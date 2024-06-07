@@ -1,11 +1,8 @@
 "use client";
-import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipe } from "@/api/recipeApi";
+import { getRecipe } from "../../api/recipeApi";
 import { useParams } from "next/navigation";
-import { PrivateLayout } from "../privateLayout/privateLayout";
 import LoadingSpinner from "../generic/loading/loadingSpinner";
-import RenderRecipe from "./renderRecipe";
 
 export default function RecipeDetails() {
   const params = useParams();
