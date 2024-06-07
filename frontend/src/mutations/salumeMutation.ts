@@ -5,7 +5,11 @@ import {
   updateSalumeRating,
   updateSalumeState,
 } from "@/api/salumeApi";
-import { ISalumeToCreate, ISalumeToUpdate } from "@/interfaces/interfaces";
+import {
+  ISalumeToCreate,
+  ISalume,
+  ISalumeToUpdate,
+} from "@/interfaces/interfaces";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSalumeMutation = () => {
@@ -52,7 +56,7 @@ export const useAddSalumeImageMutation = () => {
 
 export const useUpdateSalumeRatingMutation = () => {
   return useMutation({
-    mutationFn: (salume: ISalumeToUpdate) => {
+    mutationFn: (salume: ISalume) => {
       return updateSalumeRating(salume.id, salume.rating);
     },
   });

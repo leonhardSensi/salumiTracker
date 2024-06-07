@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 
 export default function ModalDetails() {
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
+  console.log(modalDetails.info?.data);
   return (
     <div className="flex items-center">
       <Image
@@ -28,15 +29,16 @@ export default function ModalDetails() {
           type: "progressbar",
         }}
       >
-        {modalDetails.info.data.map((step, index) => {
-          return (
-            <SwiperSlide className="p-14">
-              <div className="" key={`step-${index}`}>
-                <div className="flex flex-col justify-start text-black">
-                  <h4 className="text-2xl underline font-semibold">
-                    {step.name}
-                  </h4>
-                  {/* <svg
+        {modalDetails.info &&
+          modalDetails.info.recipeSteps.map((step, index) => {
+            return (
+              <SwiperSlide className="p-14" key={`step-${index}`}>
+                <div className="">
+                  <div className="flex flex-col justify-start text-black">
+                    <h4 className="text-2xl underline font-semibold">
+                      {step.name}
+                    </h4>
+                    {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   version="1.1"
                   width="50px"
@@ -53,19 +55,19 @@ export default function ModalDetails() {
                   </g>
                 </svg> */}
 
-                  <p>{/* Step {index + 1}/{modalDetails.data.length} */}</p>
-                  <h5 className="text-xl mt-8"> Duration: </h5>
-                  <p>
-                    {step.duration ? step.duration : step.statusDuration}
-                    {step.duration ? "minutes" : "days"}
-                  </p>
-                  <h5 className="text-xl mt-8"> Description: </h5>
-                  <p>{step.description}</p>
+                    <p>{/* Step {index + 1}/{modalDetails.data.length} */}</p>
+                    <h5 className="text-xl mt-8"> Duration: </h5>
+                    <p>
+                      {step.duration ? step.duration : step.statusDuration}
+                      {step.duration ? "minutes" : "days"}
+                    </p>
+                    <h5 className="text-xl mt-8"> Description: </h5>
+                    <p>{step.description}</p>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          );
-        })}
+              </SwiperSlide>
+            );
+          })}
       </Swiper>
       <Image
         src={"/arrow.svg"}

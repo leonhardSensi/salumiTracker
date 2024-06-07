@@ -35,7 +35,7 @@ export default function EditSalume() {
     queryFn: () => getSalume(params.salumeId as string),
   });
 
-  const [salumeImg, setSalumeImg] = useState(salume && salume.image);
+  const [salumeImg, setSalumeImg] = useState<File>();
 
   const [salumeName, setSalumeName] = useState(salume && salume.name);
   const [salumeNotes, setSalumeNotes] = useState(salume && salume.notes);
@@ -59,10 +59,9 @@ export default function EditSalume() {
         setSalumeNotes(e.target.value);
         break;
       case "image":
-        console.log("helo");
-
-        console.log("helo again");
-        setSalumeImg(e.target.files[0]);
+        if (e.target instanceof HTMLInputElement && e.target.files) {
+          setSalumeImg(e.target.files[0]);
+        }
         break;
       default:
         break;
@@ -86,9 +85,9 @@ export default function EditSalume() {
         state: newSalume.state,
         image: newSalume.image,
         rating: newSalume.rating,
+        recipeId: newSalume.recipe.id,
       });
-      console.log(response);
-      if (response.status === 200) {
+      if (response && response.status === 200) {
         setNotificationDetails({
           type: "salumeUpdate",
           message: "Salume updated successfully!",

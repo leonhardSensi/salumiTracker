@@ -113,6 +113,13 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
                                   name: recipe.title,
                                   id: recipe.id,
                                 },
+                                image: "",
+                                title: "",
+                                details: "",
+                                inputLabel: "",
+                                placeHolder: "",
+                                user: {},
+                                recipeSteps: [],
                               },
                             });
                           }}

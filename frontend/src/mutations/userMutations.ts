@@ -34,7 +34,8 @@ export const useLoginMutation = () => {
 export const useRefreshTokenMutation = () => {
   return useMutation({
     mutationFn: (refreshCredentials: IloginCredentials) => {
-      return refresh(refreshCredentials.email, refreshCredentials.password);
+      // return refresh(refreshCredentials.email, refreshCredentials.password);
+      return refresh();
     },
   });
 };

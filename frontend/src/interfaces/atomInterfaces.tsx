@@ -1,4 +1,5 @@
 import { StringMappingType } from "typescript";
+import { IItem } from "./interfaces";
 
 export interface IModalDetails {
   type: string;
@@ -13,8 +14,21 @@ interface IModalDetailsInfo {
   details: string;
   inputLabel: string;
   placeHolder: string;
-  data: IModalDetailsInfoData | IUpdateUserData;
+  user: Partial<IUpdateUserData>;
+  data: Partial<IModalDetailsInfoData>;
+  recipeSteps: IItem[];
 }
+
+// interface IRecipeStep {
+//   id: string;
+//   description: string;
+//   duration: number;
+//   created_at: string;
+//   name: string;
+//   status: string;
+//   statusDuration: number;
+//   updated_at: string;
+// }
 
 interface IModalDetailsInfoData {
   name: string;

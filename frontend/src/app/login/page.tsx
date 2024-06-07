@@ -143,7 +143,7 @@ export default function Login() {
                   />
                   <div className="text-black">
                     <label htmlFor="terms" className=" text-black">
-                      Don't have an account yet?{" "}
+                      No account yet?{" "}
                       <Link
                         className="font-medium text-blue-500 hover:underline "
                         href="/register"

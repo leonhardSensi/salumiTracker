@@ -86,7 +86,7 @@ export default function Registration() {
               Salumi Tracker
             </h1>
             <h3 className="text-2xl text-salumeWhite indent-28">
-              The last and only tracker you'll ever need for your
+              The last and only tracker you will ever need for your
             </h3>
             <h3 className="text-2xl text-salumeWhite indent-28 leading-relaxed">
               cured meats

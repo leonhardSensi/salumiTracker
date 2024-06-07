@@ -13,12 +13,17 @@ import { useEffect, useState } from "react";
 import { getUser } from "@/api/userApi";
 import { useRecoilState } from "recoil";
 import { updateUserData } from "@/atoms/userAtoms";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Navbar(props: { user: Iuser | undefined }) {
+export default function Navbar() {
+  const { data: user } = useQuery(["user"], getUser);
+
+  console.log("NAVBAr");
+
   const pathname = usePathname();
   const [nav, setNav] = useState(false);
   const [updatedUser, setUpdatedUser] = useRecoilState(updateUserData);
-  const [user, setUser] = useState<Iuser | undefined>(props.user);
+  const [userData, setUserData] = useState<Iuser | undefined>(user && user);
 
   const navItems = [
     { id: 1, text: "Home", href: "" },
@@ -32,7 +37,7 @@ export default function Navbar(props: { user: Iuser | undefined }) {
   const fetchUser = async () => {
     const data = await getUser();
     if (data) {
-      setUser(data);
+      setUserData(data);
     }
   };
 
@@ -86,7 +91,7 @@ export default function Navbar(props: { user: Iuser | undefined }) {
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <div className="relative group inline-block text-xl w-fit">
             <button className="flex flex-row group-hover:bg-salumeBlue group-hover:text-salumeWhite py-2 px-4 rounded-t-md text-black hover:text-gray-900 transition-colors">
-              {user && <h1>Hi, {user.name}</h1>}
+              {userData && <h1>Hi, {userData.name}</h1>}
               <svg
                 className="group-hover:-rotate-180 w-4 h-6 ml-2 text-black transition-all duration-300 ease-in-out"
                 xmlns="http://www.w3.org/2000/svg"

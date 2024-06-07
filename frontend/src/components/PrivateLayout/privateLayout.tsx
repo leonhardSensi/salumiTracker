@@ -2,7 +2,6 @@
 
 import "../../app/globals.css";
 import Navbar from "@/components/navigation/navbar";
-import { getUser } from "@/api/userApi";
 import { useQuery } from "@tanstack/react-query";
 import { useModal } from "@/utils/modalProvider";
 import Modal from "../generic/modal/modal";
@@ -18,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { modalData } from "@/atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import NotificationBanner from "../generic/error/notificationBanner";
+import { Iuser } from "@/interfaces/interfaces";
 
 export default function PrivateLayout({
   children,
@@ -26,49 +26,23 @@ export default function PrivateLayout({
 }) {
   const router = useRouter();
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
+  const [isClient, setIsClient] = useState(false);
 
-  // const pathname = usePathname();
-
-  // const handleText = () => {
-  //   switch (pathname) {
-  //     case "/account/manage/section/security":
-  //       if (sessionStorage.getItem("email")) {
-  //         return "Email";
-  //       } else if (sessionStorage.getItem("password")) {
-  //         return "Password";
-  //       }
-  //     case "/account/manage/section/information":
-  //       if (sessionStorage.getItem("name")) {
-  //         return "Name";
-  //       } else if (sessionStorage.getItem("dateOfBirth")) {
-  //         return "Date of birth";
-  //       }
-  //     case "/account/manage":
-  //       if (sessionStorage.getItem("name")) {
-  //         return "Name";
-  //       } else if (sessionStorage.getItem("dateOfBirth")) {
-  //         return "Date of birth";
-  //       }
-  //     default:
-  //       break;
-  //   }
-  // };
-
-  const {
-    status: statusUser,
-    error: errorMessage,
-    data: user,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: getUser,
-  });
+  // const {
+  //   status: statusUser,
+  //   error: errorMessage,
+  //   data: user,
+  // } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: getUser,
+  // });
 
   useEffect(() => {
+    setIsClient(true);
     if (!document.cookie) {
-      console.log("unauthorized");
       router.push("/login");
     }
-  }, [document.cookie]);
+  }, [router]);
 
   const { isModalOpen } = useModal();
 
@@ -80,11 +54,14 @@ export default function PrivateLayout({
         }`}
       >
         {/* <Sidebar /> */}
-        <div className="flex-col w-full flex bg-salumeBlue">
-          <Navbar user={user} />
-          {children}
-          <NotificationBanner />
-        </div>
+
+        {isClient && document.cookie && (
+          <div className="flex-col w-full flex bg-salumeBlue">
+            <Navbar />
+            {children}
+            <NotificationBanner />
+          </div>
+        )}
       </div>
       <Modal>
         {/* {

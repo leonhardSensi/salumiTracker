@@ -45,7 +45,11 @@ export default function ConfirmDelete() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (modalDetails.subject === "recipe" && modalDetails.info) {
+      if (
+        modalDetails.subject === "recipe" &&
+        modalDetails.info &&
+        modalDetails.info.data.id
+      ) {
         const response = await deleteRecipe.mutateAsync(
           modalDetails.info.data.id
         );
@@ -56,7 +60,11 @@ export default function ConfirmDelete() {
             message: "Recipe deleted successfully!",
           });
         }
-      } else if (modalDetails.subject === "salume" && modalDetails.info) {
+      } else if (
+        modalDetails.subject === "salume" &&
+        modalDetails.info &&
+        modalDetails.info.data.id
+      ) {
         const response = await deleteSalume.mutateAsync(
           modalDetails.info.data.id
         );

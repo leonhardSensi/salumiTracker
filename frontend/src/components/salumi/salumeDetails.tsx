@@ -99,6 +99,13 @@ export default function SalumeDetails() {
                               name: salume.name,
                               id: salume.id,
                             },
+                            image: "",
+                            title: "",
+                            details: "",
+                            inputLabel: "",
+                            placeHolder: "",
+                            user: {},
+                            recipeSteps: [],
                           },
                         });
                       }}

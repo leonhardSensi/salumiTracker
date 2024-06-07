@@ -166,9 +166,11 @@ export default function SalumeInput() {
             name={"recipeInput"}
             required={true}
             autoComplete={"off"}
-            onClick={(e: React.MouseEvent<HTMLInputElement>) =>
-              e.target.select()
-            }
+
+            // uncomment to select text on click
+            // onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+            //   e.target.select()
+            // }
           />
           <div className="h-fit max-h-48 overflow-y-auto w-full hidden group-focus-within:block hover:block absolute bg-salumeBlue py-2 px-3 rounded-b-md shadow-xl">
             {dataFilter().map((recipe) => (
@@ -187,8 +189,8 @@ export default function SalumeInput() {
           <>
             <RenderRecipe
               recipe={currentRecipe}
-              cutQuantity={cutQuantity}
-              handleChange={handleChange}
+              // cutQuantity={cutQuantity}
+              // handleChange={handleChange}
             />
           </>
         )}

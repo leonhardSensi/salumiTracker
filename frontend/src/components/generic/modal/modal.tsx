@@ -12,8 +12,6 @@ import { useRecoilState } from "recoil";
 export default function Modal({ children }: { children: React.ReactNode }) {
   const { isModalOpen, closeModal } = useModal();
 
-  const { data } = useQuery(["user"], getUser);
-
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
 
   const checkImgSrc = () => {
@@ -82,12 +80,12 @@ export default function Modal({ children }: { children: React.ReactNode }) {
               </div>
               <div className="flex justify-center w-full mb-4">
                 <h1 className="text-4xl font-semibold text-black">
-                  {modalDetails.info.title}
+                  {modalDetails.info?.title}
                 </h1>
               </div>
               <div className="flex justify-center w-full">
                 <h3 className="text-2xl text-black">
-                  {modalDetails.info.details}
+                  {modalDetails.info?.details}
                 </h3>
               </div>
             </div>

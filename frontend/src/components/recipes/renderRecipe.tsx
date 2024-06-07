@@ -1,7 +1,7 @@
 import { getRecipe } from "@/api/recipeApi";
 import { IItem, Irecipe, IRecipeProps } from "@/interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards, Pagination, Navigation } from "swiper/modules";
 
@@ -52,11 +52,11 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
       await wakeLock.release();
       wakeLock = null;
     } catch (err) {
-      console.error(`${err.name}, ${err.message}`);
+      console.error(err);
     }
   };
 
-  const handleToggleChange = (e) => {
+  const handleToggleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checkbox = e.target;
     if (checkbox.checked === true) {
       requestWakeLock();
@@ -65,8 +65,12 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
     }
   };
 
+  interface IAdaptCut {
+    name: string;
+    quantity: string;
+  }
   // const [invertedSteps, setInvertedSteps] = useState([]);
-  const [userInputs, setUserInputs] = useState<any>([]);
+  const [userInputs, setUserInputs] = useState<IAdaptCut[]>([]);
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
 
   const { openModal, closeModal, isModalOpen } = useModal();
@@ -75,6 +79,8 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
   // useEffect(() => {
   //   setInvertedSteps(currentRecipe?.steps.reverse());
   // }, [currentRecipe]);
+
+  console.log(userInputs);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -96,8 +102,6 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
       // Add new input
       updatedInputs.push({ name, quantity });
     }
-
-    console.log(updatedInputs);
     setUserInputs(updatedInputs);
   };
 
@@ -128,9 +132,7 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
   //   getTotalWeight(userInputs);
   // }, [userInputs]);
 
-  const getTotalWeight = (
-    cuts: IItem[] | { cut: string; quantity: string }[]
-  ) => {
+  const getTotalWeight = (cuts: IAdaptCut[] | IItem[]) => {
     let total = 0;
     cuts.forEach((cut) => {
       total += Number(cut.quantity);
@@ -158,7 +160,13 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
           details: "",
           inputLabel: "",
           placeHolder: "",
-          data: currentRecipe.steps,
+          user: {
+            name: "",
+            email: "",
+            dateOfBirth: "",
+          },
+          data: {},
+          recipeSteps: currentRecipe.steps,
         },
       });
       openModal();
@@ -192,7 +200,7 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
           <h2 className="text-3xl mb-8 font-bold">Available quantity</h2>
           {currentRecipe &&
             currentRecipe?.cuts.map((cut) => (
-              <div className="mb-4">
+              <div className="mb-4" key={`cut-${cut.id}`}>
                 <label>{cut.name}</label>
                 <UserInput
                   handleChange={(e) => handleInputChange(e, cut.name)}
@@ -297,7 +305,7 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
         <ul>
           {currentRecipe?.steps.map((step, index) => {
             return (
-              <li>
+              <li key={`step-${step.id}`}>
                 <div
                   className="border-salumeWhite shadow-lg rounded-lg p-8"
                   key={`step-${index}`}

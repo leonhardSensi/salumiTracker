@@ -22,16 +22,9 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "New name",
             placeHolder: "Your name",
-            data: {
-              name: "",
-              duration: 0,
-              statusDuration: 0,
-              description: 0,
-              created_at: "",
-              updated_at: "",
-              id: "",
-              status: "",
-            },
+            user: { name: "", email: "", dateOfBirth: "" },
+            data: {},
+            recipeSteps: [],
           },
         });
         break;
@@ -45,16 +38,9 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "New email address",
             placeHolder: "yourname@company.com",
-            data: {
-              name: "",
-              duration: 0,
-              statusDuration: 0,
-              description: 0,
-              created_at: "",
-              updated_at: "",
-              id: "",
-              status: "",
-            },
+            user: { name: "", email: "", dateOfBirth: "" },
+            data: {},
+            recipeSteps: [],
           },
         });
         break;
@@ -69,16 +55,9 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "New date of birth",
             placeHolder: "",
-            data: {
-              name: "",
-              duration: 0,
-              statusDuration: 0,
-              description: 0,
-              created_at: "",
-              updated_at: "",
-              id: "",
-              status: "",
-            },
+            user: { name: "", email: "", dateOfBirth: "" },
+            data: {},
+            recipeSteps: [],
           },
         });
         break;
@@ -92,16 +71,9 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "",
             placeHolder: "",
-            data: {
-              name: "",
-              duration: 0,
-              statusDuration: 0,
-              description: 0,
-              created_at: "",
-              updated_at: "",
-              id: "",
-              status: "",
-            },
+            user: { name: "", email: "", dateOfBirth: "" },
+            data: {},
+            recipeSteps: [],
           },
         });
         break;

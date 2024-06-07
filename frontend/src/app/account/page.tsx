@@ -4,6 +4,7 @@ import { getSalumi } from "@/api/salumeApi";
 import { getUser } from "@/api/userApi";
 import { completedState } from "@/atoms/salumiAtoms";
 import PrivateLayout from "@/components/privateLayout/privateLayout";
+
 import { ICompletedSalume, ISalume } from "@/interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
