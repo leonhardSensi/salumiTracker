@@ -1,7 +1,7 @@
 "use client";
 
 import RecipeList from "../../components/recipes/recipeList";
-import { PrivateLayout } from "../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import { RecipeError, getRecipes } from "../../api/recipeApi";
 import { Irecipe } from "../../interfaces/interfaces";

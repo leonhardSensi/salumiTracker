@@ -1,4 +1,4 @@
-import { PrivateLayout } from "../../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../../components/PrivateLayout/privateLayout";
 import RecipeDetails from "../../../components/recipes/recipeDetails";
 
 export default function Recipe() {

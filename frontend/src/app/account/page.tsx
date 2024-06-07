@@ -3,7 +3,7 @@
 import { getSalumi } from "../../api/salumeApi";
 import { getUser } from "../../api/userApi";
 import { completedState } from "../../atoms/salumiAtoms";
-import { PrivateLayout } from "../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 
 import { ICompletedSalume, ISalume } from "../../interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";

@@ -1,6 +1,6 @@
 "use client";
 
-import { PrivateLayout } from "../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 import SalumeInput from "../../components/generic/input/salumi/salumeInput";
 import { ModalProvider } from "../../utils/modalProvider";
 

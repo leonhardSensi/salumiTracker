@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PrivateLayout } from "../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 import DashboardCardDetails from "../../components/dashboard/dashboardCardDetails";
 import {
   ISalumeProps,

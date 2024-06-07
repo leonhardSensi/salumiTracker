@@ -2,7 +2,7 @@
 
 import { getRecipe } from "../../../../api/recipeApi";
 import EditRecipeInput from "../../../../components/generic/input/recipes/editRecipeInput";
-import { PrivateLayout } from "../../../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../../../components/PrivateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 

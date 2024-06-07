@@ -1,6 +1,6 @@
 "use client";
 
-import { PrivateLayout } from "../../../../components/PrivateLayout/PrivateLayout";
+import { PrivateLayout } from "../../../../components/PrivateLayout/privateLayout";
 import EditSalume from "../../../../components/salumi/editSalume";
 
 export default function SalumeEdit() {
