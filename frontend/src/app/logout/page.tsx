@@ -1,6 +1,6 @@
 "use client";
 import LogoutPage from "../../components/authentication/logoutPage";
-import { PublicLayout } from "../../components/publicLayout/publicLayout";
+import { PublicLayout } from "../../components/PublicLayout/publicLayout";
 import { useQuery } from "@tanstack/react-query";
 import { logout } from "../../api/userApi";
 

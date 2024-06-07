@@ -1,5 +1,5 @@
 "use client";
-import { PrivateLayout } from "../../components/privateLayout/PrivateLayout";
+import { PrivateLayout } from "../../components/PrivateLayout/PrivateLayout";
 import React from "react";
 import RecipeInput from "../../components/generic/input/recipes/recipeInput";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { PublicLayout } from "../../components/publicLayout/publicLayout";
+import { PublicLayout } from "../../components/PublicLayout/publicLayout";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
