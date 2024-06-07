@@ -1,9 +1,9 @@
 "use client";
 
 import "../../app/globals.css";
-import Navbar from "@/components/navigation/navbar";
+import Navbar from "../../components/navigation/navbar";
 import { useQuery } from "@tanstack/react-query";
-import { useModal } from "@/utils/modalProvider";
+import { useModal } from "../../utils/modalProvider";
 import Modal from "../generic/modal/modal";
 // import ModalInput from "../generic/input/modalInput/modalInput";
 import UpdatePassword from "../generic/input/modalInput/updatePassword";
@@ -14,10 +14,9 @@ import ConfirmDelete from "../generic/input/modalInput/confirmDelete";
 import ModalDetails from "../generic/modal/modalDetails";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { modalData } from "@/atoms/modalAtoms";
+import { modalData } from "../../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import NotificationBanner from "../generic/error/notificationBanner";
-import { Iuser } from "@/interfaces/interfaces";
 
 export const PrivateLayout: React.FC<{
   children: React.ReactNode;
