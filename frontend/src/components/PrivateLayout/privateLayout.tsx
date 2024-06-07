@@ -19,11 +19,9 @@ import { useRecoilState } from "recoil";
 import NotificationBanner from "../generic/error/notificationBanner";
 import { Iuser } from "@/interfaces/interfaces";
 
-export default function PrivateLayout({
-  children,
-}: {
+export const PrivateLayout: React.FC<{
   children: React.ReactNode;
-}) {
+}> = ({ children }) => {
   const router = useRouter();
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
   const [isClient, setIsClient] = useState(false);
@@ -91,4 +89,4 @@ export default function PrivateLayout({
       </Modal>
     </div>
   );
-}
+};
