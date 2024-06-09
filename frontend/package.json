@@ -2,7 +2,7 @@
   "name": "salumi-tracker",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://salumitracker.onrender.com",
+  "proxy": "http://localhost:8000",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
