@@ -1,13 +1,15 @@
 import { IresponseData } from "../interfaces/interfaces";
-const backend = process.env.BACKEND;
 
 export class UserError extends Error {}
 
 export async function getUser() {
-  const response = await fetch(`${backend}/api/users/me`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/users/me`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   const responseData: IresponseData = await response.json();
   if (responseData.status === "error") {
     throw new UserError("Oh no, could not get the requested user information!");
@@ -17,31 +19,40 @@ export async function getUser() {
 }
 
 export async function login(email: string, password: string) {
-  const response = await fetch(`${backend}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/login`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    }
+  );
   return response;
 }
 
 export async function refresh() {
-  const response = await fetch(`${backend}/api/auth/refresh`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/refresh`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   return response;
 }
 
 export async function logout() {
-  const response = await fetch(`${backend}/api/auth/logout`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/logout`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   return response;
 }
 
@@ -52,17 +63,20 @@ export async function register(
   password: string,
   passwordConfirm: string
 ) {
-  const response = await fetch(`${backend}/api/auth/register`, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({
-      name,
-      email,
-      dateOfBirth,
-      password,
-      passwordConfirm,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/register`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        dateOfBirth,
+        password,
+        passwordConfirm,
+      }),
+    }
+  );
   console.log("Register respone", response);
   return response;
 }
@@ -78,26 +92,32 @@ export async function updateUser(
     const formData = new FormData();
     formData.append("photo", photo);
 
-    const response = await fetch(`${backend}/api/users/update`, {
-      method: "PATCH",
-      credentials: "include",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/update`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        body: formData,
+      }
+    );
     return response;
   }
-  const response = await fetch(`${backend}/api/users/update`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({
-      name,
-      email,
-      date_of_birth,
-      password,
-      photo,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/users/update`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        date_of_birth,
+        password,
+        photo,
+      }),
+    }
+  );
   return response;
 }

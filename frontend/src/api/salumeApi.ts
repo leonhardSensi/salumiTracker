@@ -1,11 +1,13 @@
 import { ISalume } from "../interfaces/interfaces";
-const backend = process.env.BACKEND;
 
 export async function getSalumi(): Promise<ISalume[]> {
-  const response = await fetch(`${backend}/api/salume`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   const responseData = await response.json();
   if (responseData.status === "error") {
     throw new Error("Oh no, could not get all the Salumi");
@@ -16,10 +18,13 @@ export async function getSalumi(): Promise<ISalume[]> {
 }
 
 export async function getSalume(id: string): Promise<ISalume> {
-  const response = await fetch(`${backend}/api/salume/${id}`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${id}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   const responseData = await response.json();
   if (responseData.data) {
     return responseData.data.salume;
@@ -49,17 +54,20 @@ export async function submitSalume(
   notes: string,
   state: string
 ) {
-  const response = await fetch(`${backend}/api/salume`, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      name,
-      recipeId,
-      notes,
-      state,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        name,
+        recipeId,
+        notes,
+        state,
+      }),
+    }
+  );
   return response;
 }
 
@@ -70,18 +78,21 @@ export async function updateSalumeState(
   recipeId: string,
   state: string
 ) {
-  const response = await fetch(`${backend}/api/salume/${id}`, {
-    method: "PATCH",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      id,
-      name,
-      notes,
-      recipeId,
-      state,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        id,
+        name,
+        notes,
+        recipeId,
+        state,
+      }),
+    }
+  );
   return response;
 }
 
@@ -102,34 +113,43 @@ export async function addSalumeImage(
     formData.append("state", state);
     formData.append("image", image);
 
-    const response = await fetch(`${backend}/api/salume/${id}`, {
-      method: "PATCH",
-      credentials: "include",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${id}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        body: formData,
+      }
+    );
     return response;
   }
 }
 
 export async function updateSalumeRating(id: string, rating: number) {
-  const response = await fetch(`${backend}/api/salume/${id}`, {
-    method: "PATCH",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      id,
-      rating,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        id,
+        rating,
+      }),
+    }
+  );
   return response;
 }
 
 export async function deleteSalume(id: string) {
-  const response = await fetch(`${backend}/api/salume/${id}`, {
-    method: "DELETE",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${id}`,
+    {
+      method: "DELETE",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+    }
+  );
 
   return response;
 }

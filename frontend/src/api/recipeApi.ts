@@ -8,15 +8,17 @@ import {
   ISpice,
   IStep,
 } from "../interfaces/interfaces";
-const backend = process.env.BACKEND;
 
 export class RecipeError extends Error {}
 
 export async function getRecipes(): Promise<Irecipe[]> {
-  const response = await fetch(`${backend}/api/recipes`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/recipes`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
   const responseData: IrecipeResponse = await response.json();
   if (responseData.status === "error") {
     throw new RecipeError("Oh no, could not get all the recipes");
@@ -30,10 +32,13 @@ export async function getRecipe(
   recipeId?: string
 ): Promise<Irecipe | undefined> {
   if (recipeId) {
-    const response = await fetch(`${backend}/api/recipes/${recipeId}`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/recipes/${recipeId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     const responseData = await response.json();
     if (responseData.status === "error") {
       throw new RecipeError("Oh no, could not get this recipe");
@@ -79,20 +84,23 @@ export async function submitRecipe(
       })
     );
 
-    const response = await fetch(`${backend}/api/recipes`, {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        title: name,
-        curing: curing,
-        salting: salting,
-        drying: drying,
-        cuts: submitCuts,
-        spices: submitSpices,
-        steps: submitSteps,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/recipes`,
+      {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          title: name,
+          curing: curing,
+          salting: salting,
+          drying: drying,
+          cuts: submitCuts,
+          spices: submitSpices,
+          steps: submitSteps,
+        }),
+      }
+    );
     return response;
   }
 }
@@ -138,20 +146,23 @@ export const updateRecipe = async (
     );
 
     try {
-      const response = await fetch(`${backend}/api/recipes/${id}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          title: name,
-          curing: curing,
-          salting: salting,
-          drying: drying,
-          cuts: submitCuts,
-          spices: submitSpices,
-          steps: submitSteps,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND}/api/recipes/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            title: name,
+            curing: curing,
+            salting: salting,
+            drying: drying,
+            cuts: submitCuts,
+            spices: submitSpices,
+            steps: submitSteps,
+          }),
+        }
+      );
       return response;
     } catch (error) {
       console.error(error);
@@ -160,11 +171,14 @@ export const updateRecipe = async (
 };
 
 export const deleteRecipe = async (id: string) => {
-  const response = await fetch(`${backend}/api/recipes/${id}`, {
-    method: "DELETE",
-    headers: { "Content-type": "application/json" },
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/recipes/${id}`,
+    {
+      method: "DELETE",
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+    }
+  );
   console.log(response);
 
   return response;
