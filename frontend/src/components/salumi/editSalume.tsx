@@ -111,7 +111,7 @@ export default function EditSalume() {
                       <Image
                         width={40}
                         height={40}
-                        src={`http://localhost:8000/profilePictures/${userData.photo}`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND}/profilePictures/${userData.photo}`}
                         alt="profile picture"
                         className="border rounded-full profile-picture"
                       />
@@ -127,7 +127,7 @@ export default function EditSalume() {
                     priority={true}
                     placeholder="blur"
                     blurDataURL="/salami.svg"
-                    src={`http://localhost:8000/salumePictures/${salume.image}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
                     alt="salume image"
                     className="w-full transition-opacity duration-300 ease-in-out bg-black group-hover:opacity-70"
                   />

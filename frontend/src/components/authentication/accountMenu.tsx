@@ -35,7 +35,7 @@ export default function AccountMenu(props: IprofileData) {
                   <Image
                     width={100}
                     height={100}
-                    src={`http://localhost:8000/profilePictures/${props.user.photo}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND}/profilePictures/${props.user.photo}`}
                     alt="profile picture"
                     className="border rounded-full profile-picture transition-opacity duration-300 ease-in-out group-hover:opacity-40"
                   />

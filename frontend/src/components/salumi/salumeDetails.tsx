@@ -42,7 +42,7 @@ export default function SalumeDetails() {
                     <Image
                       width={40}
                       height={40}
-                      src={`http://localhost:8000/profilePictures/${userData.photo}`}
+                      src={`${process.env.NEXT_PUBLIC_BACKEND}/profilePictures/${userData.photo}`}
                       alt="profile picture"
                       className="border rounded-full profile-picture"
                     />
@@ -117,7 +117,7 @@ export default function SalumeDetails() {
 
               {salume.image && (
                 <Image
-                  src={`http://localhost:8000/salumePictures/${salume.image}`}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
                   width={100}
                   height={100}
                   alt="salume"
