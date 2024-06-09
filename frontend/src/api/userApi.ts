@@ -77,7 +77,6 @@ export async function register(
       }),
     }
   );
-  console.log("Register respone", response);
   return response;
 }
 

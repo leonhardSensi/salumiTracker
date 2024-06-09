@@ -20,7 +20,8 @@ import { User } from "../entities/user.entity";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
+  // sameSite: "lax",
+  sameSite: "none",
 };
 
 if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
