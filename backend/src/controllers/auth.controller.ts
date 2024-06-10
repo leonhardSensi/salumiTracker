@@ -20,7 +20,7 @@ import { User } from "../entities/user.entity";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
-  sameSite: "strict",
+  sameSite: "lax",
   // secure: process.env.NODE_ENV === "production",
   secure: true,
 };
@@ -148,10 +148,12 @@ export const loginUserHandler = async (
     // 5. Add Cookies
     res.cookie("access_token", access_token, accessTokenCookieOptions);
     res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
-    res.cookie("logged_in", true, {
-      ...accessTokenCookieOptions,
-      httpOnly: false,
-    });
+    res.cookie(
+      "logged_in",
+      true,
+      accessTokenCookieOptions
+      // httpOnly: false,
+    );
 
     // 6. Send response
     res.status(200).json({
