@@ -22,7 +22,6 @@ const cookiesOptions: CookieOptions = {
   httpOnly: true,
   sameSite: "lax",
   // secure: process.env.NODE_ENV === "production",
-  secure: true,
 };
 
 const accessTokenCookieOptions: CookieOptions = {
