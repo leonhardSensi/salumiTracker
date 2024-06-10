@@ -19,7 +19,7 @@ import { signJwt, verifyJwt } from "../utils/jwt";
 import { User } from "../entities/user.entity";
 
 const cookiesOptions: CookieOptions = {
-  httpOnly: true,
+  httpOnly: false,
   sameSite: "none",
   secure: process.env.NODE_ENV === "production",
 };
