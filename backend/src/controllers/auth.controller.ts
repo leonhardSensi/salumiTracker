@@ -20,7 +20,7 @@ import { User } from "../entities/user.entity";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
-  sameSite: "none",
+  sameSite: "lax",
   // secure: process.env.NODE_ENV === "production",
   secure: true,
 };
@@ -109,8 +109,6 @@ export const loginUserHandler = async (
   try {
     const { email, password } = req.body;
     const user = await findUserByEmail({ email });
-    console.log("Access Token Expiration:", accessTokenCookieOptions.expires);
-    console.log("Refresh Token Expiration:", refreshTokenCookieOptions.expires);
 
     // 1. Check if user exist
     if (!user) {
