@@ -135,8 +135,8 @@ AppDataSource.initialize()
     // );
     app.use(
       cors({
-        origin: "https://salumitracker-rirv.onrender.com",
-        // origin: process.env.FRONTEND,
+        // origin: "https://salumitracker-rirv.onrender.com",
+        origin: process.env.FRONTEND,
         credentials: true,
       })
     );
