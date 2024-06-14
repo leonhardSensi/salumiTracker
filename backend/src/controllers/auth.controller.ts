@@ -145,7 +145,10 @@ export const loginUserHandler = async (
     // 5. Add Cookies
     res.cookie("access_token", access_token, accessTokenCookieOptions);
     res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
-    res.cookie("logged_in", true, accessTokenCookieOptions);
+    res.cookie("logged_in", true, {
+      ...accessTokenCookieOptions,
+      httpOnly: false,
+    });
 
     // 6. Send response
     res.status(200).json({
