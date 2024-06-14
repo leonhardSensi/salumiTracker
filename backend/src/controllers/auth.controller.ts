@@ -147,7 +147,7 @@ export const loginUserHandler = async (
     res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
     res.cookie("logged_in", true, {
       ...accessTokenCookieOptions,
-      domain: "https://salumitracker.com/*",
+      domain: "salumitracker.com",
       httpOnly: false,
     });
 
