@@ -1,4 +1,6 @@
+import { cookies } from "next/dist/client/components/headers";
 import { IresponseData } from "../interfaces/interfaces";
+import * as cookie from "js-cookie";
 
 export class UserError extends Error {}
 
@@ -31,6 +33,10 @@ export async function login(email: string, password: string) {
       }),
     }
   );
+  console.log("response", response);
+  // cookie.set("access_token");
+
+  // cookie.set("logged_in");
   return response;
 }
 
