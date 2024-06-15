@@ -21,6 +21,7 @@ import { User } from "../entities/user.entity";
 const cookiesOptions: CookieOptions = {
   sameSite: "none",
   secure: true,
+  domain: ".salumitracker.com",
   httpOnly: true,
 };
 
@@ -149,8 +150,6 @@ export const loginUserHandler = async (
     res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
     res.cookie("logged_in", true, {
       ...accessTokenCookieOptions,
-
-      domain: "salumitracker.com",
       httpOnly: false,
     });
 

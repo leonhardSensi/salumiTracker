@@ -33,10 +33,6 @@ export async function login(email: string, password: string) {
       }),
     }
   );
-  console.log("response", response);
-  // cookie.set("access_token");
-
-  // cookie.set("logged_in");
   return response;
 }
 
