@@ -26,7 +26,7 @@ export async function login(email: string, password: string) {
     {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      credentials: "same-origin",
+      credentials: "include",
       body: JSON.stringify({
         email,
         password,
