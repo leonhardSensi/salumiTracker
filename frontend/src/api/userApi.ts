@@ -9,7 +9,7 @@ export async function getUser() {
     `${process.env.NEXT_PUBLIC_BACKEND}/api/users/me`,
     {
       method: "GET",
-      credentials: "include",
+      credentials: "same-origin",
     }
   );
   const responseData: IresponseData = await response.json();
@@ -26,7 +26,7 @@ export async function login(email: string, password: string) {
     {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      credentials: "include",
+      credentials: "same-origin",
       body: JSON.stringify({
         email,
         password,

@@ -137,7 +137,6 @@ AppDataSource.initialize()
       cors({
         origin: process.env.FRONTEND,
         credentials: true,
-        exposedHeaders: "Set-Cookie",
       })
     );
 
