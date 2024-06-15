@@ -15,7 +15,7 @@ export const getMeHandler = async (
       return next(new AppError(404, "User not found"));
     }
 
-    res.status(200).status(200).json({
+    res.status(200).json({
       status: "success",
       data: {
         user,
