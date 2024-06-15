@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UpdateUserInput } from "../schemas/user.schema";
+import AppError from "../utils/appError";
 const bcrypt = require("bcryptjs");
 
 export const getMeHandler = async (
@@ -9,6 +10,10 @@ export const getMeHandler = async (
 ) => {
   try {
     const user = res.locals.user;
+
+    if (!user) {
+      return next(new AppError(404, "User not found"));
+    }
 
     res.status(200).status(200).json({
       status: "success",
