@@ -46,10 +46,8 @@ export const getSalumeHandler = async (
     const salume = await getSalume(req.params.salumeId);
 
     if (!salume) {
-      return next(new AppError(404, "Salume with that ID not found"));
+      return next(new AppError(404, "Salume with that ID not found."));
     }
-
-    console.log("GET SALUME", salume);
 
     res.status(200).json({
       status: "success",
@@ -72,6 +70,9 @@ export const getSalumiHandler = async (
     const user = await findUserById(res.locals.user.id as string);
     if (user) {
       const salumi = await findSalumi(user.id);
+      if (!salumi) {
+        return next(new AppError(404, "No salumi found."));
+      }
 
       res.status(200).json({
         status: "success",
