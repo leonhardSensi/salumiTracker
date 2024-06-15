@@ -9,7 +9,7 @@ export async function getUser() {
     `${process.env.NEXT_PUBLIC_BACKEND}/api/users/me`,
     {
       method: "GET",
-      credentials: "same-origin",
+      credentials: "include",
     }
   );
   const responseData: IresponseData = await response.json();
