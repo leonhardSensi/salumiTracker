@@ -12,6 +12,7 @@ export async function getSalumi(): Promise<ISalume[]> {
   if (responseData.status === "error") {
     throw new Error("Oh no, could not get all the Salumi");
   } else if (responseData.data) {
+    console.log("SALUMI", responseData.data.salumi);
     return responseData.data.salumi;
   }
   return [];

@@ -69,6 +69,7 @@ export async function register(
     `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/register`,
     {
       method: "POST",
+      credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
         name,
