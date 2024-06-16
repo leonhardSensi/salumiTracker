@@ -48,14 +48,15 @@ export async function refresh() {
 }
 
 export async function logout() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/logout`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
-  return response;
+  // const response = await fetch(
+  //   `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/logout`,
+  //   {
+  //     method: "GET",
+  //     credentials: "include",
+  //   }
+  // );
+  document.cookie = "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  // return response;
 }
 
 export async function register(
