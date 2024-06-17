@@ -3,7 +3,11 @@
 const nextConfig = {
   output: "export",
   images: {
-    unoptimized: true,
+    domains: [
+      "localhost",
+      "https://salumitracker.com",
+      "https://salumitracker-rirv.onrender.com/",
+    ],
   },
 };
 
