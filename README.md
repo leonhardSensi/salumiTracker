@@ -117,16 +117,6 @@ Salumi-Tracker uses PostgreSQL as the database.
 docker-compose up -d
 ```
 
-### Usage
-
-Start the backend server:
-
-```bash
-npm run start
-```
-
-The backend will be available at http://localhost:8000
-
 ### Schema migrations
 
 Make sure the database is running.
@@ -142,3 +132,15 @@ npm run migrate
 ```bash
 npm run db:push
 ```
+
+
+### Usage
+
+Start the backend server:
+
+```bash
+npm run start
+```
+
+The backend will be available at http://localhost:8000
+
