@@ -1,6 +1,30 @@
-# salumiTracker
+# Salumi Tracker
 
-Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently being cured.
+Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently in production.
+## Screenshots
+![Dashboard](https://github.com/leonhardSensi/salumiTracker/assets/108275034/8abc6826-eef6-49bd-9d96-138b1feb3ef0.png)
+*Dashboard showing the overview of salumi being cured*
+
+![Recipe Adjustment](https://github.com/leonhardSensi/salumiTracker/assets/108275034/4a261419-1a8d-45e1-a647-f5ff41ea76c2.png)
+*Dynamic recipe adjustment ensuring precise ingredient ratios*
+
+## Tech Stack
+### Frontend 
+- Framework: Next.js (React)
+- Styling: Tailwind CSS, CSS
+- State Management: useState and Recoil
+- Data Fetching: React Query
+- Routing: useRouter (Next.js)
+
+### Backend
+- Runtime: Node.js
+- Framework: Express.js
+- Database: PostgreSQL
+- Containerization: Docker, Docker Compose
+- Authentication: JWT
+
+### Other Tools and Libraries
+- Email Service: Nodemailer
 
 ## Frontend
 
@@ -16,7 +40,7 @@ Before running the frontend of Salumi-Tracker, make sure you have the following 
 1.  Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/stefanoTron/salumiTracker
+    git clone https://github.com/leonhardSensi/salumiTracker
     ```
 
 2.  Navigate to the frontend directory:
@@ -65,7 +89,7 @@ Before running the backend of Salumi-Tracker, make sure you have the following i
 1.  Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/stefanoTron/salumiTracker
+    git clone https://github.com/leonhardSensi/salumiTracker
     ```
 
 2.  Navigate to the backend directory:
@@ -93,16 +117,6 @@ Salumi-Tracker uses PostgreSQL as the database.
 docker-compose up -d
 ```
 
-### Usage
-
-Start the backend server:
-
-```bash
-npm run start
-```
-
-The backend will be available at http://localhost:8000
-
 ### Schema migrations
 
 Make sure the database is running.
@@ -118,3 +132,15 @@ npm run migrate
 ```bash
 npm run db:push
 ```
+
+
+### Usage
+
+Start the backend server:
+
+```bash
+npm run start
+```
+
+The backend will be available at http://localhost:8000
+
