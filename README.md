@@ -40,7 +40,7 @@ Before running the frontend of Salumi-Tracker, make sure you have the following 
 1.  Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/stefanoTron/salumiTracker
+    git clone https://github.com/leonhardSensi/salumiTracker
     ```
 
 2.  Navigate to the frontend directory:
@@ -89,7 +89,7 @@ Before running the backend of Salumi-Tracker, make sure you have the following i
 1.  Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/stefanoTron/salumiTracker
+    git clone https://github.com/leonhardSensi/salumiTracker
     ```
 
 2.  Navigate to the backend directory:
