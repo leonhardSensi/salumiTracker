@@ -14,7 +14,7 @@ Salumi-Tracker is a web application that allows users to adapt their salumi reci
 - Styling: Tailwind CSS, CSS
 - State Management: useState and Recoil
 - Data Fetching: React Query
-- Routing: React Router
+- Routing: useRouter (Next.js)
 
 ### Backend
 - Runtime: Node.js
