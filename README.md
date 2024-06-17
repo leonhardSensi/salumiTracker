@@ -1,6 +1,30 @@
-# salumiTracker
+# Salumi Tracker
 
-Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently being cured.
+Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently in production.
+## Screenshots
+![Dashboard](https://github.com/leonhardSensi/salumiTracker/assets/108275034/8abc6826-eef6-49bd-9d96-138b1feb3ef0.png)
+*Dashboard showing the overview of salumi being cured*
+
+![Recipe Adjustment](https://github.com/leonhardSensi/salumiTracker/assets/108275034/4a261419-1a8d-45e1-a647-f5ff41ea76c2.png)
+*Dynamic recipe adjustment ensuring precise ingredient ratios*
+
+## Tech Stack
+### Frontend 
+- Framework: Next.js (React)
+- Styling: Tailwind CSS, CSS
+- State Management: useState and Recoil
+- Data Fetching: React Query
+- Routing: React Router
+
+### Backend
+- Runtime: Node.js
+- Framework: Express.js
+- Database: PostgreSQL
+- Containerization: Docker, Docker Compose
+- Authentication: JWT
+
+### Other Tools and Libraries
+- Email Service: Nodemailer
 
 ## Frontend
 
