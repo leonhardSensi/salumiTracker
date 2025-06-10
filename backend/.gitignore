@@ -6,3 +6,4 @@ tmp/
 temp/
 src/migrations/*
 .env
+.env*.local
