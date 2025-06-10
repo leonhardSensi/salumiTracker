@@ -18,7 +18,7 @@ export default function Step({
 }: IStepProps) {
   return (
     <>
-      <div className="flex justify-between items-center w-full text-salumeWhite">
+      <div className="flex justify-between items-center w-full">
         <label htmlFor="stepName" className="text-xl mb-2">
           Step {stepNum}
         </label>
@@ -44,10 +44,7 @@ export default function Step({
         required={true}
         defaultValue={currentItem && currentItem.name}
       />
-      <label
-        htmlFor="stepDescription"
-        className="text-xl text-salumeWhite mb-4"
-      >
+      <label htmlFor="stepDescription" className="text-xl mb-4">
         Step description
       </label>
       <textarea
@@ -60,7 +57,7 @@ export default function Step({
         defaultValue={handleCurrentItem(currentItem, "description")}
       />
       <div className="relative group mb-2 w-fit">
-        <label className="text-xl text-salumeWhite mb-4">Status</label>
+        <label className="text-xl mb-4">Status</label>
         <Dropdown
           dropDownOptions={statusArr}
           disabled={statusArr?.length === 0}
@@ -69,7 +66,7 @@ export default function Step({
           dropdownText={dropdownText}
         />
       </div>
-      <label htmlFor="stepDuration" className="text-xl text-salumeWhite mb-4">
+      <label htmlFor="stepDuration" className="text-xl mb-4">
         Duration (minutes)
       </label>
       <UserInput

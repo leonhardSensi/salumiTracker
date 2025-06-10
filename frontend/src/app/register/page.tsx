@@ -18,7 +18,6 @@ export default function Registration() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [invalidCredentialsMessage, setInvalidCredentialsMessage] =
@@ -37,9 +36,6 @@ export default function Registration() {
       case "email":
         setEmail(e.target.value);
         break;
-      case "dateOfBirth":
-        setDateOfBirth(e.target.value);
-        break;
       case "password":
         setPassword(e.target.value);
         break;
@@ -56,7 +52,6 @@ export default function Registration() {
     const registerCredentials = {
       name,
       email,
-      dateOfBirth,
       password,
       passwordConfirm,
     };
@@ -65,15 +60,15 @@ export default function Registration() {
       if (response.status === 409) {
         setInvalidCredentialsMessage("Email already in use!");
       } else if (response.status === 201) {
-        router.push("/login");
+        router.push("/verifyemail");
       }
     } catch (error) {}
   };
 
   return (
     <PublicLayout>
-      <div className="text-black bg-register-bg bg-contain bg-no-repeat bg-right-top flex flex-row justify-center py-24 bg-salumeBlue h-screen">
-        <section className="flex flex-col items-center justify-center w-1/2">
+      <div className="text-stone flex flex-row justify-evenly bg-wetSand h-screen">
+        {/* <section className="flex flex-col justify-center w-1/2">
           <div className="">
             <Image
               src="/salami.svg"
@@ -81,122 +76,117 @@ export default function Registration() {
               height={200}
               alt="salami"
             ></Image>
-            <h1 className="text-6xl font-bold text-salumeWhite indent-28">
+            <h1 className="text-6xl font-bold text-stone indent-28">
               Welcome to the
             </h1>
-            <h1 className="text-6xl font-bold text-salumeWhite indent-28 leading-relaxed">
+            <h1 className="text-6xl font-bold text-stone indent-28 leading-relaxed">
               Salumi Tracker
             </h1>
-            <h3 className="text-2xl text-salumeWhite indent-28">
+            <h3 className="text-2xl text-stone indent-28 leading-relaxed">
               The last and only tracker you will ever need for your
             </h3>
-            <h3 className="text-2xl text-salumeWhite indent-28 leading-relaxed">
+            <h3 className="text-2xl text-stone indent-28 leading-relaxed">
               cured meats
             </h3>
           </div>
-        </section>
-        <section className=" flex flex-col items-center justify-center w-1/2">
-          <div className="">
-            <div className="w-full bg-salumeWhite bg-opacity-90 rounded-lg shadow-xl">
-              <div className="p-6 space-y-6 sm:p-8">
-                <div className="text-center">
-                  <p className="text-black">
-                    Already have an account?{" "}
-                    <Link
-                      href="/login"
-                      className="font-medium text-blue-400 hover:underline text-primary-500"
-                    >
-                      Login here
-                    </Link>
-                  </p>
-                </div>
-                <h1 className="font-bold leading-tight tracking-tight text-2xl text-center">
+        </section> */}
+        <section className="flex flex-col h-full w-1/2">
+          <div className="bg-eggshell h-full m-4 bg-opacity-90 rounded-3xl shadow-2xl">
+            <div className="space-y-6 flex flex-col justify-evenly h-full">
+              <div className="text-center">
+                <p>
+                  Already have an account?{" "}
+                  <Link
+                    href="/login"
+                    className="font-extrabold text-stone hover:underline"
+                  >
+                    Login here
+                  </Link>
+                </p>
+                <h1 className="text-7xl font-serif leading-tight tracking-tight text-center">
                   Create new account
                 </h1>
-                <form
-                  className="space-y-6"
-                  method="post"
-                  onSubmit={handleSubmit}
-                >
-                  <div>
+                <h3 className="text-2xl">Start tracking your salumi today!</h3>
+              </div>
+              <form
+                className="space-y-6 w-1/2 flex flex-col mx-auto"
+                method="post"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium "
+                  >
+                    Your name
+                  </label>
+                  <UserInput
+                    width={"w-full"}
+                    handleChange={handleChange}
+                    type={"name"}
+                    name={"name"}
+                    id={"name"}
+                    placeholder={"Your name"}
+                    required={true}
+                  />
+                </div>
+
+                <div>
+                  <div className="flex mb-2">
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium "
+                      className="w-fit text-sm font-medium mr-2"
                     >
-                      Your name
+                      Your email address
                     </label>
-                    <UserInput
-                      width={"w-full"}
-                      handleChange={handleChange}
-                      type={"name"}
-                      name={"name"}
-                      id={"name"}
-                      placeholder={"Your name"}
-                      required={true}
-                    />
+                    {invalidCredentialsMessage && (
+                      <>
+                        {" "}
+                        <Image
+                          src={"/cross.svg"}
+                          alt={"email in use"}
+                          width={100}
+                          height={100}
+                          className={`w-4 h-4 mr-2`}
+                        />
+                        <ErrorMessage
+                          errorMessage={"Email is already in use!"}
+                        />
+                      </>
+                    )}
                   </div>
-
-                  <div>
-                    <div className="flex mb-2">
-                      <label
-                        htmlFor="email"
-                        className="w-fit text-sm font-medium mr-2"
-                      >
-                        Your email address
-                      </label>
-                      {invalidCredentialsMessage && (
-                        <>
-                          {" "}
-                          <Image
-                            src={"/cross.svg"}
-                            alt={"email in use"}
-                            width={100}
-                            height={100}
-                            className={`w-4 h-4 mr-2`}
-                          />
-                          <ErrorMessage
-                            errorMessage={"Email is already in use!"}
-                          />
-                        </>
-                      )}
-                    </div>
-                    <UserInput
-                      width={"w-full"}
-                      handleChange={handleChange}
-                      type={"email"}
-                      name={"email"}
-                      id={"email"}
-                      placeholder={"name@company.com"}
-                      required={true}
-                    />
-                  </div>
-                  <div>
+                  <UserInput
+                    width={"w-full"}
+                    handleChange={handleChange}
+                    type={"email"}
+                    name={"email"}
+                    id={"email"}
+                    placeholder={"name@company.com"}
+                    required={true}
+                  />
+                </div>
+                <div>
+                  <div className="flex">
                     <label
-                      htmlFor="dateOfBirth"
-                      className="block mb-2 text-sm font-medium"
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium mr-2"
                     >
-                      Your date of birth
+                      Password
                     </label>
-                    <UserInput
-                      width={"w-full"}
-                      handleChange={handleChange}
-                      type={"date"}
-                      max={maxBirthday}
-                      name={"dateOfBirth"}
-                      id={"dateOfBirth"}
-                      placeholder={""}
-                      required={true}
-                    />
-                  </div>
-                  <div>
-                    <div className="flex">
-                      <label
-                        htmlFor="password"
-                        className="block mb-2 text-sm font-medium mr-2"
-                      >
-                        Password
-                      </label>
-                      {!inputMatch(password, passwordConfirm) ? (
+                    {!inputMatch(password, passwordConfirm) ? (
+                      <>
+                        <Image
+                          src={"/cross.svg"}
+                          alt={"password invalid"}
+                          width={100}
+                          height={100}
+                          className={`w-4 h-4 mr-2 `}
+                        />
+                        <ErrorMessage errorMessage={"Passwords must match!"} />
+                      </>
+                    ) : (
+                      !validatePasswordLength(password) &&
+                      password.length > 0 && (
                         <>
                           <Image
                             src={"/cross.svg"}
@@ -206,49 +196,48 @@ export default function Registration() {
                             className={`w-4 h-4 mr-2 `}
                           />
                           <ErrorMessage
-                            errorMessage={"Passwords must match!"}
+                            errorMessage={
+                              "Password must have at least 8 characters!"
+                            }
                           />
                         </>
-                      ) : (
-                        !validatePasswordLength(password) &&
-                        password.length > 0 && (
-                          <>
-                            <Image
-                              src={"/cross.svg"}
-                              alt={"password invalid"}
-                              width={100}
-                              height={100}
-                              className={`w-4 h-4 mr-2 `}
-                            />
-                            <ErrorMessage
-                              errorMessage={
-                                "Password must have at least 8 characters!"
-                              }
-                            />
-                          </>
-                        )
-                      )}
-                    </div>
-                    <UserInput
-                      width={"w-full"}
-                      handleChange={handleChange}
-                      type={"password"}
-                      name={"password"}
-                      autoComplete="password"
-                      id={"password"}
-                      placeholder={"••••••••"}
-                      required={true}
-                    />
+                      )
+                    )}
                   </div>
-                  <div>
-                    <div className="flex">
-                      <label
-                        htmlFor="confirm-password"
-                        className="block mb-2 text-sm font-medium mr-2"
-                      >
-                        Repeat password
-                      </label>
-                      {!inputMatch(password, passwordConfirm) ? (
+                  <UserInput
+                    width={"w-full"}
+                    handleChange={handleChange}
+                    type={"password"}
+                    name={"password"}
+                    autoComplete="password"
+                    id={"password"}
+                    placeholder={"••••••••"}
+                    required={true}
+                  />
+                </div>
+                <div>
+                  <div className="flex">
+                    <label
+                      htmlFor="confirm-password"
+                      className="block mb-2 text-sm font-medium mr-2"
+                    >
+                      Repeat password
+                    </label>
+                    {!inputMatch(password, passwordConfirm) ? (
+                      <>
+                        <Image
+                          src={"/cross.svg"}
+                          alt={"confirm password invalid"}
+                          width={100}
+                          height={100}
+                          className={`w-4 h-4 mr-2`}
+                        />
+
+                        <ErrorMessage errorMessage={"Passwords must match!"} />
+                      </>
+                    ) : (
+                      !validatePasswordLength(passwordConfirm) &&
+                      passwordConfirm.length > 0 && (
                         <>
                           <Image
                             src={"/cross.svg"}
@@ -257,43 +246,27 @@ export default function Registration() {
                             height={100}
                             className={`w-4 h-4 mr-2`}
                           />
-
                           <ErrorMessage
-                            errorMessage={"Passwords must match!"}
+                            errorMessage={
+                              "Password must have at least 8 characters!"
+                            }
                           />
                         </>
-                      ) : (
-                        !validatePasswordLength(passwordConfirm) &&
-                        passwordConfirm.length > 0 && (
-                          <>
-                            <Image
-                              src={"/cross.svg"}
-                              alt={"confirm password invalid"}
-                              width={100}
-                              height={100}
-                              className={`w-4 h-4 mr-2`}
-                            />
-                            <ErrorMessage
-                              errorMessage={
-                                "Password must have at least 8 characters!"
-                              }
-                            />
-                          </>
-                        )
-                      )}
-                    </div>
-                    <UserInput
-                      width={"w-full"}
-                      handleChange={handleChange}
-                      type="password"
-                      name="confirm-password"
-                      autoComplete="confirm-password"
-                      id="confirm-password"
-                      placeholder="••••••••"
-                      required={true}
-                    />
+                      )
+                    )}
                   </div>
-                  <div className="flex items-start">
+                  <UserInput
+                    width={"w-full"}
+                    handleChange={handleChange}
+                    type="password"
+                    name="confirm-password"
+                    autoComplete="confirm-password"
+                    id="confirm-password"
+                    placeholder="••••••••"
+                    required={true}
+                  />
+                </div>
+                {/* <div className="flex items-start">
                     <div className="flex items-center h-5">
                       <input
                         id="terms"
@@ -327,21 +300,20 @@ export default function Registration() {
                           Cookies Policy
                         </Link>
                       </label>
-                    </div>
-                  </div>
-                  <SubmitButton
-                    disabled={
-                      !inputMatch(password, passwordConfirm) ? true : false
-                    }
-                    addStyles={
-                      !inputMatch(password, passwordConfirm)
-                        ? "cursor-not-allowed opacity-75"
-                        : ""
-                    }
-                    text={"Get started!"}
-                  />
-                </form>
-              </div>
+                    </div> 
+                  </div> */}
+                <SubmitButton
+                  disabled={
+                    !inputMatch(password, passwordConfirm) ? true : false
+                  }
+                  addStyles={
+                    !inputMatch(password, passwordConfirm)
+                      ? "cursor-not-allowed opacity-75"
+                      : ""
+                  }
+                  text={"Get Started!"}
+                />
+              </form>
             </div>
           </div>
         </section>

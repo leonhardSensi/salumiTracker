@@ -11,7 +11,7 @@ export default function Spice({
 }: IItemProps) {
   return (
     <>
-      <div className="flex flex-col w-full text-salumeWhite">
+      <div className="flex flex-col w-full">
         <label htmlFor="spice" className="text-xl">
           Spice
         </label>
@@ -27,7 +27,7 @@ export default function Spice({
           defaultValue={handleCurrentItem(currentItem, "name")}
         />
       </div>
-      <div className="flex flex-col ml-4 w-fit text-salumeWhite">
+      <div className="flex flex-col ml-4 w-fit">
         <label htmlFor="spiceQuantity" className="text-xl">
           Quantity (g)
         </label>
@@ -47,9 +47,7 @@ export default function Spice({
       </div>
       <div className="w-12">
         <Image
-          className={
-            items.length > 1 ? "mt-10 cursor-pointer invert" : " hidden"
-          }
+          className={items.length > 1 ? "mt-10 cursor-pointer" : " hidden"}
           src={"/delete.svg"}
           width={100}
           height={100}

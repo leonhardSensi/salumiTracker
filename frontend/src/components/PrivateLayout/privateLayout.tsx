@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { modalData } from "../../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
 import NotificationBanner from "../generic/error/notificationBanner";
+import Sidebar from "../navigation/sidebar";
+import { Dropdown } from "../generic/input/dropdown/dropdown";
 
 export const PrivateLayout: React.FC<{
   children: React.ReactNode;
@@ -50,10 +52,13 @@ export const PrivateLayout: React.FC<{
         {/* <Sidebar /> */}
 
         {isClient && document.cookie && (
-          <div className="flex-col w-full flex bg-salumeBlue">
+          <div className="w-full flex flex-col bg-wetSand">
             <Navbar />
-            {children}
-            <NotificationBanner />
+            <div className="flex h-full">
+              <Sidebar />
+              {children}
+              <NotificationBanner />
+            </div>
           </div>
         )}
       </div>

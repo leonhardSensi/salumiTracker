@@ -7,6 +7,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  BeforeUpdate,
 } from "typeorm";
 import bcrypt from "bcryptjs";
 import Model from "./model.entity";
@@ -29,12 +30,6 @@ export class User extends Model {
   })
   email: string;
 
-  @Column({
-    unique: false,
-    default: "1970-01-01",
-  })
-  date_of_birth: string;
-
   @Column()
   password: string;
 
@@ -50,9 +45,8 @@ export class User extends Model {
   })
   photo: string;
 
-  // this should be the VERIFIED column
   @Column({
-    default: true,
+    default: false,
   })
   verified: boolean;
 
@@ -63,6 +57,12 @@ export class User extends Model {
   })
   verificationCode!: string | null;
 
+  @Column({ type: "text", nullable: true })
+  passwordResetToken: string | null;
+
+  @Column({ type: "timestamp", nullable: true })
+  passwordResetExpires: Date | null;
+
   @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
 
@@ -70,10 +70,13 @@ export class User extends Model {
   salumi: Salume[];
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 12);
+    if (this.password && !this.password.startsWith("$2")) {
+      // avoid double-hashing
+      this.password = await bcrypt.hash(this.password, 12);
+    }
   }
-
   static async comparePasswords(
     candidatePassword: string,
     hashedPassword: string

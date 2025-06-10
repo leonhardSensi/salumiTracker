@@ -12,7 +12,7 @@ export const Dropdown: React.FC<IDropDown> = ({
       <button
         id="dropdownDefaultButton"
         data-dropdown-toggle="dropdown"
-        className={`text-salumeWhite cursor-pointer border border-salumeWhite focus:ring-4 focus:outline-none focus:ring-primary-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800 font-medium rounded-lg text-lg p-2.5 text-center inline-flex items-center transition-colors`}
+        className={`cursor-pointer border border-wetSand focus:ring-4 focus:outline-none focus:ring-primary-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800 font-medium rounded-lg text-lg p-2.5 text-center inline-flex items-center transition-colors`}
         type="button"
         // Why is this disabled attribute not working? Even if I directly pass true, it is not disabled. In Chrome dev tools it is also shown as disabled
         disabled={disabled}
@@ -37,11 +37,10 @@ export const Dropdown: React.FC<IDropDown> = ({
 
       <div
         id="dropdown"
-        // className={`z-10 hidden group-hover:block bg-salumeWhite divide-y w-56 divide-gray-100 rounded-md w-group shadow-lg border border-salumeWhite`}
-        className="z-10 h-fit max-h-48 overflow-y-auto overflow-x-hidden divide-y w-56 divide-gray-100 rounded-md w-group shadow-lg border border-salumeWhite hidden group-hover:block hover:block absolute bg-salumeWhite py-2 px-3 rounded-b-md"
+        className="z-10 h-fit max-h-48 overflow-y-auto overflow-x-hidden divide-y w-56 divide-gray-100 rounded-md w-group shadow-lg border border-wetSand hidden group-hover:block hover:block absolute bg-wetSand py-2 px-3 rounded-b-md"
       >
         <ul
-          className="py-2 text-lg font-bold text-salumeBlue"
+          className="py-2 text-lg font-bold text-eggshell"
           aria-labelledby="dropdownDefaultButton"
         >
           {dropDownOptions?.length !== 0 ? (
@@ -49,7 +48,7 @@ export const Dropdown: React.FC<IDropDown> = ({
               return (
                 <li
                   key={`option-${index}`}
-                  className="block px-4 py-2 hover:bg-salumeBlue hover:text-salumeWhite transition-all ease-in-out duration-250 border-salumeWhite rounded-md"
+                  className="block px-4 py-2 hover:bg-eggshell hover:cursor-pointer hover:text-stone transition-all ease-in-out duration-250rounded-md"
                   onClick={() => handleSelect(option, currentId)}
                 >
                   {option}
@@ -57,7 +56,7 @@ export const Dropdown: React.FC<IDropDown> = ({
               );
             })
           ) : (
-            <li className="block px-4 py-2 hover:bg-salumeBlue  hover:text-salumeWhite transition-all ease-in-out duration-250 border-salumeWhite rounded-md">
+            <li className="block px-4 py-2 hover:bg-wetSand  hover:text-eggshell transition-all ease-in-out duration-250 rounded-md">
               No status added
             </li>
           )}

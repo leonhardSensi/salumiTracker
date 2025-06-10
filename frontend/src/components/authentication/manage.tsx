@@ -56,14 +56,14 @@ export default function ManageAccount() {
                     openModal={openModal}
                     closeModal={closeModal}
                   />
-                  <UserCard
+                  {/* <UserCard
                     title={"Date of birth"}
                     details={user.date_of_birth}
                     imgSrc={"/calendar.svg"}
                     isModalOpen={isModalOpen}
                     openModal={openModal}
                     closeModal={closeModal}
-                  />
+                  /> */}
                   <UserCard
                     title={"Email"}
                     details={user.email}

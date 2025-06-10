@@ -8,7 +8,7 @@ export default function Status({
   statusName,
 }: any) {
   return (
-    <div className="flex mb-4 text-salumeWhite items-center">
+    <div className="flex mb-4 items-center">
       <div className="p-2">
         <UserInput
           handleChange={handleCheckBoxChange}

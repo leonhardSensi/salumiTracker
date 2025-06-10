@@ -61,7 +61,6 @@ export async function logout() {
 export async function register(
   name: string,
   email: string,
-  dateOfBirth: string,
   password: string,
   passwordConfirm: string
 ) {
@@ -74,7 +73,6 @@ export async function register(
       body: JSON.stringify({
         name,
         email,
-        dateOfBirth,
         password,
         passwordConfirm,
       }),
@@ -86,7 +84,6 @@ export async function register(
 export async function updateUser(
   name?: string,
   email?: string,
-  date_of_birth?: string,
   password?: string,
   photo?: File
 ) {
@@ -115,9 +112,40 @@ export async function updateUser(
       body: JSON.stringify({
         name,
         email,
-        date_of_birth,
         password,
         photo,
+      }),
+    }
+  );
+  return response;
+}
+
+export async function resetPassword(
+  resetToken: string,
+  password: string,
+  passwordConfirm: string
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/resetpassword/${resetToken}`,
+    {
+      method: "PATCH",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        password,
+        passwordConfirm,
+      }),
+    }
+  );
+  return response;
+}
+export async function requestPasswordReset(email: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/resetpassword`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        email,
       }),
     }
   );

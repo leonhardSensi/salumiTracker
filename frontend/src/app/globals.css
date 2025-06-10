@@ -25,12 +25,12 @@ body {
     )
     rgb(var(--background-start-rgb)); */
   background-color: white;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
   width: 0px;
-}
+} */
 
 input:focus::placeholder {
   color: transparent;

@@ -1,7 +1,7 @@
 export default function DashboardIcon() {
   return (
     <svg
-      className="h-5 w-5 group-hover:fill-red-600 fill-gray-600  transition-colors duration-200"
+      className="h-5 w-5 group-hover:fill-wetSand fill-stone  transition-colors duration-200"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

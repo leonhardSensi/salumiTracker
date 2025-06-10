@@ -1,195 +1,175 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import Link from "next/link";
 import Image from "next/image";
-import { PrivateLayout } from "../components/PrivateLayout/privateLayout";
+import { PublicLayout } from "../components/PublicLayout/publicLayout";
 
-import "swiper/css";
-// import "swiper/css/effect-cards";
-
-// import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { useQuery } from "@tanstack/react-query";
-import { getSalumi } from "../api/salumeApi";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import {
-  saltingState,
-  dryingState,
-  curingState,
-  completedState,
-} from "../atoms/salumiAtoms";
-import { ISalume, ISalumeWithDuration } from "../interfaces/interfaces";
-import { calculateSalumeDuration } from "../utils/salumeDuration";
-
-export default function Home() {
-  const {
-    status,
-    error: errorMessage,
-    data: salumi,
-  } = useQuery({
-    queryKey: ["salumi"],
-    queryFn: getSalumi,
-  });
-
-  const [completedSalumi, setCompletedSalumi] =
-    useRecoilState<ISalume[]>(completedState);
-
-  useEffect(() => {
-    if (salumi) {
-      salumi.map((salume) => {
-        if (
-          salume.state === "done" &&
-          !completedSalumi.some(
-            (existingSalume) => existingSalume.id === salume.id
-          )
-        ) {
-          setCompletedSalumi((prevCompletedSalumi) => [
-            ...prevCompletedSalumi,
-            salume,
-          ]);
-        }
-      });
-    }
-  }, [salumi]);
-
-  const [salting, setSalting] = useRecoilState(saltingState);
-  const [drying, setDrying] = useRecoilState(dryingState);
-  const [curing, setCuring] = useRecoilState(curingState);
-
-  const updateSalumiStateWithDuration = (salumi: ISalumeWithDuration[]) => {
-    const dryingArr = salumi.filter((item) => item.salume.state === "drying");
-    const saltingArr = salumi.filter((item) => item.salume.state === "salting");
-    const curingArr = salumi.filter((item) => item.salume.state === "curing");
-
-    setDrying(dryingArr);
-    setSalting(saltingArr);
-    setCuring(curingArr);
-  };
-
-  useEffect(() => {
-    calcDuration();
-  }, [salumi]);
-
-  // const calculateSalumeDuration = async (salume: ISalume) => {
-  //   const recipe = await getRecipe(salume.recipe.id);
-  //   let duration = 0;
-  //   let salumeDuration = 0;
-  //   if (recipe) {
-  //     switch (salume.state) {
-  //       case "drying":
-  //         salumeDuration = recipe.drying.duration;
-
-  //         break;
-  //       case "salting":
-  //         salumeDuration = recipe.salting.duration;
-
-  //         break;
-  //       case "curing":
-  //         salumeDuration = recipe.curing.duration;
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  //   const createdDate = new Date(salume.updated_at);
-  //   const currentDate = new Date();
-
-  //   const completionDate = new Date(createdDate);
-  //   completionDate.setDate(completionDate.getDate() + salumeDuration);
-
-  //   const timeDiff = completionDate.getTime() - currentDate.getTime();
-
-  //   duration = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-  //   return { salume, duration };
-  // };
-
-  const calcDuration = async () => {
-    if (salumi) {
-      const salumiArr = await Promise.all(
-        salumi.map(async (salume) => calculateSalumeDuration(salume))
-      );
-      updateSalumiStateWithDuration(salumiArr);
-    }
-  };
-
-  //-------
-  //-------
-  //-------
-  //-------
-  //-------
-  //-------
+export default function LandingPage() {
   return (
-    <PrivateLayout>
-      <main className="font-Montserrat flex h-3/4 flex-col items-center justify-around p-24 bg-salumeBlue overflow-hidden shadow-md z-10 border-b-black border-b-4">
-        <h1 className="text-salumeWhite text-8xl text-center">
-          Salumi Tracker
-        </h1>
-        <Image
-          src={"/charcuterie.svg"}
-          width={400}
-          height={400}
-          alt="Charcuterie board"
-          className="mb-8"
-          priority={true}
-        />
+    <PublicLayout>
+      <div className="p-4 bg-wetSand">
+        {/* Hero Section */}
+        <main className="flex flex-col min-h-[80vh] border rounded-3xl bg-eggshell shadow-2xl mb-4">
+          <div className="flex h-fit px-48 py-16 justify-between items-center">
+            <div className="w-1/2 text-black flex flex-col justify-center space-y-12">
+              <h1 className="text-7xl font-serif leading-tight">
+                Track Your Salumi Production
+              </h1>
+              <h3 className="text-2xl text-justify text-black">
+                Easily track and manage your salumi batches from start to finish
+                with our intuitive tracking application.
+              </h3>
+              <div className="w-full flex justify-start">
+                <Link href="/register">
+                  <button className="bg-wetSand py-4 px-8 text-white text-xl rounded-xl shadow-md hover:bg-eggshell hover:text-wetSand hover:border-solid hover:border-wetSand hover:border-2 transition-all">
+                    Get Started
+                  </button>
+                </Link>
+              </div>
+            </div>
+            <div className="w-1/2 flex justify-end">
+              <Image
+                src={"/salumeSelection.png"}
+                alt="salumi selection"
+                width={400}
+                height={400}
+              />
+            </div>
+          </div>
+          {/* <div className="flex justify-center bg-eggshell">
+            <button
+              onClick={() =>
+                document
+                  .getElementById("how-it-works")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="text-wetSand text-4xl flex hover:opacity-70"
+            >
+              Learn How It Works ↓
+            </button>
+          </div> */}
+        </main>
 
-        <div className="bg-salumeWhite text-center lg:w-1/3 lg:h-1/3 w-3/4 h-1/3 overflow-hidden lg:flex items-center justify-center absolute bottom-1 rounded-full cursor-pointer">
-          <Image
-            src={"/arrow.svg"}
-            alt={"prev-arrow"}
-            width={50}
-            height={50}
-            className="image-swiper-button-prev rotate-180 cursor-pointer"
-          />
-          <Swiper
-            modules={[Pagination, Navigation]}
-            navigation={{
-              nextEl: ".image-swiper-button-next",
-              prevEl: ".image-swiper-button-prev",
-              disabledClass: "swiper-button-disabled",
-            }}
-            pagination={{
-              dynamicBullets: true,
-            }}
-            className="w-full h-3/4 swiper-container font-Montserrat lg:text-6xl text-4xl"
-          >
-            <SwiperSlide className="text-black">
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="mt-8">Now Salting</h1>
-                <h3 className="mt-12 font-Satisfy">
-                  {salting[0] ? salting[0].salume.name : "None"}
-                </h3>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="text-black">
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="mt-8">Now Drying</h1>
-                <h3 className="mt-12 font-Satisfy">
-                  {drying[0] ? drying[0].salume.name : "None"}
-                </h3>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="text-black ">
-              <div className="flex flex-col justify-center items-center">
-                <h1 className=" mt-8">Now Curing</h1>
-                <h3 className="mt-12 font-Satisfy">
-                  {curing[0] ? curing[0].salume.name : "None"}
-                </h3>
-              </div>
-            </SwiperSlide>
-          </Swiper>
-          <Image
-            src={"/arrow.svg"}
-            alt={"prev-arrow"}
-            width={50}
-            height={50}
-            className="image-swiper-button-next cursor-pointer"
-          />
-        </div>
-      </main>
-      <div className="bg-salumeWhite h-1/4 w-full"></div>
-    </PrivateLayout>
+        {/* Features Section */}
+        <section id="how-it-works" className="py-24 px-32 space-y-20">
+          <h2 className="text-5xl font-serif text-center text-eggshell">
+            Why Salumi Tracker?
+          </h2>
+          <div className="grid grid-cols-3 gap-16 text-center">
+            <div>
+              <Image
+                width={300}
+                height={300}
+                src="./batch.png"
+                alt="Batch icon"
+                className="mx-auto mb-6 shadow-xl rounded-xl"
+              />
+              <h3 className="text-2xl font-semibold">Batch Tracking</h3>
+              <p className="mt-4">
+                Monitor weight, start/end dates, and curing status with visual
+                meters.
+              </p>
+            </div>
+            <div>
+              <Image
+                width={300}
+                height={300}
+                src="./timer.png"
+                alt="Timer icon"
+                className="mx-auto mb-6 shadow-xl rounded-xl"
+              />
+              <h3 className="text-2xl font-semibold">Curing Timers</h3>
+              <p className="mt-4">
+                Stay on top of flips, checks, and estimated readiness.
+              </p>
+            </div>
+            <div>
+              <Image
+                width={300}
+                height={300}
+                src="./metrics.png"
+                alt="Chart icon"
+                className="mx-auto mb-6 shadow-xl rounded-xl"
+              />
+              <h3 className="text-2xl font-semibold">Detailed Metrics</h3>
+              <p className="mt-4">
+                Visualize aging time, yield, and moisture loss trends over time.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-eggshell py-24 px-32 border rounded-3xl shadow-2xl mb-4">
+          <h2 className="text-5xl font-serif text-center text-wetSand mb-20">
+            How It Works
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 text-center text-stone-800">
+            {/* Step 1 */}
+            <div className="flex flex-col items-center space-y-6 text-wetSand">
+              <Image
+                src={"/createBatch.png"}
+                alt="Create Batch"
+                width={200}
+                height={200}
+                className="rounded-md shadow-sm"
+              />
+              <h3 className="text-2xl font-bold font-serif">
+                1. Create a Batch
+              </h3>
+              <p className="text-lg">
+                Choose your salumi type and log initial weight and curing start
+                date.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center space-y-6 text-wetSand">
+              <Image
+                src={"/trackProgress.png"}
+                alt="Track Progress"
+                width={200}
+                height={200}
+                className="rounded-md shadow-sm"
+              />
+              <h3 className="text-2xl font-bold font-serif">
+                2. Track the Process
+              </h3>
+              <p className="text-lg">
+                Monitor curing, weight loss, and milestones using intuitive
+                dashboards.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center space-y-6 text-wetSand">
+              <Image
+                src={"/getNotified.png"}
+                alt="Get Notified"
+                width={200}
+                height={200}
+                className="rounded-md shadow-sm"
+              />
+              <h3 className="text-2xl font-bold font-serif">3. Get Notified</h3>
+              <p className="text-lg">
+                Receive timely updates on when to flip, check, or harvest your
+                batch.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Call To Action */}
+        <section className="text-white py-24 px-32 text-center">
+          <h2 className="text-4xl font-serif mb-8">
+            Ready to Craft Perfect Salumi?
+          </h2>
+          <Link href="/register">
+            <button className="bg-eggshell text-wetSand font-bold text-xl px-10 py-4 rounded-xl shadow-md hover:bg-wetSand hover:text-eggshell hover:border-solid hover:border-eggshell hover:border-2 transition-all">
+              Join Now
+            </button>
+          </Link>
+        </section>
+      </div>
+    </PublicLayout>
   );
 }

@@ -20,6 +20,10 @@ module.exports = {
         salumeBlue: "#759281",
         salumeWhite: "#ffebae",
         hoverSalumeWhite: "#ffe699",
+        eggshell: "rgb(250,240,225)",
+        wetSand: "rgb(170,100,55)",
+        stone: "rgb(50,50,50)",
+        flesh: "rgb(235, 212, 192)",
       },
       fontFamily: {
         Satisfy: ["Satisfy", "cursive"],

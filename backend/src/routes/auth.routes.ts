@@ -1,9 +1,12 @@
 import express from "express";
 import {
+  forgotPasswordHandler,
   loginUserHandler,
   logoutHandler,
   refreshAccessTokenHandler,
   registerUserHandler,
+  resetPasswordHandler,
+  verifyEmailHandler,
   // verifyEmailHandler,
 } from "../controllers/auth.controller";
 import { deserializeUser } from "../middleware/deserializeUser";
@@ -30,10 +33,13 @@ router.get("/logout", deserializeUser, requireUser, logoutHandler);
 router.get("/refresh", refreshAccessTokenHandler);
 
 // Verify Email Address
-// router.get(
-//   "/verifyemail/:verificationCode",
-//   validate(verifyEmailSchema)
-//   // verifyEmailHandler
-// );
+router.get(
+  "/verifyemail/:verificationCode",
+  validate(verifyEmailSchema),
+  verifyEmailHandler
+);
+
+router.post("/resetpassword", forgotPasswordHandler);
+router.patch("/resetpassword/:resetToken", resetPasswordHandler);
 
 export default router;

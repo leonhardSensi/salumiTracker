@@ -251,9 +251,9 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
   };
 
   return (
-    <div className="my-4 w-full text-salumeWhite">
+    <div className="my-4 w-full text-stone">
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-left border-b-salumeWhite border-b-4 pb-4">
+        <div className="flex flex-col items-left border-b-stone border-b-4 pb-4">
           <label htmlFor="name" className="text-3xl font-bold mr-4">
             Add name
           </label>
@@ -269,8 +269,8 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             defaultValue={props.recipe && props.recipe.title}
           />
         </div>
-        <div className="border-b-salumeWhite border-b-4  pb-4">
-          <h1 className="text-3xl my-4 font-bold text-salumeWhite">Status</h1>
+        <div className="border-b-stone border-b-4  pb-4">
+          <h1 className="text-3xl my-4 font-bold">Status</h1>
           <Status
             handleCheckBoxChange={handleCheckBoxChange}
             selected={salting.state}
@@ -287,7 +287,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             statusName={"Curing"}
           />
         </div>
-        <div className="border-b-salumeWhite border-b-4 mt-8">
+        <div className="border-b-stone border-b-4 mt-8">
           <h1 className="text-3xl my-4 font-bold">Meats</h1>
           {cuts.map((cut) => (
             <div
@@ -306,7 +306,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             </div>
           ))}
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}
@@ -314,7 +314,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             alt="add"
           />
         </div>
-        <div className="border-b-salumeWhite border-b-4 mt-8">
+        <div className="border-b-stone border-b-4 mt-8">
           <h1 className="text-3xl my-4 font-bold">Spices</h1>
           {spices.map((spice) => (
             <div
@@ -333,7 +333,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             </div>
           ))}
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}
@@ -363,7 +363,7 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             </div>
           ))}
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}

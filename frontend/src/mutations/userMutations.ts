@@ -14,7 +14,6 @@ export const useRegisterMutation = () => {
       return register(
         registerCredentials.name,
         registerCredentials.email,
-        registerCredentials.dateOfBirth,
         registerCredentials.password,
         registerCredentials.passwordConfirm
       );
@@ -43,13 +42,7 @@ export const useRefreshTokenMutation = () => {
 export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: (user: IuserToUpdate) => {
-      return updateUser(
-        user.name,
-        user.email,
-        user.dateOfBirth,
-        user.password,
-        user.photo
-      );
+      return updateUser(user.name, user.email, user.password, user.photo);
     },
   });
 };

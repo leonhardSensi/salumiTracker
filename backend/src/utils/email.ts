@@ -1,19 +1,16 @@
 // const nodemailer = require("nodemailer");
 import nodemailer from "nodemailer";
-import { createTransport, TransportOptions } from "nodemailer";
-import { User } from "../entities/user.entity";
+import { TransportOptions } from "nodemailer";
 import pug from "pug";
 import { convert } from "html-to-text";
-import { string } from "zod";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
 require("dotenv").config({ path: "../../.env" });
 
-// const smtp = config.get<{
-//   host: string;
-//   port: number;
-//   user: string;
-//   pass: string;
-// }>("smtp");
+const smtp = {
+  host: process.env.SMTP_HOST as string,
+  port: Number(process.env.SMTP_PORT),
+  user: process.env.SMTP_USER as string,
+  pass: process.env.SMTP_PASSWORD as string,
+};
 
 interface ISalumeToNotify {
   salume: string;
@@ -29,9 +26,6 @@ export default class Email {
   firstName: string;
   to: string;
   from: string;
-  // salume: string;
-  // totalSalumi: string;
-  // daysRemaining: string;
   salumiToNotifyArr: ISalumeToNotify[];
 
   constructor(
@@ -40,34 +34,17 @@ export default class Email {
     salumiToNotifyArr: ISalumeToNotify[] = []
   ) {
     this.firstName = user.name.split(" ")[0];
-    // this.salume = salumeInfo.salume;
-    // this.totalSalumi = salumeInfo.totalSalumi;
-    // this.daysRemaining = salumeInfo.daysRemaining;
     this.salumiToNotifyArr = salumiToNotifyArr;
     this.to = user.email;
-    // this.from = `Codevo ${config.get<string>("emailFrom")}`;
-    this.from = "Salumi Tracker";
+    this.from = "info@salumitracker.com";
   }
 
   private newTransport() {
-    // if (process.env.NODE_ENV === 'production') {
-    //   console.log('Hello')
-    // }
-
     return nodemailer.createTransport({
-      // ...smtp,
-      // auth: {
-      //   user: smtp.user,
-      //   pass: smtp.pass,
-      // },
-      service: "gmail",
+      ...smtp,
       auth: {
-        type: "OAuth2",
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,
-        clientId: process.env.OAUTH_CLIENT_ID,
-        clientSecret: process.env.OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        user: smtp.user,
+        pass: smtp.pass,
       },
     } as TransportOptions);
   }
@@ -76,9 +53,6 @@ export default class Email {
     // Generate HTML template based on the template string
     const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
       firstName: this.firstName,
-      // salume: this.salume,
-      // daysRemaining: this.daysRemaining,
-      // totalSalumi: this.totalSalumi,
       salumiToNotifyArr: this.salumiToNotifyArr,
       subject,
       url: this.url,
@@ -100,11 +74,10 @@ export default class Email {
         },
       ],
     };
-    // console.log("Email sent successfully");
     // // Send email
     const info = await this.newTransport().sendMail(mailOptions);
     console.log(info);
-    // console.log(nodemailer.getTestMessageUrl(info));
+    console.log("Email sent successfully");
   }
 
   async sendVerificationCode() {
@@ -112,7 +85,6 @@ export default class Email {
   }
 
   async salumeReminder() {
-    // console.log("EMAIL", this.salumiToNotifyArr);
     if (this.salumiToNotifyArr.length > 1) {
       await this.send("salumeReminder", `Your salumi are almost ready!`);
     } else {
