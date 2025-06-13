@@ -251,11 +251,11 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
   };
 
   return (
-    <div className="my-4 w-full text-stone">
+    <div className="my-4 w-full text-stone px-16 py-8">
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-left border-b-stone border-b-4 pb-4">
-          <label htmlFor="name" className="text-3xl font-bold mr-4">
-            Add name
+        <div className="flex flex-col items-left border-b-wetSand border-b-2 pb-4">
+          <label htmlFor="name" className="text-3xl font-serif mr-4">
+            Title
           </label>
           <UserInput
             width={"w-1/2"}
@@ -264,13 +264,13 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             type="text"
             handleChange={(e) => setName(e.target.value)}
             id="name"
-            placeholder="Recipe Name"
+            placeholder="New Recipe"
             required={true}
             defaultValue={props.recipe && props.recipe.title}
           />
         </div>
-        <div className="border-b-stone border-b-4  pb-4">
-          <h1 className="text-3xl my-4 font-bold">Status</h1>
+        <div className="border-b-wetSand border-b-2  pb-4">
+          <h1 className="text-3xl font-serif my-4">Status</h1>
           <Status
             handleCheckBoxChange={handleCheckBoxChange}
             selected={salting.state}
@@ -287,8 +287,8 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             statusName={"Curing"}
           />
         </div>
-        <div className="border-b-stone border-b-4 mt-8">
-          <h1 className="text-3xl my-4 font-bold">Meats</h1>
+        <div className="border-b-wetSand border-b-2 mt-8">
+          <h1 className="text-3xl font-serif my-4">Meats</h1>
           {cuts.map((cut) => (
             <div
               key={`cut-${cut.listId}`}
@@ -314,8 +314,8 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             alt="add"
           />
         </div>
-        <div className="border-b-stone border-b-4 mt-8">
-          <h1 className="text-3xl my-4 font-bold">Spices</h1>
+        <div className="border-b-wetSand border-b-2 mt-8">
+          <h1 className="text-3xl font-serif my-4">Spices</h1>
           {spices.map((spice) => (
             <div
               key={`spice-${spice.listId}`}
@@ -341,8 +341,8 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             alt="add"
           />
         </div>
-        <div className="mt-8">
-          <h1 className="text-3xl my-4 font-bold">Steps</h1>
+        <div className="mt-8 space-y-2">
+          <h1 className="text-3xl font-serif my-4">Steps</h1>
           {steps.map((step) => (
             <div key={`step-${step.listId}`}>
               {step !== null && (

@@ -52,9 +52,9 @@ export const PrivateLayout: React.FC<{
         {/* <Sidebar /> */}
 
         {isClient && document.cookie && (
-          <div className="w-full flex flex-col bg-wetSand">
+          <div className="w-full flex flex-col">
             <Navbar />
-            <div className="flex h-full">
+            <div className="flex h-screen bg-eggshell">
               <Sidebar />
               {children}
               <NotificationBanner />

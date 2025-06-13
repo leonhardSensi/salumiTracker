@@ -274,15 +274,15 @@ export default function Dashboard() {
 
   return (
     <PrivateLayout>
-      <div className="flex flex-col items-center h-full overflow-hidden">
-        <h1 className="w-fit text-6xl text-salumeWhite border-b-salumeWhite border-b-4 border-double font-bold font-Montserrat mt-8">
+      <div className="flex flex-col items-center w-full overflow-hidden">
+        {/* <h1 className="text-6xl text-eggshell border-b-eggshell border-b-4 border-double font-bold font-Montserrat mt-8">
           Dashboard
-        </h1>
+        </h1> */}
         {salumi && (
-          <div className="w-full flex flex-col justify-around h-full">
-            <div className="flex flex-row w-full justify-around">
+          <div className="w-full flex flex-col justify-center items-center p-12">
+            <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
               <div
-                className="w-1/3 justify-center flex"
+                className="justify-center w-1/2 flex"
                 ref={dropTargetSalting}
               >
                 <Card
@@ -299,7 +299,7 @@ export default function Dashboard() {
                   <DashboardCardDetails salumi={salting} status={"Salting"} />
                 </Card>
               </div>
-              <div className="w-1/3 justify-center flex" ref={dropTargetDrying}>
+              <div className="justify-center w-1/2 flex" ref={dropTargetDrying}>
                 <Card
                   details={drying}
                   image={"/dry.svg"}
@@ -315,7 +315,7 @@ export default function Dashboard() {
                 </Card>
               </div>
             </div>
-            <div className="w-full justify-center flex" ref={dropTargetCuring}>
+            <div className="justify-center w-1/2 flex" ref={dropTargetCuring}>
               <Card
                 details={curing}
                 image={"/cure.svg"}

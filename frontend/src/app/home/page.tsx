@@ -23,6 +23,7 @@ import {
 import { calculateSalumeDuration } from "../../utils/salumeDuration";
 import { getUser } from "../../api/userApi";
 import { updateUserData } from "../../atoms/userAtoms";
+import Link from "next/link";
 
 export default function Home() {
   const { data: user } = useQuery(["user"], getUser);
@@ -201,9 +202,11 @@ export default function Home() {
           <div className="bg-flesh p-6 rounded-xl shadow-md">
             <h3 className="text-xl font-serif mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <button className="block w-full bg-wetSand text-eggshell py-2 rounded-md">
-                + Add New Batch
-              </button>
+              <Link href="/add_salume">
+                <button className="block w-full bg-wetSand text-eggshell py-2 rounded-md">
+                  + Add New Batch
+                </button>
+              </Link>
               <button className="block w-full border border-wetSand text-stone py-2 rounded-md">
                 📸 Upload Snapshot
               </button>

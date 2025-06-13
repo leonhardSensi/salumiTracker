@@ -23,7 +23,7 @@ export default function Recipes() {
     <ModalProvider>
       <PrivateLayout>
         <div className="flex flex-col w-full h-full items-center overflow-hidden">
-          <div className="flex flex-col lg:w-1/2 items-center justify-start mt-16 overflow-auto bg-salumeBlue rounded-lg shadow-2xl">
+          <div className="text-stone flex flex-col lg:w-1/2 items-center justify-start mt-16 overflow-auto bg-flesh rounded-lg shadow-2xl">
             <RecipeList recipes={recipes} />
           </div>
           <Link href="/add_recipe" className="mt-8">

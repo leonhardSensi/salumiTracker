@@ -15,25 +15,25 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
       {props.recipes ? (
         <>
           {props.recipes.length === 0 ? (
-            <div className="flex text-xl justify-center text-black">
+            <div className="flex text-xl justify-center">
               <p>No recipes found. Create a new one instead!</p>
             </div>
           ) : (
             <table className="w-full text-left mb-16">
-              <thead className="lg:text-6xl text-3xl w-full text-center">
+              {/* <thead className="lg:text-6xl text-3xl w-full text-center">
                 <tr>
-                  <th className="font-bold font-Montserrat text-salumeWhite pb-8 flex justify-center">
+                  <th className="font-bold font-Montserrat pb-8 flex justify-center">
                     <h1 className="w-fit border-b-salumeWhite border-b-4 border-double">
                       Recipes
                     </h1>
                   </th>
                 </tr>
-              </thead>
+              </thead> */}
               <tbody>
                 {props.recipes.map((recipe) => (
                   <tr
                     key={`recipe-${recipe.id}`}
-                    className="border-y border-salumeWhite hover:bg-salumeWhite hover:bg-gradient-to-l from-salumeBlue hover:text-salumeBlue hover:border-y-salumeBlue text-salumeWhite w-full transition-colors duration-300"
+                    className="border-y border-wetSand hover:bg-gradient-to-l from-eggshell hover:text-wetSand hover:border-y-eggshell w-full transition-colors duration-100"
                   >
                     <td className="lg:text-4xl cursor-pointer  font-medium  whitespace-nowrap flex justify-between items-center">
                       {/* <Image
@@ -46,7 +46,7 @@ export default function RecipeList(props: { recipes: Irecipe[] | undefined }) {
                         href={`/recipes/${recipe.id}`}
                         className="w-full px-6 py-4"
                       >
-                        <p className="font-Satisfy">- {recipe.title}</p>
+                        <p className="font-serif">- {recipe.title}</p>
                       </Link>
                       {/* <td
                       className="cursor-pointer px-6 py-4"

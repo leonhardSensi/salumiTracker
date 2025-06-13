@@ -17,15 +17,46 @@ export default function Step({
   stepStatus,
 }: IStepProps) {
   return (
-    <>
-      <div className="flex justify-between items-center w-full">
-        <label htmlFor="stepName" className="text-xl mb-2">
-          Step {stepNum}
-        </label>
+    <div className="border-wetSand border-opacity-50 border rounded-xl p-2">
+      <div className="flex justify-between w-full">
+        <div className="flex space-x-4">
+          <label htmlFor="step" className="text-xl mr-12">
+            Title
+          </label>
+
+          <div className="relative group w-fit">
+            {/* <label className="text-xl">Status</label> */}
+            <Dropdown
+              dropDownOptions={statusArr}
+              disabled={statusArr?.length === 0}
+              handleSelect={handleSelect}
+              currentId={currentId}
+              dropdownText={dropdownText}
+            />
+          </div>
+
+          <label htmlFor="stepDuration" className="text-xl mb-4">
+            Duration
+            <br />
+            (minutes)
+          </label>
+          <UserInput
+            width={"w-24"}
+            addStyle={"mb-8"}
+            name="stepDuration"
+            handleChange={handleChange}
+            type="number"
+            id="stepDuration"
+            placeholder="20"
+            step="1"
+            min={0}
+            required={true}
+            defaultValue={handleCurrentItem(currentItem, "duration")}
+            disabled={stepStatus ? true : false}
+          />
+        </div>
         <Image
-          className={
-            items.length > 1 ? "cursor-pointer ml-2 mb-2 invert" : " hidden"
-          }
+          className={items.length > 1 ? "cursor-pointer ml-2 mb-2" : " hidden"}
           src={"/delete.svg"}
           width={30}
           height={30}
@@ -56,7 +87,7 @@ export default function Step({
         required={true}
         defaultValue={handleCurrentItem(currentItem, "description")}
       />
-      <div className="relative group mb-2 w-fit">
+      {/* <div className="relative group mb-2 w-fit">
         <label className="text-xl mb-4">Status</label>
         <Dropdown
           dropDownOptions={statusArr}
@@ -65,8 +96,8 @@ export default function Step({
           currentId={currentId}
           dropdownText={dropdownText}
         />
-      </div>
-      <label htmlFor="stepDuration" className="text-xl mb-4">
+      </div> */}
+      {/* <label htmlFor="stepDuration" className="text-xl mb-4">
         Duration (minutes)
       </label>
       <UserInput
@@ -82,7 +113,7 @@ export default function Step({
         required={true}
         defaultValue={handleCurrentItem(currentItem, "duration")}
         disabled={stepStatus ? true : false}
-      />
-    </>
+      /> */}
+    </div>
   );
 }
