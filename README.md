@@ -1,18 +1,16 @@
-# Salumi Tracker
+# Salumi-Tracker
 
-Salumi-Tracker is a web application that allows users to adapt their salumi recipes and have an overview of their salumi that are currently in production.
-## Screenshots
-![Dashboard](https://github.com/leonhardSensi/salumiTracker/assets/108275034/8abc6826-eef6-49bd-9d96-138b1feb3ef0.png)
-*Dashboard showing the overview of salumi being cured*
+Introducing [Salumi-Tracker](https://salumitracker.com/): Your Ultimate Companion for Perfecting Salumi Recipes!
 
-![Recipe Adjustment](https://github.com/leonhardSensi/salumiTracker/assets/108275034/4a261419-1a8d-45e1-a647-f5ff41ea76c2.png)
-*Dynamic recipe adjustment ensuring precise ingredient ratios*
+Salumi-Tracker is an innovative web application designed to elevate your salumi-making experience. Seamlessly adapt your recipes to perfection and effortlessly monitor your salumi in production. Whether you're a seasoned artisan or a passionate hobbyist, Salumi-Tracker empowers you to create exceptional salumi with precision and ease.
+
+Join the community of salumi enthusiasts and take your craft to the next level with Salumi-Tracker!
 
 ## Tech Stack
 ### Frontend 
 - Framework: Next.js (React)
 - Styling: Tailwind CSS, CSS
-- State Management: useState and Recoil
+- State Management: Recoil
 - Data Fetching: React Query
 - Routing: useRouter (Next.js)
 
@@ -25,6 +23,29 @@ Salumi-Tracker is a web application that allows users to adapt their salumi reci
 
 ### Other Tools and Libraries
 - Email Service: Nodemailer
+
+## Key Features
+- Creating multiple recipes and salumi
+- Track the progress of the salumi in production
+- Rate completed salumi and track your average score
+- Dynamic ingredient ratio calculation
+- Email notifications
+
+## Screenshots
+![Dashboard](https://github.com/leonhardSensi/salumiTracker/assets/108275034/8abc6826-eef6-49bd-9d96-138b1feb3ef0.png)
+*Dashboard showing the overview of salumi being cured*
+
+![Recipe Adjustment](https://github.com/leonhardSensi/salumiTracker/assets/108275034/4a261419-1a8d-45e1-a647-f5ff41ea76c2.png)
+*Dynamic recipe adjustment ensuring precise ingredient ratios*
+
+## To Dos
+- UI improvements
+- ARIA support
+- Mobile support
+- Recipe sharing
+- Multilingual support
+- Search and filtering
+- User feedback system
 
 ## Frontend
 
