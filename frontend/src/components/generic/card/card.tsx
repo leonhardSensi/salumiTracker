@@ -13,21 +13,8 @@ export default function Card({
   status,
 }: ICardProps) {
   return (
-    // <div
-    //   className={`${addStyles} w-1/3 h-80 bg-salumeBlue rounded-full border-salumeWhite border-2 shadow-xl cursor-pointer`}
-    // >
-    //   <Link href={link}>
-    //     <CardDetails
-    //       details={details}
-    //       image={image}
-    //       imageSize={imageSize}
-    //       children={children}
-    //       status={status}
-    //     />
-    //   </Link>
-    // </div>
     <div
-      className={`${addStyles} w-full bg-flesh rounded-xl shadow-xl text-stone cursor-pointer overflow-hidden`}
+      className={`${addStyles} h-80 w-full bg-flesh rounded-xl shadow-xl text-stone cursor-pointer`}
     >
       <Link href={link}>
         <CardDetails

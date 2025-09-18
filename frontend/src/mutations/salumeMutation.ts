@@ -1,5 +1,4 @@
 import {
-  addSalumeImage,
   deleteSalume,
   submitSalume,
   updateSalumeRating,
@@ -19,7 +18,8 @@ export const useSalumeMutation = () => {
         salume.name,
         salume.recipeId,
         salume.notes,
-        salume.state
+        salume.state,
+        salume.startWeight
       );
     },
   });
@@ -39,20 +39,25 @@ export const useUpdateSalumeStateMutation = () => {
   });
 };
 
-export const useAddSalumeImageMutation = () => {
-  return useMutation({
-    mutationFn: (salume: ISalumeToUpdate) => {
-      return addSalumeImage(
-        salume.id,
-        salume.name,
-        salume.notes,
-        // salume.recipeId,
-        salume.state,
-        salume.image
+export const useAddSalumeImageMutation = () =>
+  useMutation(
+    async ({
+      salumeId,
+      formData,
+    }: {
+      salumeId: string;
+      formData: FormData;
+    }) => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND}/api/salume/${salumeId}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          body: formData,
+        }
       );
-    },
-  });
-};
+    }
+  );
 
 export const useUpdateSalumeRatingMutation = () => {
   return useMutation({

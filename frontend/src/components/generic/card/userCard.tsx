@@ -101,7 +101,7 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
 
   return (
     <>
-      <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer h-fit">
+      <div className="w-full bg-flesh rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer h-fit">
         <button
           onClick={() => {
             openModal();
@@ -112,11 +112,9 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
           <div className="flex items-center">
             <div className="w-full p-8">
               <div className="mb-2">
-                <h1 className="text-black font-bold text-xl text-left">
-                  {title}
-                </h1>
+                <h1 className="font-bold text-xl text-left">{title}</h1>
               </div>
-              <p className="text-black text-left">{details}</p>
+              <p className="text-left">{details}</p>
             </div>
             <Image
               width={100}

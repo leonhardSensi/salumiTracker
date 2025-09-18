@@ -133,6 +133,27 @@ export default function Sidebar() {
             </div>
           </div>
         </Link>
+
+        <Link href="/salumi/completed" className="font-QuicksandMedium">
+          <div
+            id="completed_salumi"
+            className="w-full flex items-center space-x-3.5 group select-none cursor-pointer"
+          >
+            <div className="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">
+              <div
+                className={`absolute top-0 left-0 w-full h-[102%] group-hover:translate-y-0 bg-wetSand ${
+                  checkActive("salumi/completed")
+                    ? "translate-y-0"
+                    : "translate-y-full"
+                } transition-all duration-300`}
+              ></div>
+            </div>
+            <div className="group-hover:bg-wetSand/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 group-hover:text-wetSand hover:text-wetSand ">
+              <AddSalume />
+              <p className="font-QuicksandMedium">Completed Salumi</p>
+            </div>
+          </div>
+        </Link>
       </div>
     </aside>
   );

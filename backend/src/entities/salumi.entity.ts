@@ -24,6 +24,12 @@ export class Salume extends Model {
   })
   rating: number;
 
+  @Column({ type: "integer", nullable: true })
+  finalWeight: number | null;
+
+  @Column({ type: "float", nullable: true })
+  startWeight: number | null;
+
   @ManyToOne(() => Recipe, (recipe) => recipe.salumi, {
     onDelete: "CASCADE",
   })

@@ -122,14 +122,12 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
         const updatedCuts = cuts.map((cut) =>
           cut.listId === id ? { ...cut, name: value } : cut
         );
-        console.log("updated", updatedCuts);
         setCuts(updatedCuts);
         break;
       case "cutQuantity":
         const updatedCutQuantity = cuts.map((cut) =>
           cut.listId === id ? { ...cut, quantity: +value } : cut
         );
-        console.log(updatedCutQuantity);
         setCuts(updatedCutQuantity);
         break;
 
@@ -257,7 +255,6 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
       default:
         break;
     }
-    console.log(steps);
   };
 
   const getStatusArr = () => {
@@ -271,16 +268,12 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
   };
 
   return (
-    <div className="my-4 w-full text-salumeWhite">
+    <div className="my-4 w-full text-stone px-16 py-8">
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-left border-b-salumeWhite border-b-4 pb-4">
-          <label
-            htmlFor="name"
-            className="text-3xl text-salumeWhite font-bold mr-4"
-          >
-            Add name
+        <div className="flex flex-col items-left border-b-wetSand border-b-2 pb-4">
+          <label htmlFor="name" className="text-3xl font-serif mr-4">
+            Title
           </label>
-
           <UserInput
             width={"w-1/2"}
             addStyle={"mt-1 mb-4 text-xl"}
@@ -288,13 +281,13 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
             type="text"
             handleChange={(e) => setName(e.target.value)}
             id="name"
-            placeholder="Recipe Name"
+            placeholder="New Recipe"
             required={true}
             defaultValue={recipeToEdit && recipeToEdit.title}
           />
         </div>
-        <div>
-          <h1 className="text-3xl my-4 font-bold">Status</h1>
+        <div className="border-b-wetSand border-b-2  pb-4">
+          <h1 className="text-3xl font-serif my-4">Status</h1>
           <Status
             handleCheckBoxChange={handleCheckBoxChange}
             selected={salting.state}
@@ -317,11 +310,11 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
             statusName={"Curing"}
           />
         </div>
-        <div className="border-b-salumeWhite border-b-4 mt-8">
-          <h1 className="text-3xl my-4 font-bold">Meats</h1>
+        <div className="border-b-wetSand border-b-2 mt-8">
+          <h1 className="text-3xl font-serif my-4">Meats</h1>
           {cuts.map((cut) => (
             <div
-              key={`cut-${cut.id}`}
+              key={`cut-${cut.listId}`}
               className="flex flex-row justify-between"
             >
               {cut !== null && (
@@ -336,9 +329,8 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
               )}
             </div>
           ))}
-
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}
@@ -346,11 +338,11 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
             alt="add"
           />
         </div>
-        <div className="border-b-salumeWhite border-b-4 mt-8">
-          <h1 className="text-3xl my-4 font-bold">Spices</h1>
+        <div className="border-b-wetSand border-b-2 mt-8">
+          <h1 className="text-3xl font-serif my-4">Spices</h1>
           {spices.map((spice) => (
             <div
-              key={`spice-${spice.id}`}
+              key={`spice-${spice.listId}`}
               className="flex flex-row justify-between"
             >
               {spice !== null && (
@@ -366,7 +358,7 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
             </div>
           ))}
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}
@@ -374,10 +366,10 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
             alt="add"
           />
         </div>
-        <div className="mt-8">
-          <h1 className="text-3xl my-4 font-bold">Steps</h1>
+        <div className="mt-8 space-y-2">
+          <h1 className="text-3xl font-serif my-4">Steps</h1>
           {steps.map((step) => (
-            <div key={`step-${step.id}`}>
+            <div key={`step-${step.listId}`}>
               {step !== null && (
                 <>
                   <Step
@@ -388,28 +380,16 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
                     statusArr={getStatusArr()}
                     handleSelect={handleSelect}
                     currentId={step.listId}
-                    currentItem={step}
                     dropdownText={step.status ? step.status : "Select status"}
                     stepStatus={step.status}
+                    currentItem={step}
                   />
-                  {/* <div className="w-4">
-                <Image
-                  className={
-                    steps.length > 1 ? "h-4 w-4 mb-4 cursor-pointer" : " hidden"
-                  }
-                  src={"./x-button.svg"}
-                  width={100}
-                  height={100}
-                  onClick={() => remove(steps, step.id)}
-                  alt="delete"
-                />
-              </div> */}
                 </>
               )}
             </div>
           ))}
           <Image
-            className="cursor-pointer invert mb-8"
+            className="cursor-pointer mb-8"
             src={"/plusButton.svg"}
             width={40}
             height={40}

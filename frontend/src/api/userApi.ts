@@ -85,7 +85,8 @@ export async function updateUser(
   name?: string,
   email?: string,
   password?: string,
-  photo?: File
+  photo?: File,
+  notifications?: string
 ) {
   if (photo) {
     const formData = new FormData();
@@ -114,6 +115,7 @@ export async function updateUser(
         email,
         password,
         photo,
+        notifications,
       }),
     }
   );

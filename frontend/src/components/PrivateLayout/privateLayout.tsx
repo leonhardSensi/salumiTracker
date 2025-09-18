@@ -45,7 +45,7 @@ export const PrivateLayout: React.FC<{
   return (
     <div>
       <div
-        className={`flex flex-row h-screen font-Montserrat ${
+        className={`flex flex-row overflow-hidden h-[100vh] font-Montserrat ${
           isModalOpen && "transition-all duration-100 blur-sm"
         }`}
       >
@@ -54,7 +54,7 @@ export const PrivateLayout: React.FC<{
         {isClient && document.cookie && (
           <div className="w-full flex flex-col">
             <Navbar />
-            <div className="flex h-screen bg-eggshell">
+            <div className="flex overflow-hidden bg-eggshell h-full">
               <Sidebar />
               {children}
               <NotificationBanner />

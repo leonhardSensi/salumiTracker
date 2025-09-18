@@ -77,7 +77,6 @@ export default class Email {
     // // Send email
     const info = await this.newTransport().sendMail(mailOptions);
     console.log(info);
-    console.log("Email sent successfully");
   }
 
   async sendVerificationCode() {

@@ -50,6 +50,11 @@ export class User extends Model {
   })
   verified: boolean;
 
+  @Column({
+    default: "day",
+  })
+  notifications: string;
+
   @Index("verificationCode_index")
   @Column({
     type: "text",

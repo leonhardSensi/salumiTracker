@@ -24,6 +24,7 @@ import { calculateSalumeDuration } from "../../utils/salumeDuration";
 import { getUser } from "../../api/userApi";
 import { updateUserData } from "../../atoms/userAtoms";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const { data: user } = useQuery(["user"], getUser);
@@ -135,20 +136,46 @@ export default function Home() {
     }
   };
 
+  // Animation variants
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" as const },
+    }),
+  };
+
   return (
     <PrivateLayout>
       <main className="w-full bg-eggshell text-stone px-32 flex flex-col justify-center space-y-16 font-sans">
         {/* Header Section */}
-        <section className="text-center">
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0}
+          className="text-center"
+        >
           <p className="text-xl mt-2">
             You have <strong>3 salumi</strong> in progress. Next task in{" "}
             <strong>2 days</strong>.
           </p>
-        </section>
+        </motion.section>
 
         {/* Overview Cards */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 text-stone">
-          <div className="bg-flesh p-6 rounded-xl shadow-md text-center flex flex-col justify-between">
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+          custom={1}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 text-stone"
+        >
+          <motion.div
+            variants={sectionVariants}
+            custom={1}
+            className="bg-flesh p-6 rounded-xl shadow-md text-center flex flex-col justify-between"
+          >
             <h3 className="text-xl font-serif mb-2">Active Batches</h3>
             <table>
               <tr className="font-bold">
@@ -162,137 +189,110 @@ export default function Home() {
                 <td>{curing.length}</td>
               </tr>
             </table>
-          </div>
-          <div className="bg-flesh p-6 rounded-xl shadow-md text-center">
+          </motion.div>
+          <motion.div
+            variants={sectionVariants}
+            custom={1.2}
+            className="bg-flesh p-6 rounded-xl shadow-md text-center"
+          >
             <h3 className="text-xl font-serifmb-2">Next Task</h3>
             <p>
               Flip <strong>Coppa</strong> in <strong>2 days</strong>
             </p>
-          </div>
-          <div className="bg-flesh p-6 rounded-xl shadow-md text-center">
+          </motion.div>
+          <motion.div
+            variants={sectionVariants}
+            custom={1.4}
+            className="bg-flesh p-6 rounded-xl shadow-md text-center"
+          >
             <h3 className="text-xl font-serif mb-2">Average Yield</h3>
             <p className="text-2xl font-bold">72%</p>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Featured Batch */}
-        <section className="bg-flesh text-stone p-8 rounded-xl shadow-md flex flex-col md:flex-row items-center justify-between">
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+          custom={2}
+          className="bg-flesh text-stone p-8 rounded-xl shadow-md flex flex-col md:flex-row items-center justify-between"
+        >
           <div>
             <h2 className="text-2xl font-serif mb-2">
               Featured Batch: Guanciale
             </h2>
             <p>Started: May 1 • Weight: 1.2kg • Ready in: 10 days</p>
           </div>
-          <button className="mt-4 md:mt-0 bg-wetSand text-white px-6 py-3 rounded-lg text-lg">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="mt-4 md:mt-0 bg-wetSand text-white px-6 py-3 rounded-lg text-lg"
+          >
             Add Note
-          </button>
-        </section>
+          </motion.button>
+        </motion.section>
 
         {/* Recent Activity + Quick Links */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-10 text-stone">
-          <div className="bg-flesh p-6 rounded-xl shadow-md">
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+          custom={3}
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 text-stone"
+        >
+          <motion.div
+            variants={sectionVariants}
+            custom={3.1}
+            className="bg-flesh p-6 rounded-xl shadow-md"
+          >
             <h3 className="text-xl font-serif mb-4">Recent Activity</h3>
             <ul className="list-disc pl-5 space-y-2">
               <li>Harvested Pancetta (May 14)</li>
               <li>Logged note on Spicy Soppressata</li>
               <li>Added new batch: Fiocco</li>
             </ul>
-          </div>
+          </motion.div>
 
-          <div className="bg-flesh p-6 rounded-xl shadow-md">
+          <motion.div
+            variants={sectionVariants}
+            custom={3.2}
+            className="bg-flesh p-6 rounded-xl shadow-md"
+          >
             <h3 className="text-xl font-serif mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <Link href="/add_salume">
-                <button className="block w-full bg-wetSand text-eggshell py-2 rounded-md">
+                <motion.button
+                  whileHover={{ scale: 1.03, backgroundColor: "#e0b97f" }}
+                  whileTap={{ scale: 0.97 }}
+                  className="block w-full bg-wetSand text-eggshell py-2 rounded-md"
+                >
                   + Add New Batch
-                </button>
+                </motion.button>
               </Link>
-              <button className="block w-full border border-wetSand text-stone py-2 rounded-md">
+              <motion.button
+                whileHover={{ scale: 1.03, borderColor: "#e0b97f" }}
+                whileTap={{ scale: 0.97 }}
+                className="block w-full border border-wetSand text-stone py-2 rounded-md"
+              >
                 📸 Upload Snapshot
-              </button>
+              </motion.button>
             </div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Artisan Tip */}
-        <section className="text-center mt-12">
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+          custom={4}
+          className="text-center mt-12"
+        >
           <h4 className="text-lg font-bold">Daily Tip</h4>
           <p className="italic">“Rotate batches weekly for even drying.”</p>
-        </section>
-      </main>{" "}
+        </motion.section>
+      </main>
     </PrivateLayout>
   );
-
-  // OLD DESIGN ------------------------------------
-
-  // return (
-  //   <PrivateLayout>
-  //     <main className="font-Montserrat flex h-3/4 flex-col items-center justify-around p-24 bg-eggshell overflow-hidden shadow-md z-10 border-b-black border-b-4">
-  //       <h1 className="text-stone text-8xl text-center">Salumi Tracker</h1>
-  //       <Image
-  //         src={"/charcuterie.svg"}
-  //         width={400}
-  //         height={400}
-  //         alt="Charcuterie board"
-  //         className="mb-8"
-  //         priority={true}
-  //       />
-
-  //       <div className="bg-wetSand text-center lg:w-1/3 lg:h-1/3 w-3/4 h-1/3 overflow-hidden lg:flex items-center justify-center absolute bottom-1 rounded-full cursor-pointer">
-  //         <Image
-  //           src={"/arrow.svg"}
-  //           alt={"prev-arrow"}
-  //           width={50}
-  //           height={50}
-  //           className="image-swiper-button-prev rotate-180 cursor-pointer"
-  //         />
-  //         <Swiper
-  //           modules={[Pagination, Navigation]}
-  //           navigation={{
-  //             nextEl: ".image-swiper-button-next",
-  //             prevEl: ".image-swiper-button-prev",
-  //             disabledClass: "swiper-button-disabled",
-  //           }}
-  //           pagination={{
-  //             dynamicBullets: true,
-  //           }}
-  //           className="w-full h-3/4 swiper-container font-Montserrat lg:text-6xl text-4xl"
-  //         >
-  //           <SwiperSlide className="text-eggshell">
-  //             <div className="flex flex-col justify-center items-center">
-  //               <h1 className="mt-8">Now Salting</h1>
-  //               <h3 className="mt-12 font-Satisfy">
-  //                 {salting[0] ? salting[0].salume.name : "None"}
-  //               </h3>
-  //             </div>
-  //           </SwiperSlide>
-  //           <SwiperSlide className="text-eggshell">
-  //             <div className="flex flex-col justify-center items-center">
-  //               <h1 className="mt-8">Now Drying</h1>
-  //               <h3 className="mt-12 font-Satisfy">
-  //                 {drying[0] ? drying[0].salume.name : "None"}
-  //               </h3>
-  //             </div>
-  //           </SwiperSlide>
-  //           <SwiperSlide className="text-eggshell">
-  //             <div className="flex flex-col justify-center items-center">
-  //               <h1 className=" mt-8">Now Curing</h1>
-  //               <h3 className="mt-12 font-Satisfy">
-  //                 {curing[0] ? curing[0].salume.name : "None"}
-  //               </h3>
-  //             </div>
-  //           </SwiperSlide>
-  //         </Swiper>
-  //         <Image
-  //           src={"/arrow.svg"}
-  //           alt={"prev-arrow"}
-  //           width={50}
-  //           height={50}
-  //           className="image-swiper-button-next cursor-pointer"
-  //         />
-  //       </div>
-  //     </main>
-  //     <div className="bg-wetSand h-1/4 w-full"></div>
-  //   </PrivateLayout>
-  // );
 }

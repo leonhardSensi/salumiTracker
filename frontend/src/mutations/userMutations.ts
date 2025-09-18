@@ -42,7 +42,13 @@ export const useRefreshTokenMutation = () => {
 export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: (user: IuserToUpdate) => {
-      return updateUser(user.name, user.email, user.password, user.photo);
+      return updateUser(
+        user.name,
+        user.email,
+        user.password,
+        user.photo,
+        user.notifications
+      );
     },
   });
 };

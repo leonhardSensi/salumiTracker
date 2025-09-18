@@ -4,7 +4,7 @@ import {
   deleteSalumeHandler,
   getSalumeHandler,
   getSalumiHandler,
-  updateSalumeStateHandler,
+  updateSalumeHandler,
 } from "../controllers/salume.controller";
 import { deserializeUser } from "../middleware/deserializeUser";
 import { requireUser } from "../middleware/requireUser";
@@ -26,7 +26,7 @@ router
   .get(getSalumiHandler);
 router
   .route("/:salumeId")
-  .patch(uploadPostImageDisk, updateSalumeStateHandler)
+  .patch(uploadPostImageDisk, updateSalumeHandler)
   .get(getSalumeHandler)
   .delete(validate(deleteSalumeSchema), deleteSalumeHandler);
 

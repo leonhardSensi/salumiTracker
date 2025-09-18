@@ -26,7 +26,7 @@ export default function UserInput({
       type={type}
       name={name}
       id={id}
-      className={`${addStyle} ${width} ${height} text-black border text-xl rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-100 border-gray-300 placeholder-gray-600 focus:ring-blue-500 focus:border-blue-500`}
+      className={`${addStyle} ${width} ${height} text-black text-xl block p-2.5 placeholder-gray-600 focus:flesh rounded-xl border-wetSand border px-4 py-2 bg-white `}
       placeholder={placeholder}
       required={required}
       step={step}

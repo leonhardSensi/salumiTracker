@@ -13,6 +13,7 @@ import {
 } from "../../utils/inputValidation";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "../../components/generic/error/errorMessage";
+import { motion } from "framer-motion";
 
 export default function Registration() {
   const router = useRouter();
@@ -22,8 +23,6 @@ export default function Registration() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [invalidCredentialsMessage, setInvalidCredentialsMessage] =
     useState("");
-
-  const maxBirthday = new Date().toLocaleDateString("en-ca");
 
   const createUser = useRegisterMutation();
 
@@ -67,256 +66,209 @@ export default function Registration() {
 
   return (
     <PublicLayout>
-      <div className="text-stone flex flex-row justify-evenly bg-wetSand h-screen">
-        {/* <section className="flex flex-col justify-center w-1/2">
-          <div className="">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-eggshell to-flesh">
+        <motion.div
+          className="flex flex-col md:flex-row w-full max-w-5xl rounded-3xl shadow-2xl bg-eggshell/90 overflow-hidden"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Left: Welcome */}
+          <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-flesh px-10 py-16">
             <Image
               src="/salami.svg"
-              width={200}
-              height={200}
+              width={120}
+              height={120}
               alt="salami"
-            ></Image>
-            <h1 className="text-6xl font-bold text-stone indent-28">
-              Welcome to the
+              className="mb-8 drop-shadow-xl"
+              priority
+            />
+            <h1 className="text-5xl font-serif font-bold text-wetSand mb-4 text-center">
+              Welcome!
             </h1>
-            <h1 className="text-6xl font-bold text-stone indent-28 leading-relaxed">
-              Salumi Tracker
-            </h1>
-            <h3 className="text-2xl text-stone indent-28 leading-relaxed">
-              The last and only tracker you will ever need for your
-            </h3>
-            <h3 className="text-2xl text-stone indent-28 leading-relaxed">
-              cured meats
-            </h3>
+            <p className="text-lg text-stone text-center mb-8">
+              Join Salumi Tracker and start your journey to perfect cured meats.
+            </p>
+            <Link
+              href="/login"
+              className="font-bold text-wetSand hover:underline text-lg"
+            >
+              Already have an account? Login here
+            </Link>
           </div>
-        </section> */}
-        <section className="flex flex-col h-full w-1/2">
-          <div className="bg-eggshell h-full m-4 bg-opacity-90 rounded-3xl shadow-2xl">
-            <div className="space-y-6 flex flex-col justify-evenly h-full">
-              <div className="text-center">
-                <p>
-                  Already have an account?{" "}
-                  <Link
-                    href="/login"
-                    className="font-extrabold text-stone hover:underline"
-                  >
-                    Login here
-                  </Link>
-                </p>
-                <h1 className="text-7xl font-serif leading-tight tracking-tight text-center">
-                  Create new account
-                </h1>
-                <h3 className="text-2xl">Start tracking your salumi today!</h3>
+          {/* Right: Registration Form */}
+          <div className="flex flex-col justify-center w-full md:w-1/2 px-8 py-16 text-stone">
+            <h2 className="text-4xl font-serif text-wetSand text-center mb-2">
+              Create new account
+            </h2>
+            <h3 className="text-xl text-center mb-8">
+              Start tracking your salumi today!
+            </h3>
+            <form
+              className="space-y-6 w-full max-w-md mx-auto"
+              method="post"
+              onSubmit={handleSubmit}
+            >
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium"
+                >
+                  Your name
+                </label>
+                <UserInput
+                  width={"w-full"}
+                  handleChange={handleChange}
+                  type={"name"}
+                  name={"name"}
+                  id={"name"}
+                  placeholder={"Your name"}
+                  required={true}
+                />
               </div>
-              <form
-                className="space-y-6 w-1/2 flex flex-col mx-auto"
-                method="post"
-                onSubmit={handleSubmit}
-              >
-                <div>
+              <div>
+                <div className="flex mb-2">
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium "
+                    className="w-fit text-sm font-medium mr-2"
                   >
-                    Your name
+                    Your email address
                   </label>
-                  <UserInput
-                    width={"w-full"}
-                    handleChange={handleChange}
-                    type={"name"}
-                    name={"name"}
-                    id={"name"}
-                    placeholder={"Your name"}
-                    required={true}
-                  />
+                  {invalidCredentialsMessage && (
+                    <>
+                      <Image
+                        src={"/cross.svg"}
+                        alt={"email in use"}
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 mr-2"
+                      />
+                      <ErrorMessage errorMessage={"Email is already in use!"} />
+                    </>
+                  )}
                 </div>
-
-                <div>
-                  <div className="flex mb-2">
-                    <label
-                      htmlFor="email"
-                      className="w-fit text-sm font-medium mr-2"
-                    >
-                      Your email address
-                    </label>
-                    {invalidCredentialsMessage && (
-                      <>
-                        {" "}
-                        <Image
-                          src={"/cross.svg"}
-                          alt={"email in use"}
-                          width={100}
-                          height={100}
-                          className={`w-4 h-4 mr-2`}
-                        />
-                        <ErrorMessage
-                          errorMessage={"Email is already in use!"}
-                        />
-                      </>
-                    )}
-                  </div>
-                  <UserInput
-                    width={"w-full"}
-                    handleChange={handleChange}
-                    type={"email"}
-                    name={"email"}
-                    id={"email"}
-                    placeholder={"name@company.com"}
-                    required={true}
-                  />
-                </div>
-                <div>
-                  <div className="flex">
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium mr-2"
-                    >
-                      Password
-                    </label>
-                    {!inputMatch(password, passwordConfirm) ? (
+                <UserInput
+                  width={"w-full"}
+                  handleChange={handleChange}
+                  type={"email"}
+                  name={"email"}
+                  id={"email"}
+                  placeholder={"name@company.com"}
+                  required={true}
+                />
+              </div>
+              <div>
+                <div className="flex">
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium mr-2"
+                  >
+                    Password
+                  </label>
+                  {!inputMatch(password, passwordConfirm) ? (
+                    <>
+                      <Image
+                        src={"/cross.svg"}
+                        alt={"password invalid"}
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 mr-2"
+                      />
+                      <ErrorMessage errorMessage={"Passwords must match!"} />
+                    </>
+                  ) : (
+                    !validatePasswordLength(password) &&
+                    password.length > 0 && (
                       <>
                         <Image
                           src={"/cross.svg"}
                           alt={"password invalid"}
-                          width={100}
-                          height={100}
-                          className={`w-4 h-4 mr-2 `}
+                          width={16}
+                          height={16}
+                          className="w-4 h-4 mr-2"
                         />
-                        <ErrorMessage errorMessage={"Passwords must match!"} />
+                        <ErrorMessage
+                          errorMessage={
+                            "Password must have at least 8 characters!"
+                          }
+                        />
                       </>
-                    ) : (
-                      !validatePasswordLength(password) &&
-                      password.length > 0 && (
-                        <>
-                          <Image
-                            src={"/cross.svg"}
-                            alt={"password invalid"}
-                            width={100}
-                            height={100}
-                            className={`w-4 h-4 mr-2 `}
-                          />
-                          <ErrorMessage
-                            errorMessage={
-                              "Password must have at least 8 characters!"
-                            }
-                          />
-                        </>
-                      )
-                    )}
-                  </div>
-                  <UserInput
-                    width={"w-full"}
-                    handleChange={handleChange}
-                    type={"password"}
-                    name={"password"}
-                    autoComplete="password"
-                    id={"password"}
-                    placeholder={"••••••••"}
-                    required={true}
-                  />
+                    )
+                  )}
                 </div>
-                <div>
-                  <div className="flex">
-                    <label
-                      htmlFor="confirm-password"
-                      className="block mb-2 text-sm font-medium mr-2"
-                    >
-                      Repeat password
-                    </label>
-                    {!inputMatch(password, passwordConfirm) ? (
+                <UserInput
+                  width={"w-full"}
+                  handleChange={handleChange}
+                  type={"password"}
+                  name={"password"}
+                  autoComplete="password"
+                  id={"password"}
+                  placeholder={"••••••••"}
+                  required={true}
+                />
+              </div>
+              <div>
+                <div className="flex">
+                  <label
+                    htmlFor="confirm-password"
+                    className="block mb-2 text-sm font-medium mr-2"
+                  >
+                    Repeat password
+                  </label>
+                  {!inputMatch(password, passwordConfirm) ? (
+                    <>
+                      <Image
+                        src={"/cross.svg"}
+                        alt={"confirm password invalid"}
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 mr-2"
+                      />
+                      <ErrorMessage errorMessage={"Passwords must match!"} />
+                    </>
+                  ) : (
+                    !validatePasswordLength(passwordConfirm) &&
+                    passwordConfirm.length > 0 && (
                       <>
                         <Image
                           src={"/cross.svg"}
                           alt={"confirm password invalid"}
-                          width={100}
-                          height={100}
-                          className={`w-4 h-4 mr-2`}
+                          width={16}
+                          height={16}
+                          className="w-4 h-4 mr-2"
                         />
-
-                        <ErrorMessage errorMessage={"Passwords must match!"} />
+                        <ErrorMessage
+                          errorMessage={
+                            "Password must have at least 8 characters!"
+                          }
+                        />
                       </>
-                    ) : (
-                      !validatePasswordLength(passwordConfirm) &&
-                      passwordConfirm.length > 0 && (
-                        <>
-                          <Image
-                            src={"/cross.svg"}
-                            alt={"confirm password invalid"}
-                            width={100}
-                            height={100}
-                            className={`w-4 h-4 mr-2`}
-                          />
-                          <ErrorMessage
-                            errorMessage={
-                              "Password must have at least 8 characters!"
-                            }
-                          />
-                        </>
-                      )
-                    )}
-                  </div>
-                  <UserInput
-                    width={"w-full"}
-                    handleChange={handleChange}
-                    type="password"
-                    name="confirm-password"
-                    autoComplete="confirm-password"
-                    id="confirm-password"
-                    placeholder="••••••••"
-                    required={true}
-                  />
+                    )
+                  )}
                 </div>
-                {/* <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="terms"
-                        aria-describedby="terms"
-                        type="checkbox"
-                        className="w-4 h-4 border rounded bg-salumeBlue border-salumeBlue"
-                        required={true}
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label htmlFor="terms" className="font-light">
-                        By signing up, you agree to our{" "}
-                        <Link
-                          className="font-medium text-blue-400 hover:underline "
-                          href="#"
-                        >
-                          Terms
-                        </Link>
-                        ,{" "}
-                        <Link
-                          className="font-medium text-blue-400 hover:underline "
-                          href="#"
-                        >
-                          Data Policy{" "}
-                        </Link>
-                        and{" "}
-                        <Link
-                          className="font-medium text-blue-400 hover:underline "
-                          href="#"
-                        >
-                          Cookies Policy
-                        </Link>
-                      </label>
-                    </div> 
-                  </div> */}
-                <SubmitButton
-                  disabled={
-                    !inputMatch(password, passwordConfirm) ? true : false
-                  }
-                  addStyles={
-                    !inputMatch(password, passwordConfirm)
-                      ? "cursor-not-allowed opacity-75"
-                      : ""
-                  }
-                  text={"Get Started!"}
+                <UserInput
+                  width={"w-full"}
+                  handleChange={handleChange}
+                  type="password"
+                  name="confirm-password"
+                  autoComplete="confirm-password"
+                  id="confirm-password"
+                  placeholder="••••••••"
+                  required={true}
                 />
-              </form>
-            </div>
+              </div>
+              <SubmitButton
+                disabled={!inputMatch(password, passwordConfirm)}
+                addStyles={
+                  !inputMatch(password, passwordConfirm)
+                    ? "cursor-not-allowed opacity-75"
+                    : ""
+                }
+                text={"Get Started!"}
+              />
+            </form>
           </div>
-        </section>
+        </motion.div>
       </div>
     </PublicLayout>
   );

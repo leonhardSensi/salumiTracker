@@ -9,6 +9,7 @@ import RenderRecipe from "../../../../components/recipes/renderRecipe";
 import { useSalumeMutation } from "../../../../mutations/salumeMutation";
 import { useRecoilState } from "recoil";
 import { notificationState } from "../../../../atoms/notificationAtoms";
+import { start } from "repl";
 
 export default function SalumeInput() {
   const [currentRecipe, setCurrentRecipe] = useState<Irecipe>();
@@ -43,6 +44,7 @@ export default function SalumeInput() {
   const [reqSuccess, setReqSuccess] = useState<string>("false");
   const router = useRouter();
   const createSalume = useSalumeMutation();
+  const [startWeight, setStartWeight] = useState<number | undefined>();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -66,7 +68,8 @@ export default function SalumeInput() {
     }
   };
 
-  // NO ROUTE AND TABLE YET
+  console.log("Start weight", startWeight);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentRecipe) {
@@ -75,6 +78,7 @@ export default function SalumeInput() {
         recipeId: currentRecipe.id,
         notes,
         state,
+        startWeight: startWeight,
       };
       console.log(state);
       console.log(salume);
@@ -83,11 +87,15 @@ export default function SalumeInput() {
         setNotificationDetails({
           type: "salumeSubmit",
           message: "Salume created successfully!",
+          duration: 3000,
+          undo: false,
         });
       }
       router.push("/dashboard");
     }
   };
+
+  console.log(startWeight);
 
   const dataFilter = () => {
     if (recipes) {
@@ -121,7 +129,7 @@ export default function SalumeInput() {
   };
 
   return (
-    <div className="my-4 w-full">
+    <div className="my-4 w-full text-stone px-16 py-8">
       <form
         name="newSalumeForm"
         id="newSalumeForm"
@@ -155,7 +163,7 @@ export default function SalumeInput() {
           required={true}
         />
 
-        <div className="relative group inline-block mb-2 w-full">
+        <div className="relative group inline-block mb-2 w-full max-w-md">
           <UserInput
             id="recipeDropdown"
             placeholder="My Recipe"
@@ -166,31 +174,31 @@ export default function SalumeInput() {
             name={"recipeInput"}
             required={true}
             autoComplete={"off"}
-
-            // uncomment to select text on click
-            // onClick={(e: React.MouseEvent<HTMLInputElement>) =>
-            //   e.target.select()
-            // }
           />
-          <div className="h-fit max-h-48 overflow-y-auto w-full hidden group-focus-within:block hover:block absolute bg-salumeBlue py-2 px-3 rounded-b-md shadow-xl">
-            {dataFilter().map((recipe) => (
-              <option
-                className="text-xl text-salumeWhite cursor-pointer hover:bg-salumeWhite hover:text-salumeBlue hover:rounded transition-all"
-                onClick={(e) => selectOption(e, recipe.title, recipe)}
-                key={`recipe-${recipe.id}`}
-                id={recipe.id}
-              >
-                {recipe.title}
-              </option>
-            ))}
+          <div className="absolute left-0 top-full z-20 w-full max-w-md border-t-4 border-flesh rounded-xl shadow-2xl bg-white/95 border transition-all duration-200 opacity-0 pointer-events-none group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-hover:opacity-100 group-hover:pointer-events-auto">
+            {dataFilter().length === 0 ? (
+              <div className="px-4 py-3 text-center text-wetSand text-lg">
+                No recipes found
+              </div>
+            ) : (
+              dataFilter().map((recipe) => (
+                <div
+                  key={`recipe-${recipe.id}`}
+                  className="px-6 py-3 cursor-pointer text-lg text-wetSand hover:bg-wetSand/90 hover:text-eggshell transition-all rounded-xl"
+                  onClick={(e) => selectOption(e, recipe.title, recipe)}
+                  id={recipe.id}
+                >
+                  <span className="font-semibold">{recipe.title}</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
         {currentRecipe && (
           <>
             <RenderRecipe
               recipe={currentRecipe}
-              // cutQuantity={cutQuantity}
-              // handleChange={handleChange}
+              setStartWeight={setStartWeight}
             />
           </>
         )}

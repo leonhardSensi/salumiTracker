@@ -1,140 +1,72 @@
 "use client";
-import { completedState } from "../../atoms/salumiAtoms";
 import { ISalume } from "../../interfaces/interfaces";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
 import Rating from "../generic/rating/rating";
-import gsap from "gsap";
-import { Draggable } from "gsap/Draggable";
+import Image from "next/image";
 
 export default function SalumeList(props: { salumi: ISalume[] | undefined }) {
-  // const { data: salumiData } = useQuery(["salumi"], getSalumi);
-
-  useEffect(() => {
-    gsap.registerPlugin(Draggable);
-    props.salumi &&
-      props.salumi.forEach((salume, index) => {
-        Draggable.create(`#completedSalume-${index}`, {
-          type: "x,y",
-          inertia: true,
-          bounds: null,
-          // liveSnap: {
-          //   y: [0, 100, 200, 300],
-          // },
-          onClick: function () {
-            console.log("clicked");
-          },
-          onDragEnd: function () {
-            console.log("drag ended");
-          },
-        });
-      });
-    //   // if (completedSalumeRef.current) {
-    //   //   Draggable.create(completedSalumeRef.current, {
-    //   //     type: "x,y",
-    //   //     inertia: true,
-    //   //     bounds: {
-    //   //       top: 0,
-    //   //       left: 0,
-    //   //       width: 5000,
-    //   //       height: 5000,
-    //   //     },
-    //   //     // liveSnap: {
-    //   //     //   y: [0, 100, 200, 300],
-    //   //     // },
-    //   //     onClick: function () {
-    //   //       console.log("clicked");
-    //   //     },
-    //   //     onDragEnd: function () {
-    //   //       console.log("drag ended");
-    //   //     },
-    //   //   });
-    //   // }
-  }, []);
-
-  const [completedSalumi, setCompletedSalumi] =
-    useRecoilState<ISalume[]>(completedState);
-
-  useEffect(() => {
-    if (props.salumi) {
-      props.salumi.map((salume) => {
-        if (
-          salume.state === "done" &&
-          !completedSalumi.some(
-            (existingSalume) => existingSalume.id === salume.id
-          )
-        ) {
-          setCompletedSalumi((prevCompletedSalumi) => [
-            ...prevCompletedSalumi,
-            salume,
-          ]);
-        }
-      });
-    }
-  }, [props.salumi]);
-
   return (
-    <>
+    <div className="w-full h-[65vh] overflow-y-auto bg-eggshell rounded-lg p-6">
       {props.salumi ? (
         <>
           {props.salumi.length === 0 ? (
-            <div className="flex text-xl justify-center text-black">
+            <div className="flex text-xl justify-center">
               <p>
                 No Salumi found. Let your current ones finish first or{" "}
-                <Link
-                  className="text-salumeWhite underline"
-                  href={"/add_salume"}
-                >
+                <Link className="text-wetSand underline" href={"/add_salume"}>
                   create a new one
                 </Link>
               </p>
             </div>
           ) : (
-            <table className="w-full text-left mb-16">
-              <thead className="text-6xl text-gray-700 w-full text-center">
-                <tr>
-                  <th className="font-bold font-Montserrat text-salumeWhite pb-8 flex justify-center">
-                    <h1 className="w-fit border-b-salumeWhite border-b-4 border-double">
-                      Completed Salumi
-                    </h1>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {completedSalumi.map((salume, index) => {
-                  return (
-                    <tr
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 w-full space-y-6">
+              {props.salumi.map((salume, index) =>
+                salume.state === "completed" ? (
+                  <Link href={`/salumi/${salume.id}`} key={salume.id}>
+                    <div
                       id={`completedSalume-${index}`}
-                      key={`recipe-${salume.id}`}
-                      className="border-y border-salumeWhite hover:bg-salumeWhite hover:text-salumeBlue hover:border-y-salumeBlue text-salumeWhite w-full transition-colors duration-300"
+                      className={`mb-6 break-inside-avoid rounded-lg shadow-2xl border-flesh bg-flesh flex flex-col items-center transition-all duration-200 hover:scale-[1.02] cursor-pointer
+                        ${
+                          salume.image
+                            ? "p-8 min-h-[320px] min-w-[260px] sm:min-w-[320px] lg:min-w-[340px]"
+                            : "p-4 min-h-[160px] min-w-[180px] sm:min-w-[200px] lg:min-w-[220px]"
+                        }
+                      `}
                     >
-                      <td className="cursor-pointer font-medium  whitespace-nowrap flex justify-between items-center">
-                        <Link
-                          href={`/salumi/${salume.id}`}
-                          className="w-full px-6 py-4"
-                        >
-                          <p className="font-Satisfy text-4xl">
-                            - {salume.name}
-                          </p>
-                        </Link>
-                        {salume.rating === 0 && (
-                          <p className="text-lg absolute right-80 border-salumeWhite rounded-t-xl rounded-r-xl bg-salumeWhite text-salumeBlue p-2">
-                            Rate now!
-                          </p>
+                      {salume.image && (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
+                          width={180}
+                          height={180}
+                          alt="salume"
+                          className="w-full rounded-md mb-4 object-cover"
+                        />
+                      )}
+
+                      <div className="w-full items-start">
+                        <Rating salume={salume} />
+                        <h1 className="text-xl font-bold mt-4">
+                          {salume.name}
+                        </h1>
+                        {salume.notes && (
+                          <h2 className="text-lg mt-1">{salume.notes}</h2>
                         )}
-                        <div className="mr-14">
-                          <Rating
-                            salume={salume}
-                            // refetch={props.refetch}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        <p className="text-sm text-wetSand mt-2">
+                          {new Date(salume.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ) : null
+              )}
+            </div>
           )}
         </>
       ) : (
@@ -151,6 +83,6 @@ export default function SalumeList(props: { salumi: ISalume[] | undefined }) {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }

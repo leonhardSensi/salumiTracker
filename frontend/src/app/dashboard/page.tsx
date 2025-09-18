@@ -8,6 +8,8 @@ import {
   ISalumeWithDuration,
   ISalume,
   IDashboardSalumeState,
+  ICompletedSalume,
+  IActionItem,
 } from "../../interfaces/interfaces";
 import Card from "../../components/generic/card/card";
 import { getSalumi } from "../../api/salumeApi";
@@ -18,17 +20,26 @@ import {
   curingState,
   saltingState,
   dryingState,
+  completedState,
 } from "../../atoms/salumiAtoms";
 import { useUpdateSalumeStateMutation } from "../../mutations/salumeMutation";
 import Image from "next/image";
 import Link from "next/link";
 import { calculateSalumeDuration } from "../../utils/salumeDuration";
+import { motion, easeOut } from "framer-motion";
+import generateActionItems from "../../utils/actionItems";
+import ActionItems from "../../components/dashboard/actionItems";
+import Modal from "../../components/generic/modal/modal";
+import { ModalProvider } from "../../utils/modalProvider";
 
 export default function Dashboard() {
-  const { data: salumiData } = useQuery(["salumi"], getSalumi);
+  const {
+    data: salumiData,
+    isLoading,
+    isFetching,
+  } = useQuery(["salumi"], getSalumi);
   const updateSalumeState = useUpdateSalumeStateMutation();
   const [salumi, setSalumi] = useState(salumiData && salumiData);
-  console.log(salumi);
 
   const fetchSalumi = async () => {
     const data = await getSalumi();
@@ -56,6 +67,9 @@ export default function Dashboard() {
     useRecoilState<IDashboardSalumeState[]>(saltingState);
   const [drying, setDrying] =
     useRecoilState<IDashboardSalumeState[]>(dryingState);
+  const [completed, setCompleted] =
+    useRecoilState<IDashboardSalumeState[]>(completedState);
+  const [actionItems, setActionItems] = useState<IActionItem[]>();
 
   const [hideHints, setHideHints] = useState(false);
 
@@ -63,14 +77,26 @@ export default function Dashboard() {
     calcDuration();
   }, [salumiData]);
 
+  useEffect(() => {
+    if (salumiData) {
+      (async () => {
+        const items = await generateActionItems(salumiData);
+        setActionItems(items);
+      })();
+    }
+  }, [salumiData]);
+
   const updateSalumiStateWithDuration = (salumi: ISalumeWithDuration[]) => {
     const dryingArr = salumi.filter((item) => item.salume.state === "drying");
     const saltingArr = salumi.filter((item) => item.salume.state === "salting");
     const curingArr = salumi.filter((item) => item.salume.state === "curing");
-
+    const completedArr = salumi.filter(
+      (item) => item.salume.state === "completed"
+    );
     setDrying(dryingArr);
     setSalting(saltingArr);
     setCuring(curingArr);
+    setCompleted(completedArr);
   };
 
   const calcDuration = async () => {
@@ -130,16 +156,17 @@ export default function Dashboard() {
     }),
   });
 
-  const [{ isOverDone, getDropResultDone }, dropTargetDone] = useDrop({
-    accept: "salume",
-    drop: (droppedSalume) => {
-      addSalumeToSection(droppedSalume as ISalumeProps, isOverDone);
-    },
-    collect: (monitor) => ({
-      isOverDone: !!monitor.isOver(),
-      getDropResultDone: monitor.getDropResult(),
-    }),
-  });
+  const [{ isOverCompleted, getDropResultCompleted }, dropTargetCompleted] =
+    useDrop({
+      accept: "salume",
+      drop: (droppedSalume) => {
+        addSalumeToSection(droppedSalume as ISalumeProps, isOverCompleted);
+      },
+      collect: (monitor) => ({
+        isOverCompleted: !!monitor.isOver(),
+        getDropResultCompleted: monitor.getDropResult(),
+      }),
+    });
 
   //-------
   //-------
@@ -165,8 +192,8 @@ export default function Dashboard() {
           ? "salting"
           : isOverCuring
           ? "curing"
-          : isOverDone
-          ? "done"
+          : isOverCompleted
+          ? "completed"
           : state
         : state,
       updated_at: updated_at,
@@ -200,6 +227,7 @@ export default function Dashboard() {
       //-------
       setSalting(salting.filter((item) => item.salume.id !== id));
       setCuring(curing.filter((item) => item.salume.id !== id));
+      setCompleted(completed.filter((item) => item.salume.id !== id));
     } else if (isOverSalting) {
       if (state === "salting") {
         return;
@@ -225,6 +253,7 @@ export default function Dashboard() {
       //-----
       setDrying(drying.filter((item) => item.salume.id !== id));
       setCuring(curing.filter((item) => item.salume.id !== id));
+      setCompleted(completed.filter((item) => item.salume.id !== id));
     } else if (isOverCuring) {
       if (state === "curing") {
         return;
@@ -250,7 +279,8 @@ export default function Dashboard() {
       //------
       setDrying(drying.filter((item) => item.salume.id !== id));
       setSalting(salting.filter((item) => item.salume.id !== id));
-    } else if (isOverDone) {
+      setCompleted(completed.filter((item) => item.salume.id !== id));
+    } else if (isOverCompleted) {
       updateSalumeState.mutate({
         id: newSalume.id,
         name: newSalume.name,
@@ -260,7 +290,15 @@ export default function Dashboard() {
         rating: 0,
       });
 
-      console.log(newSalume);
+      const { duration } = await calculateSalumeDuration(newSalume);
+
+      setCompleted([
+        ...completed,
+        {
+          salume: newSalume,
+          duration: duration,
+        },
+      ]);
 
       setDrying(drying.filter((item) => item.salume.id !== id));
       setSalting(salting.filter((item) => item.salume.id !== id));
@@ -272,94 +310,150 @@ export default function Dashboard() {
     setHideHints(true);
   }, 5000);
 
-  return (
-    <PrivateLayout>
-      <div className="flex flex-col items-center w-full overflow-hidden">
-        {/* <h1 className="text-6xl text-eggshell border-b-eggshell border-b-4 border-double font-bold font-Montserrat mt-8">
-          Dashboard
-        </h1> */}
-        {salumi && (
-          <div className="w-full flex flex-col justify-center items-center p-12">
-            <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
-              <div
-                className="justify-center w-1/2 flex"
-                ref={dropTargetSalting}
-              >
-                <Card
-                  details={salting}
-                  image={"/salt.svg"}
-                  imageSize={{ width: 100, height: 100 }}
-                  link={""}
-                  status={"Salting"}
-                  addStyles={
-                    "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl w-full"
-                    // "hover:-translate-x-2/3 group-hover:translate-x-full transition-transform duration-300 ease-in-out"
-                  }
-                >
-                  <DashboardCardDetails salumi={salting} status={"Salting"} />
-                </Card>
-              </div>
-              <div className="justify-center w-1/2 flex" ref={dropTargetDrying}>
-                <Card
-                  details={drying}
-                  image={"/dry.svg"}
-                  imageSize={{ width: 100, height: 100 }}
-                  link={""}
-                  status={"Drying"}
-                  addStyles={
-                    "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl w-full"
-                    // "hover:-translate-x-1/2 group-hover:translate-x-2/3 transition-transform duration-300 ease-in-out group-hover:scale-150"
-                  }
-                >
-                  <DashboardCardDetails salumi={drying} status={"Drying"} />
-                </Card>
-              </div>
-            </div>
-            <div className="justify-center w-1/2 flex" ref={dropTargetCuring}>
-              <Card
-                details={curing}
-                image={"/cure.svg"}
-                imageSize={{ width: 100, height: 100 }}
-                link={""}
-                status={"Curing"}
-                addStyles={
-                  "hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl"
-                  // "hover:-translate-y-full group-hover:translate-y-full transition-transform duration-300 ease-in-out"
-                }
+  // Animation variants for cards
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 40 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: easeOut },
+    },
+  };
 
-                // onClick={() => {
-                //   handleClick("curing");
-                // }}
-              >
-                <DashboardCardDetails salumi={curing} status={"Curing"} />
-              </Card>
-            </div>
-            <div
-              className="pr-16 w-full flex justify-end align-top mb-8 group"
-              ref={dropTargetDone}
-            >
-              <div>
-                <p
-                  className={`group-hover:opacity-100 bg-salumeWhite text-salumeBlue shadow-2xl rounded-t-xl rounded-l-xl p-1 transition-opacity ease-in-out duration-300 mr-2 ${
-                    hideHints ? "opacity-0" : ""
-                  }`}
+  return (
+    <ModalProvider>
+      <PrivateLayout>
+        <div className="flex flex-col items-center w-full h-[100vh] overflow-y-auto">
+          {salumi && (
+            <div className="w-full flex flex-col justify-center items-center p-12">
+              <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
+                <div
+                  className="justify-center w-1/2 flex"
+                  ref={dropTargetSalting}
                 >
-                  Drop and view your completed salumi here!
-                </p>
+                  <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{
+                      scale: 1.03,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    }}
+                    className="w-full"
+                  >
+                    <Card
+                      details={salting}
+                      image={"/salt.svg"}
+                      imageSize={{ width: 100, height: 100 }}
+                      link={""}
+                      status={"Salting"}
+                      addStyles={
+                        "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
+                      }
+                    >
+                      <DashboardCardDetails
+                        salumi={salting}
+                        status={"Salting"}
+                      />
+                    </Card>
+                  </motion.div>
+                </div>
+                <div
+                  className="justify-center w-1/2 flex"
+                  ref={dropTargetDrying}
+                >
+                  <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{
+                      scale: 1.03,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    }}
+                    className="w-full"
+                  >
+                    <Card
+                      details={drying}
+                      image={"/dry.svg"}
+                      imageSize={{ width: 100, height: 100 }}
+                      link={""}
+                      status={"Drying"}
+                      addStyles={
+                        "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
+                      }
+                    >
+                      <DashboardCardDetails salumi={drying} status={"Drying"} />
+                    </Card>
+                  </motion.div>
+                </div>
               </div>
-              <Link href="/salumi/completed" className="">
-                <Image
-                  src={"/waiter.svg"}
-                  alt={"waiter"}
-                  width={100}
-                  height={100}
-                  className="hover:scale-110 transition-all duration-300 ease-in-out hover:cursor-pointer"
-                />
-              </Link>
+              <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
+                <div
+                  className="justify-center w-1/2 flex"
+                  ref={dropTargetCuring}
+                >
+                  <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{
+                      scale: 1.03,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    }}
+                    className="w-full"
+                  >
+                    <Card
+                      details={curing}
+                      image={"/cure.svg"}
+                      imageSize={{ width: 100, height: 100 }}
+                      link={""}
+                      status={"Curing"}
+                      addStyles={
+                        "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
+                      }
+                    >
+                      <DashboardCardDetails salumi={curing} status={"Curing"} />
+                    </Card>
+                  </motion.div>
+                </div>
+                <div
+                  className="justify-center w-1/2 flex"
+                  // ref={dropTargetCompleted}
+                >
+                  <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{
+                      scale: 1.03,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    }}
+                    className="w-full"
+                  >
+                    <Card
+                      details={completed}
+                      image={"/action.svg"}
+                      imageSize={{ width: 100, height: 100 }}
+                      link={""}
+                      status={"Action Items"}
+                      addStyles={
+                        "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
+                      }
+                    >
+                      <ActionItems
+                        actionItems={actionItems}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                      />
+                    </Card>
+                  </motion.div>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </PrivateLayout>
+          )}
+        </div>
+      </PrivateLayout>
+    </ModalProvider>
   );
 }

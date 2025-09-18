@@ -52,7 +52,8 @@ export async function submitSalume(
   name: string,
   recipeId: string,
   notes: string,
-  state: string
+  state: string,
+  startWeight: number
 ) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND}/api/salume`,
@@ -65,6 +66,7 @@ export async function submitSalume(
         recipeId,
         notes,
         state,
+        startWeight,
       }),
     }
   );

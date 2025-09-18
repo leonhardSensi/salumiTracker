@@ -32,40 +32,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  // const pathname = usePathname();
-
-  // useEffect(() => {
-  //   if (
-  //     !document.cookie.includes("logged_in=true") &&
-  //     pathname !== "/login" &&
-  //     pathname !== "/register"
-  //   ) {
-  //     router.push("/login");
-  //   }
-  // }, []);
-
-  // const checkAuth = () => {
-  //   try {
-  //     if (
-  //       !document.cookie.includes("logged_in=true") &&
-  //       pathname !== "/register" &&
-  //       pathname !== "/login"
-  //     ) {
-  //       console.log(pathname !== "/register");
-  //       router.push("/logout");
-  //     }
-  //   } catch (e) {
-  //     console.log("Error checking authentication status:", e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkAuth();
-  //   const interval = setInterval(checkAuth, 6000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const setupTokenRefresh = () => {

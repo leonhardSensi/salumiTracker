@@ -65,6 +65,8 @@ export const findSalumi = async (
       "recipe.id",
       "salumi.image",
       "salumi.rating",
+      "salumi.startWeight",
+      "salumi.finalWeight",
     ])
 
     .getMany();

@@ -59,6 +59,7 @@ export const updateUserSchema = object({
     email: string(),
     date_of_birth: string(),
     password: string(),
+    notifications: string().optional(),
   }),
 });
 

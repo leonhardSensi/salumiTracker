@@ -47,6 +47,10 @@ export interface IRecipeStatus {
   duration: number;
 }
 
+export interface RenderRecipeProps extends IRecipeProps {
+  setStartWeight: React.Dispatch<React.SetStateAction<number | undefined>>;
+}
+
 export interface ICut {
   position?: number;
   id?: string;
@@ -108,6 +112,7 @@ export interface IuserToUpdate {
   email?: string;
   photo?: File;
   password?: string;
+  notifications?: string;
 }
 
 export interface IloginCredentials {
@@ -156,6 +161,7 @@ export interface Iuser {
   name: string;
   role: string;
   updated_at: string;
+  notifications: string;
 }
 
 export interface IUserProps {
@@ -183,6 +189,7 @@ export interface ISalumeToCreate {
   recipeId: string;
   notes: string;
   state: string;
+  startWeight: number;
 }
 
 export interface ISalumeToUpdate {
@@ -205,6 +212,8 @@ export interface ISalume {
   updated_at: string;
   image?: string;
   rating: number;
+  startWeight?: number;
+  finalWeight?: number | null;
 }
 
 export interface ICompletedSalume {
@@ -365,6 +374,7 @@ export interface IGenericButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   addStyles?: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 export interface IItem {
@@ -465,4 +475,21 @@ export interface IErrorMessage {
 export interface INotification {
   type: string | null;
   message: string | null;
+  duration: number | null;
+  undo: boolean;
+  onUndo?: (() => void) | null;
+  undoLabel?: string | null;
+}
+
+export interface IActionItem {
+  salumeId: string;
+  salumeName: string;
+  message: string;
+  priority: number;
+}
+
+export interface IActionItemProps {
+  actionItems: IActionItem[] | undefined;
+  isLoading: boolean;
+  isFetching: boolean;
 }

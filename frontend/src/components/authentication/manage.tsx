@@ -3,7 +3,7 @@
 import AccountMenu from "../../components/authentication/accountMenu";
 import UserCard from "../../components/generic/card/userCard";
 import { PrivateLayout } from "../PrivateLayout/privateLayout";
-import { Iuser, IUserProps } from "../../interfaces/interfaces";
+import { Iuser } from "../../interfaces/interfaces";
 import { ModalProvider, useModal } from "../../utils/modalProvider";
 import formatDate from "../../utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import { getUser } from "../../api/userApi";
 import { useRecoilState } from "recoil";
 import { updateUserData } from "../../atoms/userAtoms";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function ManageAccount() {
   const { data: userData } = useQuery(["user"], getUser);
@@ -34,20 +35,42 @@ export default function ManageAccount() {
     <ModalProvider>
       <PrivateLayout>
         {userData && (
-          <div className={`flex flex-col ml-32 mt-16`}>
-            <AccountMenu user={user} />
-            <div className="flex">
-              <div className="flex flex-col ml-16 space-y-48">
-                <p className="text-2xl text-salumeWhite">
-                  Personal Information
-                </p>
-                <p className="text-2xl text-salumeWhite">
-                  Sign-In and Security
-                </p>
-              </div>
+          <motion.div
+            className="flex flex-col ml-32 mt-16 text-stone"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <AccountMenu user={user} />
+            </motion.div>
+            <motion.div
+              className="flex"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <motion.div
+                className="flex flex-col ml-16 space-y-48"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <p className="text-2xl">Personal Information</p>
+                <p className="text-2xl">Sign-In and Security</p>
+              </motion.div>
 
               {user && (
-                <div className="grid grid-cols-2 gap-24 w-fit justify-items-start mx-16">
+                <motion.div
+                  className="grid grid-cols-2 gap-24 w-fit justify-items-start mx-16"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
                   <UserCard
                     title={"Name"}
                     details={user.name}
@@ -56,14 +79,6 @@ export default function ManageAccount() {
                     openModal={openModal}
                     closeModal={closeModal}
                   />
-                  {/* <UserCard
-                    title={"Date of birth"}
-                    details={user.date_of_birth}
-                    imgSrc={"/calendar.svg"}
-                    isModalOpen={isModalOpen}
-                    openModal={openModal}
-                    closeModal={closeModal}
-                  /> */}
                   <UserCard
                     title={"Email"}
                     details={user.email}
@@ -80,11 +95,11 @@ export default function ManageAccount() {
                     openModal={openModal}
                     closeModal={closeModal}
                   />
-                </div>
+                </motion.div>
               )}
-            </div>
-          </div>
-        )}{" "}
+            </motion.div>
+          </motion.div>
+        )}
       </PrivateLayout>
     </ModalProvider>
   );

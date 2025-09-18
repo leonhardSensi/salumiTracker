@@ -22,7 +22,7 @@ const saltingState = atom({
 
 const completedState = atom({
   key: "completed",
-  default: [] as ISalume[],
+  default: [] as IDashboardSalumeState[],
 });
 
 export { curingState, dryingState, saltingState, completedState };

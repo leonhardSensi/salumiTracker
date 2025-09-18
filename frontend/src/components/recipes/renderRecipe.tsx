@@ -1,5 +1,10 @@
 import { getRecipe } from "../../api/recipeApi";
-import { IItem, Irecipe, IRecipeProps } from "../../interfaces/interfaces";
+import {
+  IItem,
+  Irecipe,
+  IRecipeProps,
+  RenderRecipeProps,
+} from "../../interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useEffect, useState } from "react";
 import "swiper/css";
@@ -10,8 +15,13 @@ import UserInput from "../generic/input/userInput";
 import { useModal } from "../../utils/modalProvider";
 import { useRecoilState } from "recoil";
 import { modalData } from "../../atoms/modalAtoms";
+import { motion } from "framer-motion";
+import React from "react";
 
-export default function RenderRecipe({ recipe }: IRecipeProps) {
+export default function RenderRecipe({
+  recipe,
+  setStartWeight,
+}: RenderRecipeProps) {
   const {
     status: statusRecipe,
     error: errorRecipe,
@@ -21,6 +31,7 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
     queryFn: () => getRecipe(recipe.id),
   });
 
+  const [userInputs, setUserInputs] = useState<IAdaptCut[]>([]);
   let wakeLock: {
     addEventListener: (arg0: string, arg1: () => void) => void;
     release: () => any;
@@ -66,7 +77,6 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
     quantity: string;
   }
   // const [invertedSteps, setInvertedSteps] = useState([]);
-  const [userInputs, setUserInputs] = useState<IAdaptCut[]>([]);
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
 
   const { openModal, closeModal, isModalOpen } = useModal();
@@ -75,8 +85,6 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
   // useEffect(() => {
   //   setInvertedSteps(currentRecipe?.steps.reverse());
   // }, [currentRecipe]);
-
-  console.log(userInputs);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -92,13 +100,18 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
     );
 
     if (existingInputIndex !== -1) {
-      // Update existing input
       updatedInputs[existingInputIndex] = { name, quantity };
     } else {
-      // Add new input
       updatedInputs.push({ name, quantity });
     }
+
     setUserInputs(updatedInputs);
+
+    const updatedStartWeight = updatedInputs.reduce(
+      (sum, input) => sum + (Number(input.quantity) || 0),
+      0
+    );
+    setStartWeight(updatedStartWeight);
   };
 
   // ------------------------------------------ ------------------------ ------------------------------------------
@@ -186,18 +199,40 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
     };
   }, [isModalOpen]);
 
+  // Add state for step deck
+  const [stepIndex, setStepIndex] = useState(0);
+
+  // Navigation handlers
+  const prevStep = () =>
+    setStepIndex((i) =>
+      currentRecipe && currentRecipe.steps.length
+        ? (i - 1 + currentRecipe.steps.length) % currentRecipe.steps.length
+        : 0
+    );
+  const nextStep = () =>
+    setStepIndex((i) =>
+      currentRecipe && currentRecipe.steps.length
+        ? (i + 1) % currentRecipe.steps.length
+        : 0
+    );
+
   return (
-    <div className="text-salumeWhite flex flex-col justify-center items-center my-16">
-      <h1 className="text-6xl my-12 font-Satisfy text-salumeWhite">
+    <div className="flex flex-col items-center justify-center my-16 w-full">
+      <h1 className="text-6xl my-12 font-serif text-wetSand drop-shadow">
         {currentRecipe?.title}
       </h1>
-      <div className="flex justify-between w-full font-Montserrat">
-        <div className="flex flex-col w-1/2 items-start border-salumeWhite border-double border-r-8">
-          <h2 className="text-3xl mb-8 font-bold">Available quantity</h2>
+      <div className="flex flex-col md:flex-row w-full max-w-5xl rounded-3xl shadow-2xl bg-eggshell/90 overflow-hidden border border-wetSand">
+        {/* Cuts Input */}
+        <div className="flex flex-col w-full md:w-1/2 items-start px-12 py-12 border-b md:border-b-0 md:border-r border-wetSand bg-flesh/60">
+          <h2 className="text-3xl mb-8 font-bold text-wetSand font-serif">
+            Available quantity
+          </h2>
           {currentRecipe &&
             currentRecipe?.cuts.map((cut) => (
-              <div className="mb-4" key={`cut-${cut.id}`}>
-                <label>{cut.name}</label>
+              <div className="mb-6 w-full" key={`cut-${cut.id}`}>
+                <label className="block text-lg font-semibold text-wetSand mb-2">
+                  {cut.name}
+                </label>
                 <UserInput
                   handleChange={(e) => handleInputChange(e, cut.name)}
                   name="cutQuantity"
@@ -208,134 +243,175 @@ export default function RenderRecipe({ recipe }: IRecipeProps) {
                   defaultValue=""
                   min={0}
                   required={false}
-                ></UserInput>
+                  width="w-full"
+                  addStyle="rounded-xl border-wetSand border px-4 py-2 bg-eggshell"
+                />
               </div>
             ))}
         </div>
-        <div className="flex w-1/2 flex-col items-end">
-          <h2 className="text-3xl mb-8 font-bold">Ingredients</h2>
-
-          <div className="mb-4 w-3/4">
-            <div className="mb-4 flex flex-col items-end">
-              <h3 className="text-3xl">Cuts</h3>
+        {/* Ingredients */}
+        <div className="flex flex-col w-full md:w-1/2 items-end px-12 py-12 bg-eggshell">
+          <h2 className="text-3xl mb-8 font-bold text-wetSand font-serif">
+            Ingredients
+          </h2>
+          <div className="mb-4 w-full">
+            <div className="mb-8 flex flex-col items-end">
+              <h3 className="text-2xl font-semibold text-wetSand mb-2">Cuts</h3>
               <ul className="w-full">
-                {userInputs?.map((cut, index) => {
-                  return (
-                    <li
-                      key={`cut-${index}`}
-                      className={`text-xl p-2 flex justify-between text-black ${
-                        index % 2 !== 1 &&
-                        "border rounded-lg border-salumeBlue bg-salumeWhite bg-opacity-30"
-                      }`}
-                    >
-                      <p>{cut.quantity}g </p>
-                      <p>{cut.name}</p>
-                    </li>
-                  );
-                })}
+                {userInputs?.map((cut, index) => (
+                  <li
+                    key={`cut-${index}`}
+                    className={`text-lg p-2 flex justify-between items-center rounded-lg mb-2 ${
+                      index % 2 === 0
+                        ? "bg-flesh/40 border border-wetSand"
+                        : "bg-eggshell"
+                    }`}
+                  >
+                    <span className="font-bold text-wetSand">
+                      {cut.quantity}g
+                    </span>
+                    <span className="ml-4">{cut.name}</span>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="flex flex-col items-end">
-              <h3 className="text-3xl">Spices</h3>
+              <h3 className="text-2xl font-semibold text-wetSand mb-2">
+                Spices
+              </h3>
               <ul className="w-full">
-                {currentRecipe?.spices.map((spice, index) => {
-                  return (
-                    <li
-                      key={`spice-${index}`}
-                      className={`text-xl p-2 flex justify-between text-black ${
-                        index % 2 !== 1 &&
-                        "border rounded-lg border-salumeBlue bg-salumeWhite bg-opacity-30"
-                      }`}
-                    >
-                      <p>{spice.quantity && adaptSpices(spice.quantity)}g </p>
-                      <p>{spice.name}</p>
-                    </li>
-                  );
-                })}
+                {currentRecipe?.spices.map((spice, index) => (
+                  <li
+                    key={`spice-${index}`}
+                    className={`text-lg p-2 flex justify-between items-center rounded-lg mb-2 ${
+                      index % 2 === 0
+                        ? "bg-flesh/40 border border-wetSand"
+                        : "bg-eggshell"
+                    }`}
+                  >
+                    <span className="font-bold text-wetSand">
+                      {spice.quantity && adaptSpices(spice.quantity)}g
+                    </span>
+                    <span className="ml-4">{spice.name}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col space-y-8 border-double border-t-8 border-t-salumeWhite mt-4">
-        <div className="flex flex-col w-full items-start justify-center space-y-4">
-          <div className="flex">
-            <h2 className="text-3xl font-bold mt-4">Steps</h2>
-            <div className="mt-4 ml-4">
-              <p
-                className="bg-salumeWhite border-salumeWhite rounded-full p-2 text-md cursor-pointer text-salumeBlue hover:bg-opacity-80 hover:shadow-lg transition-all"
-                onClick={handleClick}
-              >
-                Step by step
-              </p>
-            </div>
-          </div>
-          <div className="">
-            {/* <label className="flex cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                onChange={(e) => handleToggleChange(e)}
-              />
-              <div className="relative w-11 h-6 bg-salumeWhite peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-salumeBlue after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-salumeWhite peer-checked:bg-opacity-50"></div>
-              <span className="ms-3 text-sm font-medium text-salumeWhite">
-                Prevent screen from sleep
-              </span>
-            </label> */}
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input
-                id="switch"
-                type="checkbox"
-                className="peer sr-only"
-                onChange={(e) => handleToggleChange(e)}
-              />
-              <label htmlFor="switch" className="hidden"></label>
-              <div className="peer h-6 w-11 rounded-full border border-salumeWhite bg-salumeBlue after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-salumeWhite after:transition-all after:content-[''] peer-checked:bg-salumeWhite peer-checked:after:translate-x-full peer-checked:after:bg-salumeBlue"></div>
-              <span className="ms-3 text-sm font-medium text-salumeWhite">
-                Prevent screen from sleep
-              </span>
-            </label>
-          </div>
+      {/* Steps Section */}
+      <div className="w-full max-w-2xl flex flex-col items-center border-t-4 border-wetSand mt-12 pt-8">
+        <div className="flex items-center mb-6 relative z-20">
+          <h2 className="text-3xl font-bold text-wetSand font-serif">Steps</h2>
         </div>
-        <ul>
-          {currentRecipe?.steps.map((step, index) => {
+        <div className="relative w-full flex justify-center items-center min-h-[420px]">
+          {currentRecipe?.steps.map((step, i) => {
+            // Deck logic
+            let pos = i - stepIndex;
+            if (pos < -Math.floor(currentRecipe.steps.length / 2))
+              pos += currentRecipe.steps.length;
+            if (pos > Math.floor(currentRecipe.steps.length / 2))
+              pos -= currentRecipe.steps.length;
+
+            const isActive = pos === 0;
+            const scale = isActive ? 1 : 0.92;
+            const y = pos * 30;
+            const z = 100 - Math.abs(pos);
+            const opacity = Math.abs(pos) > 2 ? 0 : 1;
+
             return (
-              <li key={`step-${step.id}`}>
+              <motion.div
+                key={step.id}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                style={{
+                  zIndex: z,
+                  opacity,
+                  pointerEvents: isActive ? "auto" : "none",
+                }}
+                className={`absolute w-full max-w-2xl p-0 flex flex-col items-center ${
+                  isActive ? "ring-4 ring-wetSand" : ""
+                }`}
+                animate={{
+                  scale,
+                  y,
+                  boxShadow: isActive
+                    ? "0 12px 48px 0 rgba(0,0,0,0.18)"
+                    : "0 2px 8px rgba(0,0,0,0.08)",
+                }}
+              >
                 <div
-                  className="border-salumeWhite shadow-lg rounded-lg p-8"
-                  key={`step-${index}`}
+                  className={`relative w-full h-full bg-gradient-to-br from-flesh to-eggshell rounded-3xl shadow-2xl border border-wetSand transition-all duration-300 ${
+                    isActive
+                      ? "scale-105"
+                      : "opacity-80 blur-[1px] grayscale-[0.2]"
+                  }`}
                 >
-                  <div className="flex flex-col justify-start text-salumeWhite">
-                    <h4 className="text-2xl underline font-semibold">
+                  <div className="flex flex-col items-center px-12 py-8">
+                    <h4 className="text-2xl font-serif font-bold underline mb-2 text-wetSand">
                       {step.name}
                     </h4>
-                    <p>
-                      Step {index + 1}/{currentRecipe.steps.length}
+                    <p className="mb-2 text-sm text-wetSand/70">
+                      Step {i + 1}/{currentRecipe.steps.length}
                     </p>
-                    <div className="flex h-fit mt-8">
-                      <p className="pr-1">{"•"}</p>
+                    <div className="flex h-fit mt-4">
+                      <span className="pr-1">{"•"}</span>
                       <div className="flex flex-col items-start justify-start">
-                        <h5 className="text-xl ">Duration: </h5>
+                        <h5 className="text-lg font-semibold">Duration:</h5>
                         <p>
                           {step.duration ? step.duration : step.statusDuration}{" "}
                           {step.duration ? "minutes" : "days"}
                         </p>
                       </div>
                     </div>
-                    <div className="flex h-fit mt-8">
-                      <p className="pr-1">{"•"}</p>
-                      <div className="flex flex-col items-start justify-start">
-                        <h5 className="text-xl">Description: </h5>
-                        <p>{step.description}</p>
+                    <div className="flex h-fit mt-4 w-full">
+                      <span className="pr-1">{"•"}</span>
+                      <div className="flex flex-col items-start justify-start w-full">
+                        <h5 className="text-lg font-semibold">Description:</h5>
+                        <div
+                          className="max-h-40 overflow-y-auto w-full break-words pr-2"
+                          style={{ wordBreak: "break-word" }}
+                        >
+                          <p>{step.description}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </li>
+              </motion.div>
             );
           })}
-        </ul>
+        </div>
+        <div className="flex justify-center gap-8 mt-6 relative z-20">
+          <button
+            type="button"
+            onClick={prevStep}
+            className="bg-wetSand text-eggshell px-4 py-2 rounded-full shadow hover:scale-105 transition"
+            aria-label="Previous step"
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={nextStep}
+            className="bg-wetSand text-eggshell px-4 py-2 rounded-full shadow hover:scale-105 transition"
+            aria-label="Next step"
+          >
+            ↓
+          </button>
+        </div>
+        <div className="mt-4 flex gap-2 relative z-20">
+          {currentRecipe?.steps.map((_, i) => (
+            <span
+              key={i}
+              className={`w-3 h-3 rounded-full ${
+                i === stepIndex
+                  ? "bg-wetSand"
+                  : "bg-eggshell border border-wetSand"
+              } inline-block`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -3,10 +3,31 @@
 import { IManageProps, IprofileData, Iuser } from "../../interfaces/interfaces";
 import { useUpdateUserMutation } from "../../mutations/userMutations";
 import Image from "next/image";
+import { Dropdown } from "../generic/input/dropdown/dropdown";
+import { useEffect, useState } from "react";
 
 export default function AccountMenu(props: IprofileData) {
   // const { data } = useQuery(["user"], getUser);
   const updateUser = useUpdateUserMutation();
+  const [notificationFrequency, setNotificationFrequency] = useState(
+    props.user?.notifications || "day"
+  );
+
+  const handleDropdownSelect = (value: string) => {
+    setNotificationFrequency(value);
+
+    if (props.user) {
+      updateUser.mutate({
+        notifications: value,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (props.user?.notifications) {
+      setNotificationFrequency(props.user.notifications);
+    }
+  }, [props.user?.notifications]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>
@@ -61,6 +82,16 @@ export default function AccountMenu(props: IprofileData) {
                 <div className="flex flex-col justify-center pl-8 space-y-2">
                   <p className="text-xl font-semibold">{props.user.name}</p>
                   <p className="text-xl">{props.user.email}</p>
+                  <div className="flex justify-center items-center space-x-4">
+                    <p>You will receive notifications every</p>
+                    <Dropdown
+                      dropDownOptions={["day", "week", "month", "never"]}
+                      disabled={false}
+                      handleSelect={handleDropdownSelect}
+                      currentId={0}
+                      dropdownText={notificationFrequency}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

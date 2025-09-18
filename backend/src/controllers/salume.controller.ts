@@ -49,6 +49,8 @@ export const getSalumeHandler = async (
       return next(new AppError(404, "Salume with that ID not found."));
     }
 
+    console.log("This is the salume", salume);
+
     res.status(200).json({
       status: "success",
       data: {
@@ -87,31 +89,31 @@ export const getSalumiHandler = async (
   }
 };
 
-export const updateSalumeStateHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const existingSalume = await getSalume(req.params.salumeId);
-    if (!existingSalume) {
-      return next(new AppError(404, "Salume with that ID not found"));
-    }
-    console.log(req.body);
-    Object.assign(existingSalume, req.body);
+// export const updateSalumeStateHandler = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const existingSalume = await getSalume(req.params.salumeId);
+//     if (!existingSalume) {
+//       return next(new AppError(404, "Salume with that ID not found"));
+//     }
+//     console.log(req.body);
+//     Object.assign(existingSalume, req.body);
 
-    await existingSalume.save();
+//     await existingSalume.save();
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        salume: existingSalume,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+//     res.status(200).json({
+//       status: "success",
+//       data: {
+//         salume: existingSalume,
+//       },
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const deleteSalumeHandler = async (
   req: Request<DeleteSalumeInput>,
@@ -136,47 +138,34 @@ export const deleteSalumeHandler = async (
   }
 };
 
-// export const updateSalumeStateHandler = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     // Call multer middleware to handle file upload
-//     uploadPostImageDisk(req, res, async (err: any) => {
-//       if (err) {
-//         return next(err);
-//       }
+export const updateSalumeHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const salume = await getSalume(req.params.salumeId);
+    if (!salume) {
+      return next(new AppError(404, "Salume with that ID not found"));
+    }
 
-//       console.log("BODY", req.body);
+    // Extract and assign finalWeight if present
+    if (req.body.finalWeight !== undefined) {
+      salume.finalWeight = Number(req.body.finalWeight);
+    }
 
-//       const existingSalume = await getSalume(req.params.salumeId);
-//       if (!existingSalume) {
-//         return next(new AppError(404, "Salume with that ID not found"));
-//       }
+    // Assign all other fields from req.body
+    Object.assign(salume, req.body);
 
-//       console.log("existing", existingSalume);
+    await salume.save();
 
-//       // Assign properties from req.body
-//       Object.assign(existingSalume, req.body);
-
-//       // If an image was uploaded, assign the filename to the salume object
-//       if (req.body.image) {
-//         existingSalume.image = req.body.image;
-//       }
-
-//       // Save the updated salume object
-//       await existingSalume.save();
-
-//       res.status(200).json({
-//         status: "success",
-//         data: {
-//           salume: existingSalume,
-//         },
-//       });
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     next(err);
-//   }
-// };
+    res.status(200).json({
+      status: "success",
+      data: {
+        salume,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -15,21 +15,21 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const itemsPerPage = 3;
+  // const itemsPerPage = 3;
 
-  const renderSalumi = salumi.slice(currentIndex, currentIndex + itemsPerPage);
+  // const renderSalumi = salumi.slice(currentIndex, currentIndex + itemsPerPage);
 
-  const handleNext = () => {
-    if (currentIndex + itemsPerPage < salumi.length) {
-      setCurrentIndex(currentIndex + itemsPerPage);
-    }
-  };
+  // const handleNext = () => {
+  //   if (currentIndex + itemsPerPage < salumi.length) {
+  //     setCurrentIndex(currentIndex + itemsPerPage);
+  //   }
+  // };
 
-  const handlePrev = () => {
-    if (currentIndex - itemsPerPage <= 0) {
-      setCurrentIndex(currentIndex - itemsPerPage);
-    }
-  };
+  // const handlePrev = () => {
+  //   if (currentIndex - itemsPerPage <= 0) {
+  //     setCurrentIndex(currentIndex - itemsPerPage);
+  //   }
+  // };
 
   return (
     // <div className="w-full">
@@ -53,11 +53,12 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
     //     </div>
     //   </div>
     // </div>
-    <div className="w-full h-full overflow-hidden">
+
+    <div className="w-full h-full overflow-auto">
       <div className="flex px-16 h-full justify-between">
         <ul className="h-full pb-12">
           {salumi.length > 0 ? (
-            renderSalumi.map((salume, index) => (
+            salumi.map((salume, index) => (
               <SalumePreview
                 salume={salume.salume}
                 duration={salume.duration}
@@ -68,9 +69,8 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
             <li className="text-black">None</li>
           )}
         </ul>
-        {salumi.length > 3 && (
+        {/* {salumi.length > 3 && (
           <div className="flex flex-col items-center space-y-12">
-            {/* <Image src={"/arrow2.svg"} width={100} height={100} alt="up" /> */}
             <button
               className={`text-4xl ${currentIndex === 0 && "hidden"}`}
               onClick={handlePrev}
@@ -88,7 +88,7 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
               ↓
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

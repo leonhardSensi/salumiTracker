@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import LoadingSpinner from "../generic/loading/loadingSpinner";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import { getUser } from "../../api/userApi";
 import Link from "next/link";
 import { instanceOf } from "../../utils/typeChecker";
@@ -26,158 +26,128 @@ export default function SalumeDetails() {
     queryFn: () => getSalume(params.salumeId as string),
   });
 
+  console.log("Salume Details:", salume);
+
   return (
-    <div className="m-24 flex flex-col items-center">
+    <div className="min-h-screen w-full bg-eggshell px-0 py-8 flex flex-col items-center">
       {salumeStatus === "loading" && <LoadingSpinner />}
       {salumeError === "error" && (
         <p className="text-black">{JSON.stringify(salumeError)}</p>
       )}
       {instanceOf(salume) && userData && (
-        <>
-          <div className="w-1/3">
-            <div className="flex flex-col border border-salumeBlue shadow-2xl rounded-lg p-8 items-center w-full">
-              <div className="flex items-center w-full mb-4 justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="border rounded-full bg-black w-fit">
-                    <Image
-                      width={40}
-                      height={40}
-                      src={`${process.env.NEXT_PUBLIC_BACKEND}/profilePictures/${userData.photo}`}
-                      alt="profile picture"
-                      className="border rounded-full profile-picture"
-                    />
-                  </div>
-                  <h2>{userData.name}</h2>
-                </div>
-                {/* <Image src={"/edit.svg"} alt={"edit"} width={20} height={20} /> */}
-                <div className="relative group inline-block">
-                  <button className="py-2 rounded-t-md group-hover:invert">
-                    <div className="group">
-                      <Image
-                        src={"/edit.svg"}
-                        width={20}
-                        height={20}
-                        alt="edit"
-                      />
-                    </div>
-                  </button>
-                  <div className="z-10 w-36 hidden group-hover:block absolute bg-salumeBlue py-2 px-3 rounded-md shadow-lg font-Montserrat border-black border">
-                    {/* <ul className="w-full">
-                      <li className="cursor-pointer block py-1 px-2 text-sm text-salumeWhite hover:text-salumeBlue hover:bg-salumeWhite rounded-md font-bold">
-                        <label htmlFor="salumeImg" className="cursor-pointer">
-                          {salume.image ? "Edit picture" : "Add picture"}
-                        </label>
-                        <input
-                          name="salumeImg"
-                          id="salumeImg"
-                          type="file"
-                          className="hidden"
-                          onChange={(e) => handleChange(e)}
-                          accept="image/*"
-                        />
-                      </li>
-                      <li className="cursor-pointer block py-1 px-2 text-sm text-salumeWhite hover:text-salumeBlue hover:bg-salumeWhite rounded-md font-bold">
-                        Delete picture
-                      </li>
-                    </ul> */}
-                    <Link
-                      href={`/salumi/edit/${salume.id}`}
-                      className="cursor-pointer block py-1 px-2 text-sm text-salumeWhite hover:text-salumeBlue hover:bg-salumeWhite rounded-md font-bold"
-                    >
-                      Edit
-                    </Link>
-                    <li
-                      className="cursor-pointer block py-1 px-2 text-sm text-salumeWhite hover:text-salumeBlue hover:bg-salumeWhite rounded-md font-bold"
-                      onClick={() => {
-                        openModal();
-                        setModalDetails({
-                          type: "delete",
-                          subject: "salume",
-                          info: {
-                            data: {
-                              name: salume.name,
-                              id: salume.id,
-                            },
-                            image: "",
-                            title: "",
-                            details: "",
-                            inputLabel: "",
-                            placeHolder: "",
-                            user: {},
-                            recipeSteps: [],
-                          },
-                        });
-                      }}
-                    >
-                      Delete
-                    </li>
-                  </div>
-                </div>
-              </div>
-
-              {salume.image && (
+        <div className="bg-flesh/90 shadow-2xl rounded-3xl p-10 max-w-3xl w-full flex flex-col items-center border-2 border-wetSand">
+          {/* Header */}
+          <div className="flex items-center w-full mb-8 justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="border-4 border-wetSand rounded-full bg-black w-fit shadow-lg">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
-                  width={100}
-                  height={100}
-                  alt="salume"
-                  className="w-full"
+                  width={56}
+                  height={56}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND}/profilePictures/${userData.photo}`}
+                  alt="profile picture"
+                  className="border rounded-full profile-picture"
                 />
-              )}
-
-              <div className="w-full items-start">
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Image
-                      key={`rating-${star}`}
-                      className={`pr-1 ${
-                        star <= salume.rating ? "grayscale-0" : "grayscale"
-                      }`}
-                      src={"/salami.svg"}
-                      width={30}
-                      height={30}
-                      alt="star"
-                    />
-                  ))}
+              </div>
+              <h2 className="text-lg font-semibold text-wetSand">
+                Made by {userData.name}
+              </h2>
+            </div>
+            <div className="relative group inline-block">
+              <button className="py-2 rounded-t-md invert">
+                <div className="group">
+                  <Image src={"/edit.svg"} width={28} height={28} alt="edit" />
                 </div>
-
-                <h1 className="text-xl font-bold mt-4">{salume.name}</h1>
-                <h2 className="text-lg">{salume.notes}</h2>
+              </button>
+              <div className="z-10 w-36 hidden group-hover:block absolute bg-wetSand py-2 px-3 rounded-md shadow-lg font-Montserrat right-0">
+                <Link
+                  href={`/salumi/edit/${salume.id}`}
+                  className="cursor-pointer block py-1 px-2 text-sm text-eggshell hover:text-stone hover:bg-eggshell rounded-md font-bold"
+                >
+                  Edit
+                </Link>
+                <button
+                  className="cursor-pointer block py-1 px-2 text-sm text-eggshell hover:text-stone hover:bg-eggshell rounded-md font-bold"
+                  onClick={() => {
+                    openModal();
+                    setModalDetails({
+                      type: "delete",
+                      subject: "salume",
+                      info: {
+                        data: {
+                          name: salume.name,
+                          id: salume.id,
+                        },
+                        image: "",
+                        title: "",
+                        details: "",
+                        inputLabel: "",
+                        placeHolder: "",
+                        user: {},
+                        recipeSteps: [],
+                      },
+                    });
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
-
-            {/* <div className="flex flex-col w-full mt-16"> */}
-            {/* <form onSubmit={handleSubmit} className="w-full"> */}
-            {/* <label htmlFor="completedNotes" className="text-2xl w-full">
-                  Add notes for next time!
-                </label>
-                <textarea
-                  name="completedNotes"
-                  onChange={handleChange}
-                  id="completedNotes"
-                  placeholder="- Less salt"
-                  className="w-full h-32 text-black mt-1 mb-4 border text-xl rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 bg-gray-100 border-gray-300 placeholder-gray-600 focus:ring-blue-500 focus:border-blue-500"
-                  required={true}
-                /> */}
-            {/* <div className="flex flex-col space-y-4">
-                  <label htmlFor="salumeImg" className="text-2xl w-full">
-                    Upload a picture of your salume
-                  </label>
-                  <input
-                    name="salumeImg"
-                    type="file"
-                    className="border-salumeWhite border"
-                    onChange={(e) => handleChange(e)}
-                    accept="image/*"
-                  />
-                  <StatusButton
-                    reqSuccess={updateSalume.isLoading ? "pending" : "false"}
-                  />
-                </div> */}
-            {/* </form> */}
-            {/* </div> */}
           </div>
-        </>
+
+          {/* Salume Image */}
+          {salume.image && (
+            <div className="w-full flex justify-center mb-8">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
+                width={320}
+                height={320}
+                alt="salume"
+                className="rounded-2xl shadow-lg object-cover max-h-72"
+              />
+            </div>
+          )}
+
+          {/* Details */}
+          <div className="w-full flex flex-col items-center">
+            <div className="flex mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Image
+                  key={`rating-${star}`}
+                  className={`pr-1 ${
+                    star <= salume.rating ? "grayscale-0" : "grayscale"
+                  }`}
+                  src={"/salami.svg"}
+                  width={36}
+                  height={36}
+                  alt="star"
+                />
+              ))}
+            </div>
+            <h1 className="text-3xl font-bold mt-2 text-wetSand drop-shadow mb-2">
+              {salume.name}
+            </h1>
+            {salume.notes && (
+              <h2 className="text-lg italic text-stone mb-2">{salume.notes}</h2>
+            )}
+            <h2 className="text-lg font-semibold text-wetSand mb-2">
+              Start weight:{" "}
+              <span className="font-mono">{salume.startWeight}g</span>
+            </h2>
+
+            <h2 className="text-lg font-semibold text-wetSand mb-2">
+              Final weight:{" "}
+              <span className="font-mono">{salume.finalWeight}g</span>
+            </h2>
+            <p className="text-sm text-stone mt-2">
+              Created:{" "}
+              {new Date(salume.created_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

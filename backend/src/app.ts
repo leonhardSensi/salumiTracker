@@ -62,14 +62,36 @@ import path from "path";
 import Email from "./utils/email";
 import { findUserById, getAllUsers } from "./services/user.service";
 import { calcRemainingDuration } from "./utils/salumeDuration";
+import { User } from "./entities/user.entity";
 
 const schedule = require("node-schedule");
 
-schedule.scheduleJob("*/30 * * * * *", async () => {
-  const allUsers = await getAllUsers();
+function shouldNotify(user: User, now: Date): boolean {
+  switch (user.notifications) {
+    case "day":
+      return true;
+    case "week":
+      // e.g., notify every Monday
+      return now.getDay() === 1;
+    case "month":
+      // e.g., notify on the 1st of each month
+      return now.getDate() === 1;
+    case "never":
+    default:
+      return false;
+  }
+}
+
+schedule.scheduleJob("30 9 * * *", async () => {
+  const userRepo = AppDataSource.getRepository(User);
+  const allUsers = await userRepo.find();
+
+  const now = new Date();
 
   await Promise.all(
     allUsers.map(async (user) => {
+      if (!shouldNotify(user, now)) return;
+
       const salumiToNotifyArr = await calcRemainingDuration(user.id);
       if (user && salumiToNotifyArr.length > 0) {
         const emailInstance = new Email(
@@ -87,8 +109,8 @@ schedule.scheduleJob("*/30 * * * * *", async () => {
         );
         // UNCOMMENT TO SEND NOTIFICATIONS
         try {
-          // await emailInstance.salumeReminder();
-          console.log("Email sent to", user.email);
+          await emailInstance.salumeReminder();
+          console.log("Salumi reminder email sent successfully");
         } catch (error) {
           console.error(error);
         }
