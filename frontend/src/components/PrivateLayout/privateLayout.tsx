@@ -36,6 +36,7 @@ export const PrivateLayout: React.FC<{
   useEffect(() => {
     setIsClient(true);
     if (!document.cookie) {
+      console.log("No cookies found, redirecting...");
       router.push("/login");
     }
   }, [router]);
