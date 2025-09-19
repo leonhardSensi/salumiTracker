@@ -21,9 +21,6 @@ export default function UpdatePassword() {
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
-  const [dateOfBirth, setDateOfBirth] = useState(
-    data ? data.date_of_birth : ""
-  );
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
@@ -60,7 +57,6 @@ export default function UpdatePassword() {
     const user = {
       name,
       email,
-      dateOfBirth,
       password: newPassword,
     };
     const validateUser = { email, password: oldPassword };
@@ -74,6 +70,8 @@ export default function UpdatePassword() {
         setNotificationDetails({
           type: "passwordSubmit",
           message: "Password updated successfully!",
+          duration: 3000,
+          undo: false,
         });
       }
     }

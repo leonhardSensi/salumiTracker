@@ -44,5 +44,4 @@ interface IModalDetailsInfoData {
 export interface IUpdateUserData {
   name: string;
   email: string;
-  dateOfBirth: string;
 }

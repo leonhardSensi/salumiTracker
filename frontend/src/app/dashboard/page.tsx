@@ -67,8 +67,11 @@ export default function Dashboard() {
     useRecoilState<IDashboardSalumeState[]>(saltingState);
   const [drying, setDrying] =
     useRecoilState<IDashboardSalumeState[]>(dryingState);
-  const [completed, setCompleted] =
-    useRecoilState<IDashboardSalumeState[]>(completedState);
+
+  // Fix type issue here
+  const [completed, setCompleted] = useRecoilState<IDashboardSalumeState[]>(
+    completedState as any
+  );
   const [actionItems, setActionItems] = useState<IActionItem[]>();
 
   const [hideHints, setHideHints] = useState(false);

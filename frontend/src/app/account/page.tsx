@@ -38,7 +38,7 @@ export default function Account() {
         }
       });
     }
-  }, [salumiData]);
+  }, [salumiData, completedSalumi, setCompletedSalumi]);
 
   useEffect(() => {
     if (completedSalumi) {
@@ -56,7 +56,7 @@ export default function Account() {
         setAvgRating(avg);
       }
     }
-  }, [completedSalumi]);
+  }, [completedSalumi, setAvgRating]);
 
   let rating = [];
   for (let index = 0; index < Math.floor(avgRating); index++) {

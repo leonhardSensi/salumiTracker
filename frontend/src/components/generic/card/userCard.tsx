@@ -22,7 +22,7 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "New name",
             placeHolder: "Your name",
-            user: { name: "", email: "", dateOfBirth: "" },
+            user: { name: "", email: "" },
             data: {},
             recipeSteps: [],
           },
@@ -38,29 +38,13 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "New email address",
             placeHolder: "yourname@company.com",
-            user: { name: "", email: "", dateOfBirth: "" },
+            user: { name: "", email: "" },
             data: {},
             recipeSteps: [],
           },
         });
         break;
 
-      case "Date of birth":
-        setModalDetails({
-          type: "dateOfBirth",
-          inputType: "date",
-          info: {
-            image: "",
-            title,
-            details,
-            inputLabel: "New date of birth",
-            placeHolder: "",
-            user: { name: "", email: "", dateOfBirth: "" },
-            data: {},
-            recipeSteps: [],
-          },
-        });
-        break;
       case "Password":
         setModalDetails({
           type: "password",
@@ -71,7 +55,7 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
             details,
             inputLabel: "",
             placeHolder: "",
-            user: { name: "", email: "", dateOfBirth: "" },
+            user: { name: "", email: "" },
             data: {},
             recipeSteps: [],
           },

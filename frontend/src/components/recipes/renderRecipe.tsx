@@ -172,7 +172,6 @@ export default function RenderRecipe({
           user: {
             name: "",
             email: "",
-            dateOfBirth: "",
           },
           data: {},
           recipeSteps: currentRecipe.steps,

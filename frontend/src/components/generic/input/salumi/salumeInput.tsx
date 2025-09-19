@@ -78,7 +78,7 @@ export default function SalumeInput() {
         recipeId: currentRecipe.id,
         notes,
         state,
-        startWeight: startWeight,
+        startWeight: startWeight || 0,
       };
       console.log(state);
       console.log(salume);

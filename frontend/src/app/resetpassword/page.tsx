@@ -24,8 +24,8 @@ export default function ResetPassword() {
           Looks like you forgot your password.
         </p>
         <p className="text-stone mb-8">
-          Don't worry, it happens to the best of us! Please check your email for
-          a link to reset your password.
+          Don&apos;t worry, it happens to the best of us! Please check your
+          email for a link to reset your password.
         </p>
         <form
           onSubmit={handleSubmit}

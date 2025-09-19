@@ -220,8 +220,10 @@ export default function EditRecipeInput({ recipeToEdit }: IEditRecipeProps) {
       setNotificationDetails({
         type: "recipeUpdate",
         message: "Recipe updated successfully!",
+        duration: 3000,
+        undo: false,
       });
-      router.push(`/recipes/${recipe.id}`);
+      router.push(`/recipes/${recipeToEdit.id}`);
     }
   };
 

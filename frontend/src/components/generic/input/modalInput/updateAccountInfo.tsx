@@ -20,9 +20,6 @@ export default function UpdateAccountInfo() {
 
   const [name, setName] = useState(userData ? userData.name : "");
   const [email, setEmail] = useState(userData ? userData.email : "");
-  const [dateOfBirth, setDateOfBirth] = useState(
-    userData ? userData.date_of_birth : ""
-  );
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -41,9 +38,6 @@ export default function UpdateAccountInfo() {
       case "email":
         setEmail(e.target.value);
         break;
-      case "dateOfBirth":
-        setDateOfBirth(e.target.value);
-        break;
       default:
         break;
     }
@@ -55,7 +49,6 @@ export default function UpdateAccountInfo() {
       const user = {
         name,
         email,
-        dateOfBirth,
       };
       const response = await updateUser.mutateAsync(user);
       if (response.status === 200) {
@@ -63,6 +56,8 @@ export default function UpdateAccountInfo() {
         setNotificationDetails({
           type: "userUpdate",
           message: "Account information updated successfully!",
+          duration: 3000,
+          undo: false,
         });
         setUpdatedUser(user);
       }

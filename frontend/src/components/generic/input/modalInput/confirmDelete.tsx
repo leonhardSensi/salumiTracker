@@ -50,6 +50,8 @@ export default function ConfirmDelete() {
           setNotificationDetails({
             type: "delete",
             message: "Recipe deleted successfully!",
+            duration: 3000,
+            undo: false,
           });
         }
       } else if (
@@ -65,6 +67,8 @@ export default function ConfirmDelete() {
           setNotificationDetails({
             type: "delete",
             message: "Salume deleted successfully!",
+            duration: 3000,
+            undo: false,
           });
         }
       }

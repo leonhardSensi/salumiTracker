@@ -202,6 +202,8 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
       setNotificationDetails({
         type: "recipeSubmit",
         message: "Recipe created successfully!",
+        duration: 3000,
+        undo: false,
       });
 
       router.push("/recipes");

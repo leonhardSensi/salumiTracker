@@ -10,9 +10,6 @@ export default function UpdateEmail() {
 
   const [name, setName] = useState(data ? data.name : "");
   const [email, setEmail] = useState(data ? data.email : "");
-  const [dateOfBirth, setDateOfBirth] = useState(
-    data ? data.date_of_birth : ""
-  );
   const [password, setPassword] = useState("");
 
   const updateUser = useUpdateUserMutation();
@@ -30,8 +27,6 @@ export default function UpdateEmail() {
     const user = {
       name,
       email,
-      dateOfBirth,
-      // password,
     };
     console.log("EMAIL", user);
     updateUser.mutate(user);

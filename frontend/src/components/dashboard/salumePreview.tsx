@@ -54,8 +54,11 @@ export default function SalumePreview({
     useRecoilState<IDashboardSalumeState[]>(saltingState);
   const [drying, setDrying] =
     useRecoilState<IDashboardSalumeState[]>(dryingState);
-  const [completed, setCompleted] =
-    useRecoilState<IDashboardSalumeState[]>(completedState);
+
+  // Fix type issue here
+  const [completed, setCompleted] = useRecoilState<IDashboardSalumeState[]>(
+    completedState as any
+  );
 
   const [notificationDetails, setNotificationDetails] =
     useRecoilState(notificationState);
@@ -86,7 +89,7 @@ export default function SalumePreview({
         details: `This will help you track the progress across multiple batches.`,
         inputLabel: "New email address",
         placeHolder: "yourname@company.com",
-        user: { name: "", email: "", dateOfBirth: "" },
+        user: { name: "", email: "" },
         data: {},
         recipeSteps: [],
       },
