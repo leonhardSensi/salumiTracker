@@ -3,10 +3,11 @@ import { ISalume } from "../../interfaces/interfaces";
 import Link from "next/link";
 import Rating from "../generic/rating/rating";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function SalumeList(props: { salumi: ISalume[] | undefined }) {
   return (
-    <div className="w-full h-[65vh] overflow-y-auto bg-eggshell rounded-lg p-6">
+    <div className="max-w-4xl">
       {props.salumi ? (
         <>
           {props.salumi.length === 0 ? (
@@ -19,62 +20,74 @@ export default function SalumeList(props: { salumi: ISalume[] | undefined }) {
               </p>
             </div>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 w-full space-y-6">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
               {props.salumi.map((salume, index) =>
                 salume.state === "completed" ? (
-                  <Link href={`/salumi/${salume.id}`} key={salume.id}>
-                    <div
-                      id={`completedSalume-${index}`}
-                      className={`mb-6 break-inside-avoid rounded-lg shadow-2xl border-flesh bg-flesh flex flex-col items-center transition-all duration-200 hover:scale-[1.02] cursor-pointer
-                        ${
-                          salume.image
-                            ? "p-8 min-h-[320px] min-w-[260px] sm:min-w-[320px] lg:min-w-[340px]"
-                            : "p-4 min-h-[160px] min-w-[180px] sm:min-w-[200px] lg:min-w-[220px]"
-                        }
-                      `}
-                    >
-                      {salume.image && (
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
-                          width={180}
-                          height={180}
-                          alt="salume"
-                          className="w-full rounded-md mb-4 object-cover"
-                        />
-                      )}
-
-                      <div className="w-full items-start">
-                        <Rating salume={salume} />
-                        <h1 className="text-xl font-bold mt-4">
-                          {salume.name}
-                        </h1>
-                        {salume.notes && (
-                          <h2 className="text-lg mt-1">{salume.notes}</h2>
+                  <motion.div
+                    key={salume.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    className="break-inside-avoid mb-6"
+                  >
+                    <Link href={`/salumi/${salume.id}`}>
+                      <motion.div
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        transition={{ duration: 0.3 }}
+                        className="rounded-2xl shadow-lg border-2 border-wetSand/20 bg-gradient-to-br from-[#faf0e1] to-[#f5ebe0] overflow-hidden hover:shadow-2xl transition-shadow cursor-pointer"
+                      >
+                        {salume.image && (
+                          <div className="w-full aspect-square relative overflow-hidden">
+                            <Image
+                              src={`${process.env.NEXT_PUBLIC_BACKEND}/salumePictures/${salume.image}`}
+                              fill
+                              alt={salume.name}
+                              className="object-cover"
+                            />
+                          </div>
                         )}
-                        <p className="text-sm text-wetSand mt-2">
-                          {new Date(salume.created_at).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
+
+                        <div className="p-5">
+                          <Rating salume={salume} />
+
+                          <h1 className="text-xl font-serif font-bold mt-3 text-wetSand">
+                            {salume.name}
+                          </h1>
+
+                          {salume.notes && (
+                            <p className="text-sm text-stone mt-2 line-clamp-3">
+                              {salume.notes}
+                            </p>
                           )}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
+
+                          <div className="flex items-center gap-2 mt-3 text-xs text-wetSand/70">
+                            <div className="w-1.5 h-1.5 rounded-full bg-wetSand" />
+                            <span>
+                              {new Date(salume.created_at).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  </motion.div>
                 ) : null
               )}
             </div>
           )}
         </>
       ) : (
-        <div className="flex text-xl justify-center text-black">
-          <p className="text-black">
-            There was an error getting salumi. Please
+        <div className="flex text-xl justify-center">
+          <p>
+            There was an error getting salumi. Please{" "}
             <span
-              className="text-blue-400 underline cursor-pointer"
+              className="text-wetSand underline cursor-pointer"
               onClick={() => location.reload()}
             >
               try again

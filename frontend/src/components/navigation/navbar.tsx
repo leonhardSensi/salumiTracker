@@ -4,16 +4,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getUser } from "../../api/userApi";
+import { getUser, logout } from "../../api/userApi";
 import { useRecoilState } from "recoil";
 import { updateUserData } from "../../atoms/userAtoms";
 import { useQuery } from "@tanstack/react-query";
+import { Settings, LogOut } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   const { data: user } = useQuery(["user"], getUser);
 
   const [updatedUser, setUpdatedUser] = useRecoilState(updateUserData);
   const [userData, setUserData] = useState<Iuser | undefined>(user && user);
+
+  const checkActive = (tabId: string) => {
+    return pathname === `/${tabId}`;
+  };
 
   const fetchUser = async () => {
     const data = await getUser();
@@ -27,7 +34,7 @@ export default function Navbar() {
   }, [updatedUser]);
 
   return (
-    <nav className="bg-wetSand bg-opacity-80 w-full z-20 text-eggshell">
+    <nav className="bg-wetSand w-full z-20 text-eggshell">
       <div className="flex items-center justify-between px-8 h-24">
         <div className="flex space-x-4">
           <Link href="/home">
@@ -50,7 +57,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl">Hi, {userData.name}</h1>
 
-              <div className="relative w-[60px] h-[60px]">
+              <div className="relative w-[60px] h-[60px] group">
                 <Link href="/account">
                   <Image
                     width={60}
@@ -60,23 +67,26 @@ export default function Navbar() {
                     className="border rounded-full object-cover"
                   />
 
-                  <Image
-                    width={20}
-                    height={20}
-                    src="/settings.svg"
-                    alt="settings icon"
-                    className="absolute bottom-1.5 -right-2 border border-white rounded-full bg-white"
+                  <Settings
+                    size={20}
+                    color="black"
+                    className={`absolute bottom-1.5 -right-2 border border-white rounded-full bg-white transition-transform duration-300 ${
+                      checkActive("account")
+                        ? "rotate-[135deg]"
+                        : "group-hover:rotate-[135deg]"
+                    }`}
                   />
                 </Link>
               </div>
 
-              <Link href="/logout">
-                <Image
-                  width={40}
-                  height={40}
-                  src="/logout.svg"
-                  alt="logout icon"
-                  className="invert"
+              <Link
+                href="/login"
+                className="w-12 h-12 rounded-full border-2 border-eggshell flex items-center justify-center hover:bg-eggshell hover:border-eggshell transition-colors group/logout"
+                onClick={logout}
+              >
+                <LogOut
+                  size={32}
+                  className="group-hover/logout:text-black transition-colors"
                 />
               </Link>
             </div>

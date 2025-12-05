@@ -22,7 +22,7 @@ export default function EditRecipeDetails() {
   return (
     <PrivateLayout>
       <motion.div
-        className="flex flex-col items-center w-full p-12"
+        className="flex flex-col items-center w-full p-12 border-eggshell rounded-tl-[4rem] bg-eggshell"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}

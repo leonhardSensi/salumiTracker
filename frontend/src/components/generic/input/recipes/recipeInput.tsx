@@ -9,9 +9,10 @@ import StatusButton from "../../button/statusButton";
 import { useRecipeMutation } from "../../../../mutations/recipeMutations";
 import Status from "./status";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useRecoilState } from "recoil";
 import { notificationState } from "../../../../atoms/notificationAtoms";
+import { motion } from "framer-motion";
+import { Plus, Save, X } from "lucide-react";
 
 export default function RecipeInput(props: { recipe?: Irecipe }) {
   const router = useRouter();
@@ -253,15 +254,25 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
   };
 
   return (
-    <div className="my-4 w-full text-stone px-16 py-8">
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-left border-b-wetSand border-b-2 pb-4">
-          <label htmlFor="name" className="text-3xl font-serif mr-4">
-            Title
+    <div className="w-full text-stone max-w-4xl">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Title Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <label
+            htmlFor="name"
+            className="block text-base font-semibold text-wetSand mb-2"
+          >
+            Title <span className="text-red-500">*</span>
           </label>
           <UserInput
-            width={"w-1/2"}
-            addStyle={"mt-1 mb-4 text-xl"}
+            // width={"w-full"}
+            addStyle={
+              "text-base py-3 px-4 rounded-lg border-2 border-wetSand/30 focus:border-wetSand focus:ring-2 focus:ring-wetSand/20 transition-all"
+            }
             name="name"
             type="text"
             handleChange={(e) => setName(e.target.value)}
@@ -270,85 +281,128 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
             required={true}
             defaultValue={props.recipe && props.recipe.title}
           />
-        </div>
-        <div className="border-b-wetSand border-b-2  pb-4">
-          <h1 className="text-3xl font-serif my-4">Status</h1>
-          <Status
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={salting.state}
-            statusName={"Salting"}
-          />
-          <Status
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={drying.state}
-            statusName={"Drying"}
-          />
-          <Status
-            handleCheckBoxChange={handleCheckBoxChange}
-            selected={curing.state}
-            statusName={"Curing"}
-          />
-        </div>
-        <div className="border-b-wetSand border-b-2 mt-8">
-          <h1 className="text-3xl font-serif my-4">Meats</h1>
-          {cuts.map((cut) => (
-            <div
-              key={`cut-${cut.listId}`}
-              className="flex flex-row justify-between"
-            >
-              {cut !== null && (
-                <>
+        </motion.div>
+
+        {/* Status Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <h2 className="text-base font-semibold text-wetSand">Status</h2>
+          <div className="space-y-4">
+            <Status
+              handleCheckBoxChange={handleCheckBoxChange}
+              selected={salting.state}
+              statusName={"Salting"}
+            />
+            <Status
+              handleCheckBoxChange={handleCheckBoxChange}
+              selected={drying.state}
+              statusName={"Drying"}
+            />
+            <Status
+              handleCheckBoxChange={handleCheckBoxChange}
+              selected={curing.state}
+              statusName={"Curing"}
+            />
+          </div>
+        </motion.div>
+
+        {/* Meats Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-4"
+        >
+          <h2 className="text-base font-semibold text-wetSand">Meats</h2>
+          <div className="space-y-3">
+            {cuts.map((cut, index) => (
+              <motion.div
+                key={`cut-${cut.listId}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                {cut !== null && (
                   <Cut
                     handleChange={(e) => handleChange(e, cut.listId)}
                     remove={() => remove(cuts, cut.listId, "cuts")}
                     items={cuts}
                   />
-                </>
-              )}
-            </div>
-          ))}
-          <Image
-            className="cursor-pointer mb-8"
-            src={"/plusButton.svg"}
-            width={40}
-            height={40}
+                )}
+              </motion.div>
+            ))}
+          </div>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => add(cuts, "cuts")}
-            alt="add"
-          />
-        </div>
-        <div className="border-b-wetSand border-b-2 mt-8">
-          <h1 className="text-3xl font-serif my-4">Spices</h1>
-          {spices.map((spice) => (
-            <div
-              key={`spice-${spice.listId}`}
-              className="flex flex-row justify-between"
-            >
-              {spice !== null && (
-                <>
+            className="flex items-center gap-2 px-4 py-2 text-wetSand hover:bg-wetSand/10 rounded-lg transition-colors font-medium"
+          >
+            <Plus size={20} />
+            <span>Add Meat</span>
+          </motion.button>
+        </motion.div>
+
+        {/* Spices Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="space-y-4"
+        >
+          <h2 className="text-base font-semibold text-wetSand">Spices</h2>
+          <div className="space-y-3">
+            {spices.map((spice, index) => (
+              <motion.div
+                key={`spice-${spice.listId}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                {spice !== null && (
                   <Spice
                     handleChange={(e) => handleChange(e, spice.listId)}
                     remove={() => remove(spices, spice.listId, "spices")}
                     items={spices}
                   />
-                </>
-              )}
-            </div>
-          ))}
-          <Image
-            className="cursor-pointer mb-8"
-            src={"/plusButton.svg"}
-            width={40}
-            height={40}
+                )}
+              </motion.div>
+            ))}
+          </div>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => add(spices, "spices")}
-            alt="add"
-          />
-        </div>
-        <div className="mt-8 space-y-2">
-          <h1 className="text-3xl font-serif my-4">Steps</h1>
-          {steps.map((step) => (
-            <div key={`step-${step.listId}`}>
-              {step !== null && (
-                <>
+            className="flex items-center gap-2 px-4 py-2 text-wetSand hover:bg-wetSand/10 rounded-lg transition-colors font-medium"
+          >
+            <Plus size={20} />
+            <span>Add Spice</span>
+          </motion.button>
+        </motion.div>
+
+        {/* Steps Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="space-y-4"
+        >
+          <h2 className="text-base font-semibold text-wetSand">Steps</h2>
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <motion.div
+                key={`step-${step.listId}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                {step !== null && (
                   <Step
                     handleChange={(e) => handleChange(e, step.listId)}
                     stepNum={steps.indexOf(step) + 1}
@@ -357,27 +411,55 @@ export default function RecipeInput(props: { recipe?: Irecipe }) {
                     statusArr={getStatusArr()}
                     handleSelect={handleSelect}
                     currentId={step.listId}
-                    dropdownText={step.status ? step.status : "Select status"}
+                    dropdownText={
+                      step.status ? step.status : "Select status..."
+                    }
                     stepStatus={step.status}
                   />
-                </>
-              )}
-            </div>
-          ))}
-          <Image
-            className="cursor-pointer mb-8"
-            src={"/plusButton.svg"}
-            width={40}
-            height={40}
+                )}
+              </motion.div>
+            ))}
+          </div>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => add(steps, "steps")}
-            alt="add"
-          />
-        </div>
-        <div className="flex justify-end mt-16">
-          <StatusButton
-            reqSuccess={createRecipe.isLoading ? "pending" : "false"}
-          />
-        </div>
+            className="flex items-center gap-2 px-4 py-2 text-wetSand hover:bg-wetSand/10 rounded-lg transition-colors font-medium"
+          >
+            <Plus size={20} />
+            <span>Add Step</span>
+          </motion.button>
+        </motion.div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="flex gap-4 pt-4"
+        >
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={createRecipe.isLoading}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-wetSand text-eggshell rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Save size={20} />
+            <span>{createRecipe.isLoading ? "Saving..." : "Save Recipe"}</span>
+          </motion.button>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => router.push("/recipes")}
+            className="px-6 py-3 bg-eggshell text-wetSand border-2 border-wetSand/30 rounded-xl font-semibold hover:bg-wetSand/10 transition-colors"
+          >
+            <X size={20} className="inline mr-2" />
+            Cancel
+          </motion.button>
+        </motion.div>
       </form>
     </div>
   );

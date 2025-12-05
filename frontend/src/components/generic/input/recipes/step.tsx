@@ -3,6 +3,7 @@ import UserInput from "../userInput";
 import Image from "next/image";
 import { handleCurrentItem } from "../../../../utils/typeChecker";
 import { Dropdown } from "../dropdown/dropdown";
+import { CircleX } from "lucide-react";
 
 export default function Step({
   handleChange,
@@ -18,22 +19,36 @@ export default function Step({
 }: IStepProps) {
   return (
     <div className="border-wetSand border-opacity-50 border rounded-xl p-2">
-      <div className="flex justify-between w-full">
-        <div className="flex space-x-4">
-          <label htmlFor="step" className="text-xl mr-12">
-            Title
-          </label>
+      <label htmlFor="step" className="text-xl mr-12">
+        Title
+      </label>
 
-          <div className="relative group w-fit">
-            {/* <label className="text-xl">Status</label> */}
-            <Dropdown
-              dropDownOptions={statusArr}
-              disabled={statusArr?.length === 0}
-              handleSelect={handleSelect}
-              currentId={currentId}
-              dropdownText={dropdownText}
-            />
-          </div>
+      <UserInput
+        width={"w-1/2"}
+        addStyle={"mb-4"}
+        name="step"
+        handleChange={handleChange}
+        type="text"
+        id="step"
+        placeholder="Preparation"
+        required={true}
+        defaultValue={currentItem && currentItem.name}
+      />
+
+      <div className="flex justify-between items-center w-full">
+        <div className="flex space-x-4">
+          {statusArr && statusArr.length > 0 && (
+            <div className="relative group w-fit">
+              {/* <label className="text-xl">Status</label> */}
+              <Dropdown
+                dropDownOptions={statusArr}
+                disabled={statusArr?.length === 0}
+                handleSelect={handleSelect}
+                currentId={currentId}
+                dropdownText={dropdownText}
+              />
+            </div>
+          )}
 
           <label htmlFor="stepDuration" className="text-xl mb-4">
             Duration
@@ -55,26 +70,24 @@ export default function Step({
             disabled={stepStatus ? true : false}
           />
         </div>
-        <Image
+        <CircleX
+          className={
+            items.length > 1
+              ? "cursor-pointer text-stone hover:text-red-600"
+              : "hidden"
+          }
+          size={30}
+          onClick={remove}
+        />
+        {/* <Image
           className={items.length > 1 ? "cursor-pointer ml-2 mb-2" : " hidden"}
           src={"/delete.svg"}
           width={30}
           height={30}
           onClick={remove}
           alt="delete"
-        />
+        /> */}
       </div>
-      <UserInput
-        width={"w-1/2"}
-        addStyle={"mb-4"}
-        name="step"
-        handleChange={handleChange}
-        type="text"
-        id="step"
-        placeholder="Preparation"
-        required={true}
-        defaultValue={currentItem && currentItem.name}
-      />
       <label htmlFor="stepDescription" className="text-xl mb-4">
         Step description
       </label>

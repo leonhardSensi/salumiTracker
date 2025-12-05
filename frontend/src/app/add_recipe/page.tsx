@@ -3,34 +3,34 @@ import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 import React from "react";
 import RecipeInput from "../../components/generic/input/recipes/recipeInput";
 import { motion } from "framer-motion";
+import { ChefHat } from "lucide-react";
 
 export default function NewRecipe() {
   return (
     <PrivateLayout>
-      <motion.div
-        className="flex flex-col items-center w-full p-12"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <motion.h1
-          className="w-fit text-6xl text-wetSand font-serif mb-4"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          Add Recipe
-        </motion.h1>
-
+      <div className="flex flex-col items-center w-full p-12 bg-eggshell overflow-y-auto rounded-tl-[4rem]">
+        {/* Header with icon */}
         <motion.div
-          className="flex flex-col items-center h-fit w-full overflow-auto rounded-xl bg-flesh shadow-2xl"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
         >
-          <RecipeInput />
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+            className="inline-block mb-4"
+          >
+            <ChefHat size={48} className="text-wetSand" strokeWidth={1.5} />
+          </motion.div>
+          <h1 className="text-5xl font-serif font-bold text-wetSand">
+            Add Recipe
+          </h1>
         </motion.div>
-      </motion.div>
+
+        <RecipeInput />
+      </div>
     </PrivateLayout>
   );
 }

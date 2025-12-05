@@ -24,6 +24,10 @@ module.exports = {
         wetSand: "rgb(170,100,55)",
         stone: "rgb(50,50,50)",
         flesh: "rgb(235, 212, 192)",
+        trueBlack: "#0E0E0E",
+        boneWhite: "#F9F7F2",
+        oxBlood: "#7D2E2F",
+        steelGrey: "#BFC1C3",
       },
       fontFamily: {
         Satisfy: ["Satisfy", "cursive"],

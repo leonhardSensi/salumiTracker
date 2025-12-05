@@ -10,6 +10,8 @@ import { useSalumeMutation } from "../../../../mutations/salumeMutation";
 import { useRecoilState } from "recoil";
 import { notificationState } from "../../../../atoms/notificationAtoms";
 import { start } from "repl";
+import { motion } from "framer-motion";
+import { Save, X } from "lucide-react";
 
 export default function SalumeInput() {
   const [currentRecipe, setCurrentRecipe] = useState<Irecipe>();
@@ -129,7 +131,7 @@ export default function SalumeInput() {
   };
 
   return (
-    <div className="my-4 w-full text-stone px-16 py-8">
+    <div className="w-full text-stone px-16 max-w-4xl">
       <form
         name="newSalumeForm"
         id="newSalumeForm"
@@ -203,9 +205,36 @@ export default function SalumeInput() {
           </>
         )}
 
-        <div className="flex justify-end mt-16">
+        {/* <div className="flex justify-end mt-16">
           <StatusButton reqSuccess={reqSuccess} />
-        </div>
+        </div> */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="flex gap-4 pt-4"
+        >
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={createSalume.isLoading}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-wetSand text-eggshell rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Save size={20} />
+            <span>{createSalume.isLoading ? "Saving..." : "Save Salume"}</span>
+          </motion.button>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => router.push("/salumi/completed")}
+            className="px-6 py-3 bg-eggshell text-wetSand border-2 border-wetSand/30 rounded-xl font-semibold hover:bg-wetSand/10 transition-colors"
+          >
+            <X size={20} className="inline mr-2" />
+            Cancel
+          </motion.button>
+        </motion.div>
       </form>
     </div>
   );

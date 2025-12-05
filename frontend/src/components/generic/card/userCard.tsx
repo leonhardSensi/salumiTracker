@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useModal } from "../../../utils/modalProvider";
 import { modalData } from "../../../atoms/modalAtoms";
 import { useRecoilState } from "recoil";
+import { CircleUserRound, Mail, Lock } from "lucide-react";
 
 export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -95,18 +96,15 @@ export default function UserCard({ title, details, imgSrc }: IUserCardProps) {
         >
           <div className="flex items-center">
             <div className="w-full p-8">
-              <div className="mb-2">
+              <div className="mb-2 flex items-center space-x-2">
+                {title === "Name" && <CircleUserRound size={24} />}
+                {title === "Email" && <Mail size={24} />}
+                {title === "Password" && <Lock size={24} />}
+
                 <h1 className="font-bold text-xl text-left">{title}</h1>
               </div>
               <p className="text-left">{details}</p>
             </div>
-            <Image
-              width={100}
-              height={100}
-              src={imgSrc}
-              alt="usercard-picture"
-              className="pr-8 items-center w-1/4 h-1/4"
-            />
           </div>
         </button>
       </div>

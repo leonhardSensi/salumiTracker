@@ -2,6 +2,7 @@ import UserInput from "../userInput";
 import { IItemProps } from "../../../../interfaces/interfaces";
 import Image from "next/image";
 import { handleCurrentItem } from "../../../../utils/typeChecker";
+import { CircleX } from "lucide-react";
 
 export default function Spice({
   handleChange,
@@ -10,7 +11,7 @@ export default function Spice({
   currentItem,
 }: IItemProps) {
   return (
-    <>
+    <div className="flex justify-between items-center w-full">
       <div className="flex flex-col w-full">
         <label htmlFor="spice" className="text-xl">
           Spice
@@ -46,15 +47,25 @@ export default function Spice({
         />
       </div>
       <div className="w-12">
-        <Image
+        <CircleX
+          className={
+            items.length > 1
+              ? "cursor-pointer text-stone hover:text-red-600"
+              : "hidden"
+          }
+          size={30}
+          onClick={remove}
+        />
+
+        {/* <Image
           className={items.length > 1 ? "mt-10 cursor-pointer" : " hidden"}
           src={"/delete.svg"}
           width={100}
           height={100}
           onClick={remove}
           alt="delete"
-        />
+        /> */}
       </div>
-    </>
+    </div>
   );
 }

@@ -1,51 +1,57 @@
 "use client";
 import { Irecipe } from "../../interfaces/interfaces";
 import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import UserInput from "../generic/input/userInput";
+import { ChefHat, Edit3, Trash2, BookOpen, Eye } from "lucide-react";
 
 export default function RecipeDeck({
   recipes,
 }: {
   recipes: Irecipe[] | undefined;
 }) {
-  // 1. Read from localStorage on mount
-  const [pendingViewMode, setPendingViewMode] = useState<"deck" | "list">(
-    () => {
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem("recipeViewMode");
-        if (stored === "deck" || stored === "list") return stored;
-      }
-      return "deck";
-    }
-  );
-  const [viewMode, setViewMode] = useState(pendingViewMode);
-
-  // 2. Write to localStorage when changed
-  useEffect(() => {
-    localStorage.setItem("recipeViewMode", pendingViewMode);
-    // Delay the actual content switch for smooth highlight animation
-    const timeout = setTimeout(() => setViewMode(pendingViewMode), 250); // match transition duration
-    return () => clearTimeout(timeout);
-  }, [pendingViewMode]);
-
-  const [index, setIndex] = useState(0);
   const [search, setSearch] = useState("");
 
   if (!recipes) {
     return (
-      <div className="flex text-xl justify-center text-black">
-        <p>There was an error getting recipes.</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-16"
+      >
+        <motion.div
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="inline-block mb-4"
+        >
+          <BookOpen size={64} className="text-wetSand/50" strokeWidth={1} />
+        </motion.div>
+        <p className="text-xl text-stone">
+          There was an error getting recipes.
+        </p>
+      </motion.div>
     );
   }
+
   if (recipes.length === 0) {
     return (
-      <div className="flex text-xl justify-center">
-        <p>No recipes found. Create a new one instead!</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-16"
+      >
+        <motion.div
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="inline-block mb-4"
+        >
+          <BookOpen size={64} className="text-wetSand/50" strokeWidth={1} />
+        </motion.div>
+        <h3 className="font-serif text-2xl font-bold text-wetSand mb-2">
+          No recipes found
+        </h3>
+        <p className="text-stone">Create your first recipe to get started!</p>
+      </motion.div>
     );
   }
 
@@ -54,305 +60,223 @@ export default function RecipeDeck({
     r.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Ensure index is valid for filteredRecipes
-  const safeIndex = Math.min(index, Math.max(filteredRecipes.length - 1, 0));
-
-  // Looping logic for deck
-  const prev = () =>
-    setIndex((i) =>
-      filteredRecipes.length
-        ? (i - 1 + filteredRecipes.length) % filteredRecipes.length
-        : 0
-    );
-  const next = () =>
-    setIndex((i) =>
-      filteredRecipes.length ? (i + 1) % filteredRecipes.length : 0
-    );
-
   // Search handler
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    setIndex(0); // Always reset to first result on new search
   };
-
-  // Segmented control animation
-  const highlightVariants = {
-    deck: { x: 0 },
-    list: { x: "100%" },
-  };
-
-  // Use pendingViewMode for the toggle highlight, but viewMode for the content
-  const highlightPosition = pendingViewMode === "deck" ? "left-0" : "left-1/2";
 
   return (
-    <div className="relative w-full flex flex-col items-center h-[65vh]">
+    <div className="relative w-full flex flex-col items-center">
       {/* Search Bar */}
-      <div className="w-full max-w-2xl mb-6 flex justify-center items-center">
+      <div className="w-full max-w-3xl mb-8">
         <input
           type="text"
           value={search}
           onChange={handleSearch}
           placeholder="Search recipes..."
-          className="w-full px-6 py-3 my-2 rounded-lg border border-wetSand focus:outline-none focus:ring-2 focus:ring-wetSand text-lg"
+          className="w-full px-6 py-3 rounded-lg border-2 border-wetSand/30 focus:outline-none focus:ring-2 focus:ring-wetSand focus:border-wetSand text-lg text-stone shadow-sm bg-white transition-all"
         />
-        {/* Animated Segmented Toggle */}
-        <div className="w-full max-w-2xl flex justify-end">
-          <div className="relative inline-flex bg-eggshell border border-wetSand rounded-full p-1 shadow min-w-[180px] overflow-hidden">
-            {/* Animated highlight "liquid" pill */}
-            <motion.div
-              layout
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 30,
-                mass: 1.2,
-              }}
-              className={`absolute top-0 h-full w-1/2 rounded-full z-0 bg-wetSand transition-all duration-300 ${highlightPosition}`}
-              style={{
-                boxShadow: "0 4px 24px 0 rgba(0,0,0,0.10)",
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setPendingViewMode("deck")}
-              className={`relative z-10 px-5 py-2 rounded-full font-semibold transition-all duration-200
-              ${
-                pendingViewMode === "deck"
-                  ? "text-eggshell"
-                  : "text-wetSand hover:bg-flesh/60"
-              }`}
-              aria-pressed={pendingViewMode === "deck"}
-            >
-              <span className="inline-flex items-center gap-2">
-                <Image src="/deck.svg" width={18} height={18} alt="Deck view" />
-                Deck
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPendingViewMode("list")}
-              className={`relative z-10 px-5 py-2 rounded-full font-semibold transition-all duration-200
-              ${
-                pendingViewMode === "list"
-                  ? "text-eggshell"
-                  : "text-wetSand hover:bg-flesh/60"
-              }`}
-              aria-pressed={pendingViewMode === "list"}
-            >
-              <span className="inline-flex items-center gap-2">
-                <Image src="/list.svg" width={18} height={18} alt="List view" />
-                List
-              </span>
-            </button>
-          </div>
-        </div>
       </div>
-      {/* Deck View */}
-      {viewMode === "deck" ? (
-        filteredRecipes.length === 0 ? (
-          <div className="flex text-xl justify-center">
-            <p>No recipes found.</p>
-          </div>
-        ) : (
-          <>
-            <div className="relative w-full flex justify-center items-center min-h-[420px]">
-              {filteredRecipes.map((recipe, i) => {
-                // Calculate position relative to active index
-                let pos = i - safeIndex;
-                if (pos < -Math.floor(filteredRecipes.length / 2))
-                  pos += filteredRecipes.length;
-                if (pos > Math.floor(filteredRecipes.length / 2))
-                  pos -= filteredRecipes.length;
 
-                const isActive = pos === 0;
-                const scale = isActive ? 1 : 0.92;
-                const y = pos * 30;
-                const z = 100 - Math.abs(pos);
-                const opacity = Math.abs(pos) > 2 ? 0 : 1;
-
-                return (
-                  <motion.div
-                    key={recipe.id}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    style={{
-                      zIndex: z,
-                      opacity,
-                      pointerEvents: isActive ? "auto" : "none",
-                    }}
-                    className={`absolute w-full max-w-2xl p-0 flex flex-col items-center ${
-                      isActive ? "ring-4 ring-wetSand" : ""
-                    }`}
-                    animate={{
-                      scale,
-                      y,
-                      boxShadow: isActive
-                        ? "0 12px 48px 0 rgba(0,0,0,0.18)"
-                        : "0 2px 8px rgba(0,0,0,0.08)",
-                    }}
-                  >
-                    <div
-                      className={`relative w-full h-full bg-gradient-to-br from-flesh to-eggshell rounded-3xl shadow-2xl border border-wetSand transition-all duration-300 ${
-                        isActive
-                          ? "scale-105"
-                          : "opacity-80 blur-[1px] grayscale-[0.2]"
-                      }`}
-                    >
-                      {/* Decorative top bar */}
-                      <div className="flex items-center justify-between px-8 py-4 rounded-t-3xl">
-                        <span className="text-xs text-stone">
-                          {recipe.created_at
-                            ? new Date(recipe.created_at).toLocaleDateString()
-                            : ""}
-                        </span>
-                      </div>
-                      {/* Main content */}
-                      <div className="flex flex-col items-center px-12 py-8">
-                        <Link href={`/recipes/${recipe.id}`} className="w-full">
-                          <h2 className="text-4xl font-serif mb-4 text-wetSand text-center drop-shadow-lg hover:underline transition-all duration-200">
-                            {recipe.title}
-                          </h2>
-                        </Link>
-                        <div className="flex gap-6 mt-2">
-                          <Link href={`/recipes/edit/${recipe.id}`}>
-                            <button
-                              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-wetSand text-eggshell font-semibold shadow hover:bg-wetSand/90 transition"
-                              title="Edit"
-                            >
-                              <Image
-                                className="w-6 h-6"
-                                src="/editButton.svg"
-                                width={24}
-                                height={24}
-                                alt="edit"
-                              />
-                              Edit
-                            </button>
-                          </Link>
-                          <button
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-200 text-red-900 font-semibold shadow hover:bg-red-300 transition"
-                            title="Delete"
-                            // onClick={...}
-                          >
-                            <Image
-                              className="w-6 h-6"
-                              src="/delete.svg"
-                              width={24}
-                              height={24}
-                              alt="delete"
-                            />
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                      {/* Decorative bottom bar */}
-                      <div className="flex justify-center items-center px-8 py-2 rounded-b-3xl">
-                        <span className="text-xs text-stone tracking-widest">
-                          {recipe.steps ? `${recipe.steps.length} steps` : ""}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-            <div className="flex justify-center gap-8 mt-6">
-              <button
-                type="button"
-                onClick={prev}
-                className="bg-wetSand text-eggshell px-4 py-2 rounded-full shadow hover:scale-105 transition"
-                aria-label="Previous recipe"
-              >
-                ↑
-              </button>
-              <button
-                type="button"
-                onClick={next}
-                className="bg-wetSand text-eggshell px-4 py-2 rounded-full shadow hover:scale-105 transition"
-                aria-label="Next recipe"
-              >
-                ↓
-              </button>
-            </div>
-            <div className="mt-4 flex gap-2">
-              {filteredRecipes.map((_, i) => (
-                <span
-                  key={i}
-                  className={`w-3 h-3 rounded-full ${
-                    i === index
-                      ? "bg-wetSand"
-                      : "bg-eggshell border border-wetSand"
-                  } inline-block`}
-                />
-              ))}
-            </div>
-          </>
-        )
-      ) : // List View
-      filteredRecipes.length === 0 ? (
-        <div className="flex text-xl justify-center">
-          <p>No recipes found.</p>
-        </div>
+      {/* List View */}
+      {filteredRecipes.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          className="text-center py-16"
+        >
+          <motion.div
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="inline-block mb-4"
+          >
+            <BookOpen size={64} className="text-wetSand/50" strokeWidth={1} />
+          </motion.div>
+          <h3 className="font-serif text-2xl font-bold text-wetSand mb-2">
+            No recipes found
+          </h3>
+          <p className="text-stone">
+            {search
+              ? "Try a different search term"
+              : "Create your first recipe to get started"}
+          </p>
+        </motion.div>
       ) : (
-        <div className="w-full max-w-2xl flex flex-col gap-6 p-6">
-          {filteredRecipes.map((recipe) => (
-            <div
-              key={recipe.id}
-              className="w-full bg-gradient-to-br from-flesh to-eggshell rounded-3xl shadow-2xl border border-wetSand transition-all duration-300 hover:scale-[1.01]"
-            >
-              <div className="flex items-center justify-between px-8 py-4 rounded-t-3xl">
-                <span className="text-xs text-stone">
-                  {recipe.created_at
-                    ? new Date(recipe.created_at).toLocaleDateString()
-                    : ""}
-                </span>
-              </div>
-              <div className="flex flex-col md:flex-row items-center px-12 py-8 gap-4">
-                <Link href={`/recipes/${recipe.id}`} className="w-full">
-                  <h2 className="text-3xl font-serif mb-2 text-wetSand text-center drop-shadow-lg hover:underline transition-all duration-200">
-                    {recipe.title}
-                  </h2>
-                </Link>
-                <div className="flex gap-4 mt-2 w-2/3">
-                  <Link href={`/recipes/edit/${recipe.id}`} className="w-fit">
-                    <button
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-wetSand text-eggshell font-semibold shadow hover:bg-wetSand/90 transition"
-                      title="Edit"
-                    >
-                      <Image
-                        className="w-6 h-6"
-                        src="/editButton.svg"
-                        width={24}
-                        height={24}
-                        alt="edit"
-                      />
-                      Edit
-                    </button>
-                  </Link>
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-200 text-red-900 font-semibold shadow hover:bg-red-300 transition"
-                    title="Delete"
-                    // onClick={...}
-                  >
-                    <Image
-                      className="w-6 h-6"
-                      src="/delete.svg"
-                      width={24}
-                      height={24}
-                      alt="delete"
-                    />
-                    Delete
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-8 py-2 rounded-b-3xl">
-                <span className="text-xs text-stone tracking-widest">
-                  {recipe.steps ? `${recipe.steps.length} steps` : ""}
-                </span>
-              </div>
-            </div>
-          ))}
+        <div className="w-full max-w-4xl space-y-4">
+          <AnimatePresence mode="popLayout">
+            {filteredRecipes.map((recipe, index) => (
+              <RecipeCard key={recipe.id} recipe={recipe} index={index} />
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </div>
+  );
+}
+
+function RecipeCard({ recipe, index }: { recipe: Irecipe; index: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleDelete = async () => {
+    // Add your delete logic here
+    console.log("Deleting recipe:", recipe.id);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{
+        delay: index * 0.08,
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="relative group"
+    >
+      <motion.div
+        whileHover={{
+          y: -6,
+          transition: { duration: 0.3 },
+        }}
+        className="relative bg-gradient-to-br from-flesh to-eggshell rounded-2xl p-6 shadow-md hover:shadow-2xl transition-shadow duration-300 border-2 border-wetSand/50 overflow-hidden"
+      >
+        {/* Decorative corner accent */}
+        <motion.div
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{
+            scale: isHovered ? 1 : 0,
+            rotate: isHovered ? 0 : -45,
+          }}
+          transition={{ duration: 0.3 }}
+          className="absolute top-0 right-0 w-20 h-20 bg-wetSand/10 rounded-bl-full"
+        />
+
+        <div className="relative flex items-start justify-between gap-4">
+          {/* Left side - Recipe info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-2">
+              <motion.div
+                animate={{ rotate: isHovered ? 5 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ChefHat size={24} className="text-wetSand" strokeWidth={1.5} />
+              </motion.div>
+              <h3 className="font-serif text-2xl font-bold text-stone">
+                {recipe.title}
+              </h3>
+            </div>
+
+            {/* Date badge */}
+            <div className="flex items-center gap-2 text-sm text-stone">
+              <div className="w-2 h-2 rounded-full bg-wetSand" />
+              <span className="font-medium">
+                {recipe.created_at
+                  ? new Date(recipe.created_at).toLocaleDateString()
+                  : ""}
+              </span>
+              {recipe.steps && recipe.steps.length > 0 && (
+                <>
+                  <span className="text-wetSand/50">•</span>
+                  <span className="font-medium">
+                    {recipe.steps.length}{" "}
+                    {recipe.steps.length === 1 ? "step" : "steps"}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Right side - Action buttons */}
+          <div className="flex items-center gap-2">
+            <Link href={`/recipes/${recipe.id}`}>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 bg-wetSand text-eggshell rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-wetSand/90 transition-colors shadow-md"
+              >
+                <Eye size={16} />
+                <span>View</span>
+              </motion.button>
+            </Link>
+
+            <Link href={`/recipes/edit/${recipe.id}`}>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 bg-wetSand text-eggshell rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-wetSand/90 transition-colors shadow-md"
+              >
+                <Edit3 size={16} />
+                <span>Edit</span>
+              </motion.button>
+            </Link>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowDeleteConfirm(true)}
+              className="px-4 py-2 bg-eggshell text-wetSand rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-wetSand hover:text-eggshell transition-colors shadow-md border border-wetSand/30"
+            >
+              <Trash2 size={16} />
+              <span>Delete</span>
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Delete confirmation modal */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDeleteConfirm(false)}
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-2xl z-50 max-w-md w-full mx-4"
+            >
+              <h3 className="font-serif text-2xl font-bold text-stone mb-2">
+                Delete Recipe?
+              </h3>
+              <p className="text-stone mb-6">
+                Are you sure you want to delete "{recipe.title}"? This action
+                cannot be undone.
+              </p>
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="flex-1 px-4 py-3 bg-eggshell text-stone rounded-xl font-medium hover:bg-flesh transition-colors"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    handleDelete();
+                    setShowDeleteConfirm(false);
+                  }}
+                  className="flex-1 px-4 py-3 bg-wetSand text-eggshell rounded-xl font-medium hover:bg-wetSand/90 transition-colors"
+                >
+                  Delete
+                </motion.button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

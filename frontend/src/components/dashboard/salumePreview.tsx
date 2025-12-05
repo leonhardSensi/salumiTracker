@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useDrag } from "react-dnd";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,33 +18,14 @@ import { notificationState } from "../../atoms/notificationAtoms";
 import { AnimatePresence, motion } from "framer-motion";
 import { useModal } from "../../utils/modalProvider";
 import { modalData } from "../../atoms/modalAtoms";
-
-const bannerVariants = {
-  hidden: { y: -80, opacity: 0, scale: 0.98 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 400,
-      damping: 32,
-      duration: 0.5,
-    },
-  },
-  exit: {
-    y: -80,
-    opacity: 0,
-    scale: 0.98,
-    transition: { duration: 0.35, ease: "easeInOut" as const },
-  },
-};
+import { Check, Eye } from "lucide-react";
 
 export default function SalumePreview({
   salume,
   duration,
 }: ISalumeWithDuration) {
   const [isActive, setIsActive] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const updateSalumeState = useUpdateSalumeStateMutation();
 
   const [curing, setCuring] =
@@ -55,28 +35,28 @@ export default function SalumePreview({
   const [drying, setDrying] =
     useRecoilState<IDashboardSalumeState[]>(dryingState);
 
-  // Fix type issue here
   const [completed, setCompleted] = useRecoilState<IDashboardSalumeState[]>(
     completedState as any
   );
 
   const [notificationDetails, setNotificationDetails] =
     useRecoilState(notificationState);
-  const [revertInProgress, setRevertInProgress] = useState(false);
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalDetails, setModalDetails] = useRecoilState(modalData);
 
-  const [{ isDragging }, drag] = useDrag({
-    type: "salume",
-    item: { salume: salume },
-    collect: (monitor: any) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
+  const handleDragStart = (e: React.DragEvent) => {
+    setIsDragging(true);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData(
+      "application/json",
+      JSON.stringify({ salume, duration })
+    );
+  };
 
-  // Save previous state for revert
-  const [prevState, setPrevState] = useState<string | null>(null);
+  const handleDragEnd = (e: React.DragEvent) => {
+    setIsDragging(false);
+  };
 
   const handleModalData = () => {
     openModal();
@@ -98,9 +78,8 @@ export default function SalumePreview({
 
   const handleCheckBoxChange = async () => {
     if (salume.state !== "completed") {
-      const prev = salume.state; // capture previous state
+      const prev = salume.state;
 
-      // Mark as completed
       updateSalumeState.mutate({
         id: salume.id,
         name: salume.name,
@@ -158,71 +137,84 @@ export default function SalumePreview({
     }
   };
 
+  const isOverdue = duration < 0;
+
   return (
     salume && (
-      <>
-        <li
-          key={`salume-${salume.id}`}
-          className={`flex w-full pr-2 items-center ${
-            isDragging ? "hidden" : ""
-          }`}
-          ref={drag}
-        >
-          {salume ? (
-            <>
-              {isActive ? (
-                <></>
-              ) : (
-                <>
-                  <Image
-                    src="/drag.svg"
-                    width={30}
-                    height={30}
-                    alt="drag"
-                    className=""
+      <li
+        key={`salume-${salume.id}`}
+        draggable
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        className="group relative bg-eggshell backdrop-blur-sm rounded-xl p-4 shadow-md hover:shadow-xl transition-all duration-300 cursor-move border border-wetSand/30 list-none"
+        style={{
+          opacity: isDragging ? 0.4 : 1,
+        }}
+      >
+        {salume && !isActive && (
+          <div className="relative flex items-center gap-3">
+            {/* Drag handle */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              className="text-wetSand opacity-40 group-hover:opacity-100 transition-opacity"
+            >
+              <Image
+                src="/drag.svg"
+                width={24}
+                height={24}
+                alt="drag"
+                className="select-none pointer-events-none"
+              />
+            </motion.div>
+            <div className="flex justify-between w-full items-center">
+              {/* Salumi name */}
+              <div className="flex items-center space-x-4 max-w-fit">
+                <Link href={`/salumi/${salume.id}`}>
+                  <Eye
+                    size={32}
+                    className="text-stone hover:text-wetSand transition-colors"
                   />
-                  <div className="flex justify-between ml-4 w-full space-x-8 items-center">
-                    <Link href={`/salumi/${salume.id}`}>
-                      <li className="text-black text-4xl font-serif">
-                        {salume.name}
-                      </li>
-                    </Link>
+                </Link>
 
-                    {duration > 0 ? (
-                      <li>{duration.toString()} days left</li>
-                    ) : duration === 0 ? (
-                      salume.state === "completed" ? (
-                        <li className="text-stone">Just now</li>
-                      ) : (
-                        <li className="text-stone">Ready</li>
-                      )
-                    ) : (
-                      <li className="text-red-300">
-                        {duration.toString().slice(1)} days ago
-                      </li>
-                    )}
+                <h3 className="text-stone text-xl font-serif">{salume.name}</h3>
+              </div>
+              <div className="flex items-center gap-4">
+                {/* Time info */}
+                <span
+                  className={`text-sm font-medium whitespace-nowrap ${
+                    isOverdue ? "text-red-500" : "text-stone"
+                  }`}
+                >
+                  {duration > 0
+                    ? `${duration} days left`
+                    : duration === 0
+                    ? salume.state === "completed"
+                      ? "Just now"
+                      : "Ready"
+                    : `${Math.abs(duration)} days ago`}
+                </span>
 
-                    <div>
-                      <Image
-                        src={"/checkbox.svg"}
-                        alt={"checkbox"}
-                        width={40}
-                        height={40}
-                        className={`${
-                          salume.state !== "completed" && "saturate-0"
-                        }`}
-                        onClick={handleCheckBoxChange}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-            </>
-          ) : (
-            <li className="text-black text-4xl font-Satisfy">Loading...</li>
-          )}
-        </li>
-      </>
+                {/* Complete checkbox */}
+                <motion.button
+                  whileHover={{ scale: 1.1, color: "#DEB992" }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleCheckBoxChange}
+                  className="w-8 h-8 rounded-lg border-2 border-wetSand flex items-center justify-center hover:bg-wetSand hover:border-wetSand transition-colors group/check"
+                >
+                  <Check
+                    size={16}
+                    className="text-wetSand group-hover/check:text-white transition-colors"
+                  />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        )}
+      </li>
     )
   );
+  //       )}
+  //     </li>
+  //   )
+  // );
 }

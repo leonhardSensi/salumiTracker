@@ -1,15 +1,14 @@
 "use client";
 
-import RecipeCarousel from "../../components/recipes/recipeDeck";
+import RecipeDeck from "../../components/recipes/recipeDeck";
 import { PrivateLayout } from "../../components/PrivateLayout/privateLayout";
 import { useQuery } from "@tanstack/react-query";
 import { RecipeError, getRecipes } from "../../api/recipeApi";
 import { Irecipe } from "../../interfaces/interfaces";
 import { ModalProvider } from "../../utils/modalProvider";
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import RecipeDeck from "../../components/recipes/recipeDeck";
+import { BookOpen, Plus } from "lucide-react";
 
 export default function Recipes() {
   const {
@@ -21,87 +20,62 @@ export default function Recipes() {
     queryFn: getRecipes,
   });
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.7 },
-    },
-  };
-  const listVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
-  };
-  const headingVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5, delay: 0.1 },
-    },
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5, delay: 0.5 },
-    },
-    hover: {
-      scale: 1.12,
-      rotate: -10,
-      boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-    },
-    tap: { scale: 0.95, rotate: 0 },
-  };
-
   return (
     <ModalProvider>
       <PrivateLayout>
-        <motion.div
-          className="flex flex-col w-full h-[100vh] overflow-y-auto items-center p-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h1
-            className="w-fit text-6xl text-wetSand font-serif"
-            variants={headingVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            Your finished Salumi
-          </motion.h1>
-
+        <main className="flex-1 p-8 bg-eggshell rounded-tl-[4rem] overflow-y-auto">
+          {/* Page header */}
           <motion.div
-            className="text-stone flex flex-col w-full items-center justify-start mt-12 overflow-auto"
-            variants={listVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+              className="inline-block mb-4"
+            >
+              <BookOpen size={48} className="text-wetSand" strokeWidth={1.5} />
+            </motion.div>
+            <h1 className="font-serif text-5xl font-bold text-wetSand mb-4">
+              Your Recipes
+            </h1>
+            <p className="text-stone text-lg">
+              {recipes?.length || 0}{" "}
+              {recipes?.length === 1 ? "recipe" : "recipes"} in your collection
+            </p>
+          </motion.div>
+
+          {/* Add new recipe button */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center mb-8"
+          >
+            <Link href="/add_recipe">
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-wetSand text-eggshell rounded-xl font-serif font-semibold text-lg flex items-center gap-3 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <Plus size={24} />
+                <span>Create New Recipe</span>
+              </motion.button>
+            </Link>
+          </motion.div>
+
+          {/* Recipe list */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-4xl mx-auto"
           >
             <RecipeDeck recipes={recipes} />
           </motion.div>
-          <Link href="/add_recipe" className="mt-4">
-            <motion.div
-              variants={buttonVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover="hover"
-              whileTap="tap"
-              className="rounded-full"
-            >
-              <Image
-                src={"/plusButton.svg"}
-                width={50}
-                height={50}
-                alt="add recipe"
-              />
-            </motion.div>
-          </Link>
-        </motion.div>
+        </main>
       </PrivateLayout>
     </ModalProvider>
   );

@@ -55,8 +55,8 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
     // </div>
 
     <div className="w-full h-full overflow-auto">
-      <div className="flex px-16 h-full justify-between">
-        <ul className="h-full pb-12">
+      <div className="flex h-full justify-between">
+        <ul className="h-full w-full space-y-2">
           {salumi.length > 0 ? (
             salumi.map((salume, index) => (
               <SalumePreview
@@ -69,26 +69,6 @@ export default function DashboardCardDetails({ salumi, status }: ISalumiProps) {
             <li className="text-black">None</li>
           )}
         </ul>
-        {/* {salumi.length > 3 && (
-          <div className="flex flex-col items-center space-y-12">
-            <button
-              className={`text-4xl ${currentIndex === 0 && "hidden"}`}
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-            >
-              ↑
-            </button>
-            <button
-              className={`text-4xl ${
-                currentIndex + itemsPerPage >= salumi.length && "hidden"
-              }`}
-              onClick={handleNext}
-              disabled={currentIndex + itemsPerPage >= salumi.length}
-            >
-              ↓
-            </button>
-          </div>
-        )} */}
       </div>
     </div>
   );

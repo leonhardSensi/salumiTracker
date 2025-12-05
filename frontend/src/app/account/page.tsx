@@ -66,13 +66,13 @@ export default function Account() {
   return (
     <PrivateLayout>
       <motion.div
-        className="ml-32 h-full text-stone"
+        className="pl-32 h-full w-full text-stone bg-eggshell rounded-tl-[4rem]"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <motion.div
-          className="w-fit font-serif"
+          className="w-full font-serif"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}

@@ -430,7 +430,7 @@ export interface IItemProps {
   >;
   stepNum?: number;
   items: IItem[] | ICut[] | ISpice[] | IStep[];
-  remove: React.MouseEventHandler<HTMLImageElement>;
+  remove: () => void;
   currentItem?: IItem;
   statusArr?: string[];
   handleSelect?: (value: string, id?: number) => void;
@@ -459,7 +459,7 @@ export interface IStepProps {
   >;
   stepNum: number;
   items: IItem[] | ICut[] | ISpice[] | IStep[];
-  remove: React.MouseEventHandler<HTMLImageElement>;
+  remove: () => void;
   currentItem?: IItem;
   statusArr: string[] | undefined;
   handleSelect: (value: string, id?: number) => void;

@@ -8,13 +8,11 @@ import {
   ISalumeWithDuration,
   ISalume,
   IDashboardSalumeState,
-  ICompletedSalume,
   IActionItem,
 } from "../../interfaces/interfaces";
 import Card from "../../components/generic/card/card";
 import { getSalumi } from "../../api/salumeApi";
 import { useQuery } from "@tanstack/react-query";
-import { useDrop } from "react-dnd";
 import { useRecoilState } from "recoil";
 import {
   curingState,
@@ -23,13 +21,10 @@ import {
   completedState,
 } from "../../atoms/salumiAtoms";
 import { useUpdateSalumeStateMutation } from "../../mutations/salumeMutation";
-import Image from "next/image";
-import Link from "next/link";
 import { calculateSalumeDuration } from "../../utils/salumeDuration";
 import { motion, easeOut } from "framer-motion";
 import generateActionItems from "../../utils/actionItems";
 import ActionItems from "../../components/dashboard/actionItems";
-import Modal from "../../components/generic/modal/modal";
 import { ModalProvider } from "../../utils/modalProvider";
 
 export default function Dashboard() {
@@ -52,15 +47,6 @@ export default function Dashboard() {
     fetchSalumi();
   }, [salumiData]);
 
-  // const {
-  //   status,
-  //   error: errorMessage,
-  //   data: salumi,
-  // } = useQuery({
-  //   queryKey: ["salumi"],
-  //   queryFn: getSalumi,
-  // });
-
   const [curing, setCuring] =
     useRecoilState<IDashboardSalumeState[]>(curingState);
   const [salting, setSalting] =
@@ -68,13 +54,13 @@ export default function Dashboard() {
   const [drying, setDrying] =
     useRecoilState<IDashboardSalumeState[]>(dryingState);
 
-  // Fix type issue here
   const [completed, setCompleted] = useRecoilState<IDashboardSalumeState[]>(
     completedState as any
   );
   const [actionItems, setActionItems] = useState<IActionItem[]>();
 
   const [hideHints, setHideHints] = useState(false);
+  const [dragOverZone, setDragOverZone] = useState<string | null>(null);
 
   useEffect(() => {
     calcDuration();
@@ -103,14 +89,6 @@ export default function Dashboard() {
   };
 
   const calcDuration = async () => {
-    // if (salumiData) {
-    //   const salumiArr = await Promise.all(
-    //     salumiData.map(async (salume) => calculateSalumeDuration(salume))
-    //   );
-    //   if (salumiArr) {
-    //     updateSalumiStateWithDuration(salumiArr);
-    //   }
-    // }
     if (salumiData) {
       const salumiArr = await Promise.all(
         salumiData.map(async (salume) => calculateSalumeDuration(salume))
@@ -121,66 +99,33 @@ export default function Dashboard() {
     }
   };
 
-  const [{ isOverDrying, getDropResultDrying }, dropTargetDrying] = useDrop({
-    accept: "salume",
-    drop: (droppedSalume) => {
-      addSalumeToSection(droppedSalume as ISalumeProps, isOverDrying);
-    },
-    // item: () => {
-    //   return { id, index };
-    // },
-    collect: (monitor: any) => ({
-      isOverDrying: !!monitor.isOver(),
-      getDropResultDrying: monitor.getDropResult(),
-    }),
-  });
+  // Native HTML5 drag handlers
+  const handleDragOver = (e: React.DragEvent, zone: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverZone(zone);
+  };
 
-  const [{ isOverSalting, getDropResultSalting }, dropTargetSalting] = useDrop({
-    accept: "salume",
-    drop: (droppedSalume) => {
-      addSalumeToSection(droppedSalume as ISalumeProps, isOverSalting);
-    },
-    // item: () => {
-    //   return { id, index };
-    // },
-    collect: (monitor: any) => ({
-      isOverSalting: !!monitor.isOver(),
-      getDropResultSalting: monitor.getDropResult(),
-    }),
-  });
-  const [{ isOverCuring, getDropResultCuring }, dropTargetCuring] = useDrop({
-    accept: "salume",
-    drop: (droppedSalume) => {
-      addSalumeToSection(droppedSalume as ISalumeProps, isOverCuring);
-    },
-    collect: (monitor: any) => ({
-      isOverCuring: !!monitor.isOver(),
-      getDropResultCuring: monitor.getDropResult(),
-    }),
-  });
+  const handleDragLeave = (e: React.DragEvent) => {
+    setDragOverZone(null);
+  };
 
-  const [{ isOverCompleted, getDropResultCompleted }, dropTargetCompleted] =
-    useDrop({
-      accept: "salume",
-      drop: (droppedSalume) => {
-        addSalumeToSection(droppedSalume as ISalumeProps, isOverCompleted);
-      },
-      collect: (monitor) => ({
-        isOverCompleted: !!monitor.isOver(),
-        getDropResultCompleted: monitor.getDropResult(),
-      }),
-    });
+  const handleDrop = async (e: React.DragEvent, targetState: string) => {
+    e.preventDefault();
+    setDragOverZone(null);
 
-  //-------
-  //-------
-  //-------
-  //-------
-  //-------
-  //-------
-  const addSalumeToSection = async (salume: ISalumeProps, isOver: boolean) => {
+    const data = e.dataTransfer.getData("application/json");
+    if (!data) return;
+
+    const droppedItem = JSON.parse(data);
+    const { salume } = droppedItem;
+
+    // Don't do anything if dropping in the same state
+    if (salume.state === targetState) return;
+
     // Extract salume data
-    const { created_at, id, name, notes, recipe, state, updated_at } =
-      salume.salume;
+    const { created_at, id, name, notes, recipe, state, updated_at } = salume;
+
     // Create newSalume object with updated state
     const newSalume: ISalume = {
       created_at,
@@ -188,124 +133,56 @@ export default function Dashboard() {
       name,
       notes,
       recipe: { id: recipe.id },
-      state: isOver
-        ? isOverDrying
-          ? "drying"
-          : isOverSalting
-          ? "salting"
-          : isOverCuring
-          ? "curing"
-          : isOverCompleted
-          ? "completed"
-          : state
-        : state,
+      state: targetState,
       updated_at: updated_at,
       rating: 0,
     };
 
-    // Update state based on drop target
-    if (isOverDrying) {
-      if (state === "drying") {
-        return;
-      }
-      console.log("IMAGE", newSalume.image);
-      updateSalumeState.mutate({
-        id: newSalume.id,
-        name: newSalume.name,
-        notes: newSalume.notes,
-        recipeId: newSalume.recipe.id,
-        state: newSalume.state,
-        rating: 0,
-      });
-      const { duration } = await calculateSalumeDuration(newSalume);
-      console.log(duration);
-      setDrying([
-        ...drying,
-        {
-          salume: newSalume,
-          duration: duration,
-        },
-      ]);
+    // Update backend
+    updateSalumeState.mutate({
+      id: newSalume.id,
+      name: newSalume.name,
+      notes: newSalume.notes,
+      recipeId: newSalume.recipe.id,
+      state: newSalume.state,
+      rating: 0,
+    });
 
-      //-------
-      setSalting(salting.filter((item) => item.salume.id !== id));
-      setCuring(curing.filter((item) => item.salume.id !== id));
-      setCompleted(completed.filter((item) => item.salume.id !== id));
-    } else if (isOverSalting) {
-      if (state === "salting") {
-        return;
-      }
-      updateSalumeState.mutate({
-        id: newSalume.id,
-        name: newSalume.name,
-        notes: newSalume.notes,
-        recipeId: newSalume.recipe.id,
-        state: newSalume.state,
-        rating: 0,
-      });
-      const { duration } = await calculateSalumeDuration(newSalume);
+    // Recalculate duration
+    const { duration } = await calculateSalumeDuration(newSalume);
 
-      setSalting([
-        ...salting,
-        {
-          salume: newSalume,
-          duration: duration,
-        },
-      ]);
+    // Create new item
+    const newItem = {
+      salume: newSalume,
+      duration: duration,
+    };
 
-      //-----
-      setDrying(drying.filter((item) => item.salume.id !== id));
-      setCuring(curing.filter((item) => item.salume.id !== id));
-      setCompleted(completed.filter((item) => item.salume.id !== id));
-    } else if (isOverCuring) {
-      if (state === "curing") {
-        return;
-      }
-      updateSalumeState.mutate({
-        id: newSalume.id,
-        name: newSalume.name,
-        notes: newSalume.notes,
-        recipeId: newSalume.recipe.id,
-        state: newSalume.state,
-        rating: 0,
-      });
-      const { duration } = await calculateSalumeDuration(newSalume);
+    // IMPORTANT: Remove from all states FIRST, then add to target
+    const filteredSalting = salting.filter((item) => item.salume.id !== id);
+    const filteredDrying = drying.filter((item) => item.salume.id !== id);
+    const filteredCuring = curing.filter((item) => item.salume.id !== id);
+    const filteredCompleted = completed.filter((item) => item.salume.id !== id);
 
-      setCuring([
-        ...curing,
-        {
-          salume: newSalume,
-          duration: duration,
-        },
-      ]);
+    // Update all states at once
+    setSalting(filteredSalting);
+    setDrying(filteredDrying);
+    setCuring(filteredCuring);
+    setCompleted(filteredCompleted);
 
-      //------
-      setDrying(drying.filter((item) => item.salume.id !== id));
-      setSalting(salting.filter((item) => item.salume.id !== id));
-      setCompleted(completed.filter((item) => item.salume.id !== id));
-    } else if (isOverCompleted) {
-      updateSalumeState.mutate({
-        id: newSalume.id,
-        name: newSalume.name,
-        notes: newSalume.notes,
-        recipeId: newSalume.recipe.id,
-        state: newSalume.state,
-        rating: 0,
-      });
-
-      const { duration } = await calculateSalumeDuration(newSalume);
-
-      setCompleted([
-        ...completed,
-        {
-          salume: newSalume,
-          duration: duration,
-        },
-      ]);
-
-      setDrying(drying.filter((item) => item.salume.id !== id));
-      setSalting(salting.filter((item) => item.salume.id !== id));
-      setCuring(curing.filter((item) => item.salume.id !== id));
+    // Add to target state
+    switch (targetState) {
+      case "drying":
+        setDrying([...filteredDrying, newItem]);
+        break;
+      case "salting":
+        setSalting([...filteredSalting, newItem]);
+        break;
+      case "curing":
+        setCuring([...filteredCuring, newItem]);
+        break;
+      case "completed":
+        setCompleted([...filteredCompleted, newItem]);
+        break;
     }
   };
 
@@ -327,29 +204,31 @@ export default function Dashboard() {
   return (
     <ModalProvider>
       <PrivateLayout>
-        <div className="flex flex-col items-center w-full h-[100vh] overflow-y-auto">
+        <div className="flex flex-col items-center w-full h-[100vh] overflow-y-auto border-eggshell rounded-tl-[4rem] bg-eggshell">
           {salumi && (
             <div className="w-full flex flex-col justify-center items-center p-12">
               <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
                 <div
                   className="justify-center w-1/2 flex"
-                  ref={dropTargetSalting}
+                  onDragOver={(e) => handleDragOver(e, "salting")}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, "salting")}
                 >
                   <motion.div
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    whileHover={{
-                      scale: 1.03,
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-                    }}
-                    className="w-full"
+                    className={`w-full transition-all duration-200 ${
+                      dragOverZone === "salting"
+                        ? "scale-105 ring-4 ring-wetSand/50"
+                        : ""
+                    }`}
                   >
                     <Card
                       details={salting}
                       image={"/salt.svg"}
                       imageSize={{ width: 100, height: 100 }}
-                      link={""}
+                      link=""
                       status={"Salting"}
                       addStyles={
                         "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
@@ -364,23 +243,25 @@ export default function Dashboard() {
                 </div>
                 <div
                   className="justify-center w-1/2 flex"
-                  ref={dropTargetDrying}
+                  onDragOver={(e) => handleDragOver(e, "drying")}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, "drying")}
                 >
                   <motion.div
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    whileHover={{
-                      scale: 1.03,
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-                    }}
-                    className="w-full"
+                    className={`w-full transition-all duration-200 ${
+                      dragOverZone === "drying"
+                        ? "scale-105 ring-4 ring-wetSand/50"
+                        : ""
+                    }`}
                   >
                     <Card
                       details={drying}
                       image={"/dry.svg"}
                       imageSize={{ width: 100, height: 100 }}
-                      link={""}
+                      link=""
                       status={"Drying"}
                       addStyles={
                         "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
@@ -394,23 +275,25 @@ export default function Dashboard() {
               <div className="flex flex-row justify-center items-center w-full space-x-4 mb-8">
                 <div
                   className="justify-center w-1/2 flex"
-                  ref={dropTargetCuring}
+                  onDragOver={(e) => handleDragOver(e, "curing")}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, "curing")}
                 >
                   <motion.div
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    whileHover={{
-                      scale: 1.03,
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-                    }}
-                    className="w-full"
+                    className={`w-full transition-all duration-200 ${
+                      dragOverZone === "curing"
+                        ? "scale-105 ring-4 ring-wetSand/50"
+                        : ""
+                    }`}
                   >
                     <Card
                       details={curing}
                       image={"/cure.svg"}
                       imageSize={{ width: 100, height: 100 }}
-                      link={""}
+                      link=""
                       status={"Curing"}
                       addStyles={
                         "shadow-md transition-all duration-200 hover:shadow-2xl w-full"
@@ -420,25 +303,18 @@ export default function Dashboard() {
                     </Card>
                   </motion.div>
                 </div>
-                <div
-                  className="justify-center w-1/2 flex"
-                  // ref={dropTargetCompleted}
-                >
+                <div className="justify-center w-1/2 flex">
                   <motion.div
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    whileHover={{
-                      scale: 1.03,
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-                    }}
                     className="w-full"
                   >
                     <Card
                       details={completed}
                       image={"/action.svg"}
                       imageSize={{ width: 100, height: 100 }}
-                      link={""}
+                      link=""
                       status={"Action Items"}
                       addStyles={
                         "shadow-md transition-all duration-200 hover:shadow-2xl w-full"

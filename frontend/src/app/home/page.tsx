@@ -148,7 +148,7 @@ export default function Home() {
 
   return (
     <PrivateLayout>
-      <main className="w-full bg-eggshell text-stone px-32 flex flex-col justify-center space-y-16 font-sans">
+      <main className="w-full bg-eggshell text-stone px-32 flex flex-col justify-center space-y-16 font-sans rounded-tl-[4rem]">
         {/* Header Section */}
         <motion.section
           variants={sectionVariants}

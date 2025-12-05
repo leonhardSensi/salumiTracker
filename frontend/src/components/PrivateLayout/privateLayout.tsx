@@ -55,7 +55,7 @@ export const PrivateLayout: React.FC<{
         {isClient && document.cookie && (
           <div className="w-full flex flex-col">
             <Navbar />
-            <div className="flex overflow-hidden bg-eggshell h-full">
+            <div className="flex overflow-hidden bg-wetSand h-full">
               <Sidebar />
               {children}
               <NotificationBanner />

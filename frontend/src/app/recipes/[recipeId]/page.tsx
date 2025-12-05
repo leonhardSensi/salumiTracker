@@ -20,7 +20,7 @@ export default function Recipe() {
   return (
     <PrivateLayout>
       {recipe ? (
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full border-eggshell rounded-tl-[4rem] bg-eggshell">
           <h1 className="text-6xl my-8 h-fit font-serif text-wetSand">
             {recipe.title}
           </h1>
